@@ -1,57 +1,37 @@
-# Implement progress — Issue #1: Project foundation setup
+# Implement progress — Issue #2: System and theme configuration as data files
 
-- **Branch:** feat/1-project-foundation-scaffold
+- **Branch:** feat/2-data-skeleton
 - **Base branch:** main
 - **PR strategy:** one
-- **Skill-retro opt-in:** yes
+- **Skill-retro opt-in:** yes (deferred to milestone-end loop)
 - **Started:** 2026-05-07
-- **Original request:** /implement:build PR #1 (interpreted as Issue #1 — repo has no PRs)
 
 ## Plan summary
 
-Scaffold a TypeScript + React project per architecture.md §5.1 (Unit 1A) and §8.1.
-Spec-first: arch decisions are locked (React 19, Vite 6, TS 6, Vitest+jsdom, base `./`); ADRs
-already exist (ADR-001, ADR-007, ADR-008). Skipping `define`/`docgen` re-derivation.
+Implement Unit 1B per architecture.md §1B (line 166) and §Unit 1B detail (line 1034).
+Spec-first: ADRs exist, types are inferable from the ADR-003 schema, Daggerheart
+values are extracted from the architecture (Hope=6, Fear=12, Stress 6/12, Armor [0,3,4],
+core conditions [Hidden, Restrained, Vulnerable], HP class table SRD-derived).
 
-Sequential `generate --mode=verify` — this is infra/config, not logic. The four gherkin
-scenarios in issue #1 are the verification gates.
+TDD via `generate` mode: tests assert config values and theme-mount behavior.
+StatTrack and component consumption land in issue #3 (separate story per architecture).
 
-## Stories
+## Files
 
-### Story — Project foundation setup (complete)
+- `src/systems/types.ts` — discriminated-union `SystemConfig` types
+- `src/systems/daggerheart.system.ts` — Daggerheart instance
+- `src/systems/SystemProvider.tsx` — context + `useSystem()` hook
+- `src/themes/types.ts` — `ThemeConfig` types
+- `src/themes/daggerheart.theme.ts` — Daggerheart theme tokens
+- `src/themes/ThemeProvider.tsx` — applies CSS custom properties to `:root` on mount
+- `src/main.tsx` — wrap App in providers
+- `src/index.css` — consume theme tokens via `var(--token)` (body stays transparent for OBS)
+- Tests for each
 
-- Task 1: package.json + bun install ✓
-- Task 2: tooling configs (tsconfig, vite, vitest, eslint, prettier) ✓
-- Task 3: app skeleton + smoke test ✓
-- Task 4: pre-commit hook (simple-git-hooks + lint-staged) ✓ (config only — see verification gap below)
-- Task 5: verify all four AC ✓
-- Task 6: commit + push + PR ✓ (PR #25 — https://github.com/alxjrvs/vellum/pull/25, commit f502fb9)
+## Acceptance criteria → verification
 
-## Verification record
-
-| AC                                                   | Status  | Evidence                                                                                                                                                                                                                                                                                                                 |
-| ---------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `bun install && bun run dev` serves at :5173         | ✓       | Curl returned HTTP 200 with React Refresh injected                                                                                                                                                                                                                                                                       |
-| `bun run check` exits 0 (eslint + prettier + tsc)    | ✓       | All three sub-commands return clean                                                                                                                                                                                                                                                                                      |
-| `bun run test` reports ≥1 passing test with coverage | ✓       | 1 test passing; v8 coverage summary printed                                                                                                                                                                                                                                                                              |
-| Pre-commit rejects TS errors / lint violations       | partial | Hook _command_ (`lint-staged && typecheck`) verified to exit non-zero on bad code (TS error → exit 2; lint error → exit 1). Hook _installation_ via `simple-git-hooks` postinstall blocked by agent sandbox (`.git/hooks/` is non-writable). The user's `bun install` outside the agent installs the hook automatically. |
-
-## Verification gap
-
-The agent sandbox blocks writes to `.git/hooks/` and `.git/config`, so the
-pre-commit hook is configured in `package.json` but not installed by this
-session. After merging, the user (or any fresh clone) running `bun install`
-triggers the `prepare` script which executes `simple-git-hooks` and installs
-the hook. The hook command itself was verified to fail correctly on a deliberately
-broken file.
-
-## PR Body Draft
-
-### Summary
-
-Scaffolds the TypeScript + React + Vite + Bun + Vitest project foundation
-per architecture.md §5.1 (Unit 1A) and §8.1. Closes #1.
-
-### Stories completed
-
-- [x] Project foundation setup (closes #1)
+| AC                                                                                | Plan                                                                   |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `daggerheart.system.ts` exists; no stat values hardcoded in components            | Source file + grep verification                                        |
+| Theme tokens applied via CSS custom properties; no hardcoded colors in stylesheet | `ThemeProvider` injects CSS vars on mount; `index.css` uses `var(--*)` |
+| `tsc` strict-mode clean                                                           | `bun run typecheck` exits 0                                            |

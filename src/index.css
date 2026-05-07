@@ -1,16 +1,22 @@
-/* Alpha-channel transparency for OBS browser source compositing (architecture §8.2). */
-:root {
-  color-scheme: light dark;
-}
-
+/*
+ * Body stays transparent for OBS browser-source alpha compositing
+ * (architecture §8.2). All visual tokens consumed via theme CSS custom
+ * properties injected by ThemeProvider — no hardcoded colors or sizes.
+ */
 html,
 body {
   margin: 0;
   padding: 0;
   background: transparent;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-display);
+  color: var(--color-ink);
+  margin: 0;
 }
