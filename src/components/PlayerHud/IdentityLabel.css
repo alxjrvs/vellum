@@ -1,0 +1,15 @@
+.identity-label {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  color: var(--color-ink);
+  letter-spacing: 0.04em;
+}
+
+.identity-label__name {
+  font-weight: 600;
+}
+
+.identity-label__detail {
+  color: var(--color-ink-muted);
+}
