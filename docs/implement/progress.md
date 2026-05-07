@@ -1,6 +1,6 @@
-# Implement progress — Issue #3: Generic StatTrack component family
+# Implement progress — Issue #4: localStorage session auto-save and restore
 
-- **Branch:** feat/3-stat-track
+- **Branch:** feat/4-character-persistence
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end loop)
@@ -8,29 +8,31 @@
 
 ## Plan summary
 
-One `StatTrack` component, two visual modes selected by props:
+Implement Unit 1C persistence half per architecture.md §Unit 1C (line 1063+) and ADR-003.
+Character JSON import (#5) and export (#6) layer on top of this.
 
-- **Pip mode** (Hope, Fear): renders `trackLength` pips, first `currentValue` filled, rest empty. `onIncrement` / `onDecrement?` wired to a click target.
-- **Slot mode** (HP, Stress, Armor): renders `trackLength` slot buttons, marked per `markedSlots` array, click toggles via `onToggleSlot`.
-
-Mode switch: presence of `markedSlots` ⇒ slot mode; else pip mode.
-
-Props match the issue verbatim: `{ trackLength, currentValue, label, onIncrement, onDecrement?, markedSlots?, onToggleSlot? }`.
-
-Style via theme CSS custom properties — no hardcoded colors/sizes. Single
-`StatTrack.css` imported as a side-effect module.
+- `CharacterState` type per ADR-003 schema
+- `useReducer` for character mutations (initial action: `SET_CHARACTER`; future stories add HOPE_INCREMENT etc.)
+- `CharacterProvider` lazy-initializes from localStorage synchronously, persists on every change via `useEffect`
+- localStorage key: `vellum:character`
+- App shows an import prompt placeholder when no character is loaded (no defaults)
 
 ## Files
 
-- `src/components/StatTrack/StatTrack.tsx` — component
-- `src/components/StatTrack/StatTrack.css` — themed styles
-- `src/components/StatTrack/StatTrack.test.tsx` — render + interaction tests
-- `src/components/StatTrack/index.ts` — barrel export
+- `src/character/types.ts` — CharacterState type
+- `src/character/storage.ts` — localStorage read/write
+- `src/character/reducer.ts` — useReducer + actions
+- `src/character/CharacterContext.ts` — context (state + dispatch)
+- `src/character/CharacterProvider.tsx` — provider with persistence
+- `src/character/useCharacter.ts` — `{ character, dispatch }` hook
+- `src/character/fixtures.ts` — test character builder
+- App.tsx — render import prompt placeholder when no character
+- Tests for each
 
 ## Acceptance criteria → verification
 
-| AC                                                          | Plan                                                                      |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Renders Hope/HP/Stress/Fear/Armor from one component family | Five test instances (one per stat) drive the component with config inputs |
-| New track type requires zero new component code             | Test instantiates a hypothetical "Momentum" pip track via the same props  |
-| Pip track max=6, currentValue=4 ⇒ 4 filled + 2 empty        | Direct render + assert via `data-state` attributes                        |
+| AC                                                         | Plan                                                                 |
+| ---------------------------------------------------------- | -------------------------------------------------------------------- |
+| Reload restores stat values from localStorage in <1s       | Synchronous lazy init reads localStorage; restore test asserts state |
+| App mount with no localStorage → import prompt shown       | App renders placeholder when character is null                       |
+| State change → localStorage write before next render frame | useEffect writes on dispatch; integration test asserts written value |
