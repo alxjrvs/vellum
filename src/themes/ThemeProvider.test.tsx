@@ -35,8 +35,9 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
     const root = document.documentElement;
-    expect(root.style.getPropertyValue('--font-size-base')).toBe('16px');
+    expect(root.style.getPropertyValue('--font-size-base')).toBe('18px');
     expect(root.style.getPropertyValue('--spacing-md')).toBe('16px');
+    expect(root.style.getPropertyValue('--pip-size')).toBe('24px');
   });
 
   it('exposes the theme to descendants via useTheme()', () => {
