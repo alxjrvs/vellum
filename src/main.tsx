@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { CharacterProvider } from './character/CharacterProvider';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { ThemeProvider } from './themes/ThemeProvider';
@@ -14,7 +15,9 @@ createRoot(rootElement).render(
   <StrictMode>
     <SystemProvider system={daggerheartSystem}>
       <ThemeProvider theme={daggerheartTheme}>
-        <App />
+        <CharacterProvider>
+          <App />
+        </CharacterProvider>
       </ThemeProvider>
     </SystemProvider>
   </StrictMode>
