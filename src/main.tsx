@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { CharacterProvider } from './character/CharacterProvider';
+import { Stage } from './components/Stage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { ThemeProvider } from './themes/ThemeProvider';
@@ -16,7 +17,9 @@ createRoot(rootElement).render(
     <SystemProvider system={daggerheartSystem}>
       <ThemeProvider theme={daggerheartTheme}>
         <CharacterProvider>
-          <App />
+          <Stage>
+            <App />
+          </Stage>
         </CharacterProvider>
       </ThemeProvider>
     </SystemProvider>
