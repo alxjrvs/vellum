@@ -1,4 +1,4 @@
-.gm-hud {
+.player-hud {
   display: inline-flex;
   flex-direction: column;
   gap: var(--spacing-md);
