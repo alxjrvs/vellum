@@ -1,4 +1,5 @@
 import { useCharacter } from './character/useCharacter';
+import { CharacterImport } from './components/CharacterImport';
 import { useSystem } from './systems/useSystem';
 import { useTheme } from './themes/useTheme';
 
@@ -21,6 +22,7 @@ export function App() {
       ) : (
         <p>Import a character to begin.</p>
       )}
+      <CharacterImport />
     </main>
   );
 }

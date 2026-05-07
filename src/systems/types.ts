@@ -1,4 +1,7 @@
-export type CoreConditionId = 'hidden' | 'restrained' | 'vulnerable';
+export const CORE_CONDITION_IDS = ['hidden', 'restrained', 'vulnerable'] as const;
+export type CoreConditionId = (typeof CORE_CONDITION_IDS)[number];
+
+export const SYSTEM_IDS = ['daggerheart'] as const;
 
 export interface CoreConditionDef {
   readonly id: CoreConditionId;
