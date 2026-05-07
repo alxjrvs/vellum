@@ -21,8 +21,8 @@
     "armorSlots": 3
   },
   "thresholds": {
-    "major": 7,
-    "severe": 12
+    "major": 3,
+    "severe": 5
   },
   "conditions": {
     "core": {

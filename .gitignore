@@ -33,7 +33,3 @@ coverage/
 # Local scratch — per-machine, not for the remote
 .gnar-term/
 ideate/
-
-# Per-player character JSONs (issue #23) — only the template is tracked
-characters/*.character.json
-!characters/template.character.json

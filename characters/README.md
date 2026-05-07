@@ -2,7 +2,8 @@
 
 Each player needs a Vellum character JSON file ready before the live
 Daggerheart session (issue #24). This directory holds the canonical
-template plus per-player files (gitignored — see below).
+template; players keep their own filled-in copies wherever they
+prefer.
 
 ## The template
 
@@ -11,12 +12,12 @@ a per-player file and fill in the values from each player's Daggerheart
 character sheet (Demiplane or paper).
 
 ```sh
-cp characters/template.character.json characters/<player-name>.character.json
+cp characters/template.character.json /path/to/your/<player-name>.character.json
 ```
 
-Per-player JSONs are **not** checked in (see `.gitignore`) — they
-contain personal player data that doesn't need to live in the public
-repo. The template is the only file in this directory that's tracked.
+Per-player JSONs contain personal player data and don't need to live
+in this repo — keep them local. The template is the only file
+tracked here.
 
 ## How to fill out each field
 
@@ -84,12 +85,12 @@ Major and severe damage thresholds from the character sheet (sheet
 typically lists "Major" and "Severe" thresholds beside the HP track).
 Vellum uses 1-indexed slot positions:
 
-- `major` — the slot at or above which a hit becomes a major hit
-  (typically 1 + the level-1 minor threshold)
-- `severe` — the slot at or above which a hit becomes a severe hit
+- `major` — the slot index that gets the "M" marker (1-indexed)
+- `severe` — the slot index that gets the "S" marker (1-indexed)
 
-If unknown, omit the `thresholds` object entirely. The HUD will render
-without threshold indicators.
+Both must satisfy `1 ≤ major ≤ severe ≤ slotCounts.hp`. Values outside
+that range render no markers. If unknown, omit the `thresholds` object
+entirely.
 
 ### `stats`
 

@@ -90,6 +90,17 @@ export function parseCharacter(value: unknown): ParseResult {
   if (!isStringArray(value.featureConditions))
     return { ok: false, error: 'featureConditions must be a string array.' };
 
+  let thresholds: CharacterState['thresholds'];
+  if (value.thresholds !== undefined) {
+    if (!isObject(value.thresholds))
+      return { ok: false, error: 'thresholds must be an object when present.' };
+    if (typeof value.thresholds.major !== 'number')
+      return { ok: false, error: 'thresholds.major must be a number.' };
+    if (typeof value.thresholds.severe !== 'number')
+      return { ok: false, error: 'thresholds.severe must be a number.' };
+    thresholds = { major: value.thresholds.major, severe: value.thresholds.severe };
+  }
+
   const character: CharacterState = {
     version: CHARACTER_SCHEMA_VERSION,
     system: system as CharacterState['system'],
@@ -120,6 +131,7 @@ export function parseCharacter(value: unknown): ParseResult {
       feature: { ...conditions.feature },
     },
     featureConditions: [...value.featureConditions],
+    ...(thresholds ? { thresholds } : {}),
   };
 
   return { ok: true, character };
