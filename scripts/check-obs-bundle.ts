@@ -42,7 +42,7 @@ const cssWithTransparentBody = cssAssets.some((asset) => {
 });
 if (cssAssets.length > 0 && !cssWithTransparentBody) {
   failures.push(
-    'No bundled CSS sets a transparent body background — OBS browser source needs alpha to composite the webcam through (architecture §8.2).'
+    'No bundled CSS sets a transparent body background — OBS browser source needs alpha to composite the webcam through (architecture REQ-038, §2 constraints).'
   );
 }
 
