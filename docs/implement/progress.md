@@ -1,50 +1,40 @@
-# Implement progress — Issue #23: Character JSON preparation
+# Implement progress — Issue #24: Live Daggerheart session (Gate 3)
 
-- **Branch:** feat/23-character-json-prep
+- **Branch:** feat/24-m3-gate-3-session
 - **Base branch:** main
 - **PR strategy:** one
-- **Skill-retro opt-in:** yes (deferred to milestone-end)
+- **Skill-retro opt-in:** yes (running at milestone-end after this PR)
 - **Started:** 2026-05-07
 
 ## Plan summary
 
-Issue #23 explicitly notes "Minimal AI leverage — character data is
-transcribed from players' Demiplane sheets." The transcription is
-inherently per-player manual work: I don't have access to anyone's
-Demiplane sheet and shouldn't be inventing values.
+Issue #24 is the project completion gate. **All five acceptance
+criteria are operational** — they require the actual humans playing
+an actual ~4-hour Daggerheart session:
 
-What this PR ships is the operator-facing scaffolding that makes the
-transcription quick and unambiguous:
+| AC                                                            | Status                                       |
+| ------------------------------------------------------------- | -------------------------------------------- |
+| Hope, HP, Stress, Fear, Armor, conditions tracked all session | **DEFERRED** — operational, requires session |
+| OM-1: zero Demiplane fallback (binary)                        | **DEFERRED** — operational                   |
+| OM-4: ≤1 minor incident; 0 session-ending                     | **DEFERRED** — operational                   |
+| OM-2: every player reports fewer alt-tabs vs baseline         | **DEFERRED** — operational debrief signal    |
+| OM-3: GM reads Hope + HP from call without asking aloud       | **DEFERRED** — operational debrief signal    |
 
-- A canonical empty template at `characters/template.character.json`
-  that parses cleanly via `parseCharacterJson` (locked in by a new
-  test)
-- A `characters/README.md` walkthrough explaining how each field maps
-  to a Daggerheart sheet, including the class/HP and armor/slot
-  tables so the operator doesn't need to look them up
-- A `.gitignore` rule that keeps per-player JSONs local (only the
-  template is tracked — players' character data shouldn't leak into
-  the public repo)
-
-| AC                                                         | Status                                                                    |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Class-correct stat caps + identity render from JSON import | Template + walkthrough shipped; per-player transcription is operator work |
-| No manual HUD corrections needed after import              | **DEFERRED** — verified by each player at the issue #22 rehearsal         |
+What this PR ships is the only deliverable that exists independent
+of running the session: a procedure document for the operator
+covering pre-flight checklist, in-session incident definitions, and
+post-session debrief templates for each outcome metric. The doc
+makes the session execution mechanical so nothing is forgotten on
+either side of the actual play.
 
 ## Files
 
-- `characters/template.character.json` (new) — canonical empty
-  character matching schema version 1
-- `characters/README.md` (new) — walkthrough + class/armor reference
-  tables
-- `src/character/template.test.ts` (new) — asserts the template
-  parses cleanly (regression guard)
-- `.gitignore` — ignore per-player `*.character.json` files but
-  keep the template tracked
+- `docs/m3-gate-3-session.md` (new) — pre-flight checklist + during-
+  session prompt sheet + post-session debrief template
 
 ## Out of scope
 
-- Each player's transcribed character JSON (operator/player work,
-  files don't live in the repo)
-- Validation of per-player JSONs against the operator's sheet —
-  per-player verification happens at the #22 rehearsal
+- Running the session itself (operational; tracked by closing the
+  issue with sign-off comments per the doc's "Issue closing" section)
+- Outcome metric reporting (each player + the GM provides their own
+  numbers at debrief)
