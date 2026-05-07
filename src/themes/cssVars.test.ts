@@ -14,8 +14,9 @@ describe('themeToCssVars', () => {
   it('emits CSS custom properties for typography tokens', () => {
     const vars = themeToCssVars(daggerheartTheme);
     expect(vars['--font-family-display']).toContain('Cinzel');
-    expect(vars['--font-size-base']).toBe('16px');
-    expect(vars['--font-size-heading']).toBe('28px');
+    expect(vars['--font-size-base']).toBe('18px');
+    expect(vars['--font-size-heading']).toBe('32px');
+    expect(vars['--font-size-label']).toBe('16px');
   });
 
   it('emits CSS custom properties for layout tokens', () => {
@@ -23,5 +24,6 @@ describe('themeToCssVars', () => {
     expect(vars['--spacing-md']).toBe('16px');
     expect(vars['--radius-sm']).toBe('4px');
     expect(vars['--border-width']).toBe('2px');
+    expect(vars['--pip-size']).toBe('24px');
   });
 });

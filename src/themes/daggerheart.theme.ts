@@ -16,9 +16,9 @@ export const daggerheartTheme: ThemeConfig = {
   typography: {
     fontFamilyDisplay: '"Cinzel", "Trajan Pro", "Times New Roman", serif',
     fontFamilyBody: '"Inter", "Helvetica Neue", system-ui, sans-serif',
-    fontSizeBase: '16px',
-    fontSizeHeading: '28px',
-    fontSizeLabel: '12px',
+    fontSizeBase: '18px',
+    fontSizeHeading: '32px',
+    fontSizeLabel: '16px',
   },
   layout: {
     spacingXs: '4px',
@@ -28,5 +28,6 @@ export const daggerheartTheme: ThemeConfig = {
     radiusSm: '4px',
     radiusMd: '8px',
     borderWidth: '2px',
+    pipSize: '24px',
   },
 };

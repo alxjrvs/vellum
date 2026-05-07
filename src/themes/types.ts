@@ -25,6 +25,7 @@ export interface ThemeLayout {
   readonly radiusSm: string;
   readonly radiusMd: string;
   readonly borderWidth: string;
+  readonly pipSize: string;
 }
 
 export interface DaggerheartThemeConfig {
