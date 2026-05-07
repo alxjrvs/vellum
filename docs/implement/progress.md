@@ -1,6 +1,6 @@
-# Implement progress — Issue #16: Character identity label
+# Implement progress — Issue #17: Optional identity fields
 
-- **Branch:** feat/16-identity-label
+- **Branch:** feat/17-optional-identity-fields
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,32 +8,39 @@
 
 ## Plan summary
 
-Adds an `IdentityLabel` component that renders `Name — Class, Ancestry`
-from `character.identity` whenever a character is loaded. Replaces the
-ad-hoc `<p>Loaded: ...</p>` line currently in `App.tsx`.
+Extends `IdentityLabel` to optionally include `level`, `subclass`, and
+`community` when present in `character.identity`. The base format remains
+`Name — Class, Ancestry`; optional fields are interleaved without
+producing empty fragments when absent.
 
-When no character is loaded, the label renders nothing (no placeholders).
-Visual sizing targets ~640×360 video-tile legibility (REQ for #20 will
-formally validate this — for now, use existing display font + label size
-tokens).
+Format:
+
+```
+Name — [Lvl N] Class[ (Subclass)], Ancestry[, Community]
+```
+
+Examples:
+
+- `Seraphine — Bard, Elf` (no optional)
+- `Seraphine — Lvl 3 Bard, Elf` (level only)
+- `Seraphine — Bard (Troubadour), Elf` (subclass only)
+- `Seraphine — Lvl 3 Bard (Troubadour), Elf, Wildborne` (all)
+
+`CharacterIdentity` already declares all three optional fields — no
+schema change needed.
 
 ## Files
 
-- `src/components/PlayerHud/IdentityLabel.tsx` (new)
-- `src/components/PlayerHud/IdentityLabel.css` (new)
-- `src/components/PlayerHud/IdentityLabel.test.tsx` (new)
-- `src/components/PlayerHud/index.ts` — export `IdentityLabel`
-- `src/App.tsx` — replace ad-hoc `<p>Loaded: ...</p>` with `<IdentityLabel />`
+- `src/components/PlayerHud/IdentityLabel.tsx` — render optional fields
+- `src/components/PlayerHud/IdentityLabel.test.tsx` — add cases for each combination
 
 ## Acceptance criteria → verification
 
-| AC                                                     | Verification                                                        |
-| ------------------------------------------------------ | ------------------------------------------------------------------- |
-| Renders `Name — Class, Ancestry` from identity JSON    | IdentityLabel.test.tsx — assert exact text content                  |
-| No character loaded → no placeholder/hardcoded strings | IdentityLabel.test.tsx with null character → component returns null |
-| Legible at ~640×360                                    | Uses `--font-family-display` + `--font-size-label`; #20 validates   |
+| AC                                                                          | Verification                                        |
+| --------------------------------------------------------------------------- | --------------------------------------------------- |
+| Subclass + level included when JSON provides them                           | IdentityLabel.test.tsx — subclass+level case        |
+| Optional fields absent → no empty placeholders; only Name — Class, Ancestry | IdentityLabel.test.tsx — base case (already exists) |
 
 ## Out of scope
 
-- Optional identity fields (subclass/community/level) — issue #17
 - Discord-scale legibility validation — issue #20

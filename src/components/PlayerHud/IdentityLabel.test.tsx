@@ -43,4 +43,53 @@ describe('IdentityLabel', () => {
       'Brakkar — Guardian, Goblin'
     );
   });
+
+  it('includes level when provided', () => {
+    renderLabel({
+      identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', level: 3 },
+    });
+    expect(screen.getByLabelText('Character identity').textContent).toBe(
+      'Seraphine — Lvl 3 Bard, Elf'
+    );
+  });
+
+  it('includes subclass in parentheses when provided', () => {
+    renderLabel({
+      identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', subclass: 'Troubadour' },
+    });
+    expect(screen.getByLabelText('Character identity').textContent).toBe(
+      'Seraphine — Bard (Troubadour), Elf'
+    );
+  });
+
+  it('includes community after ancestry when provided', () => {
+    renderLabel({
+      identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', community: 'Wildborne' },
+    });
+    expect(screen.getByLabelText('Character identity').textContent).toBe(
+      'Seraphine — Bard, Elf, Wildborne'
+    );
+  });
+
+  it('combines all optional fields when present', () => {
+    renderLabel({
+      identity: {
+        name: 'Seraphine',
+        class: 'Bard',
+        ancestry: 'Elf',
+        subclass: 'Troubadour',
+        community: 'Wildborne',
+        level: 3,
+      },
+    });
+    expect(screen.getByLabelText('Character identity').textContent).toBe(
+      'Seraphine — Lvl 3 Bard (Troubadour), Elf, Wildborne'
+    );
+  });
+
+  it('omits absent optional fields without placeholders', () => {
+    renderLabel({ identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf' } });
+    const text = screen.getByLabelText('Character identity').textContent ?? '';
+    expect(text).not.toMatch(/Lvl|\(|undefined|null/);
+  });
 });
