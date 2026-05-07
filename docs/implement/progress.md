@@ -1,6 +1,6 @@
-# Implement progress — Issue #2: System and theme configuration as data files
+# Implement progress — Issue #3: Generic StatTrack component family
 
-- **Branch:** feat/2-data-skeleton
+- **Branch:** feat/3-stat-track
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end loop)
@@ -8,30 +8,29 @@
 
 ## Plan summary
 
-Implement Unit 1B per architecture.md §1B (line 166) and §Unit 1B detail (line 1034).
-Spec-first: ADRs exist, types are inferable from the ADR-003 schema, Daggerheart
-values are extracted from the architecture (Hope=6, Fear=12, Stress 6/12, Armor [0,3,4],
-core conditions [Hidden, Restrained, Vulnerable], HP class table SRD-derived).
+One `StatTrack` component, two visual modes selected by props:
 
-TDD via `generate` mode: tests assert config values and theme-mount behavior.
-StatTrack and component consumption land in issue #3 (separate story per architecture).
+- **Pip mode** (Hope, Fear): renders `trackLength` pips, first `currentValue` filled, rest empty. `onIncrement` / `onDecrement?` wired to a click target.
+- **Slot mode** (HP, Stress, Armor): renders `trackLength` slot buttons, marked per `markedSlots` array, click toggles via `onToggleSlot`.
+
+Mode switch: presence of `markedSlots` ⇒ slot mode; else pip mode.
+
+Props match the issue verbatim: `{ trackLength, currentValue, label, onIncrement, onDecrement?, markedSlots?, onToggleSlot? }`.
+
+Style via theme CSS custom properties — no hardcoded colors/sizes. Single
+`StatTrack.css` imported as a side-effect module.
 
 ## Files
 
-- `src/systems/types.ts` — discriminated-union `SystemConfig` types
-- `src/systems/daggerheart.system.ts` — Daggerheart instance
-- `src/systems/SystemProvider.tsx` — context + `useSystem()` hook
-- `src/themes/types.ts` — `ThemeConfig` types
-- `src/themes/daggerheart.theme.ts` — Daggerheart theme tokens
-- `src/themes/ThemeProvider.tsx` — applies CSS custom properties to `:root` on mount
-- `src/main.tsx` — wrap App in providers
-- `src/index.css` — consume theme tokens via `var(--token)` (body stays transparent for OBS)
-- Tests for each
+- `src/components/StatTrack/StatTrack.tsx` — component
+- `src/components/StatTrack/StatTrack.css` — themed styles
+- `src/components/StatTrack/StatTrack.test.tsx` — render + interaction tests
+- `src/components/StatTrack/index.ts` — barrel export
 
 ## Acceptance criteria → verification
 
-| AC                                                                                | Plan                                                                   |
-| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `daggerheart.system.ts` exists; no stat values hardcoded in components            | Source file + grep verification                                        |
-| Theme tokens applied via CSS custom properties; no hardcoded colors in stylesheet | `ThemeProvider` injects CSS vars on mount; `index.css` uses `var(--*)` |
-| `tsc` strict-mode clean                                                           | `bun run typecheck` exits 0                                            |
+| AC                                                          | Plan                                                                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Renders Hope/HP/Stress/Fear/Armor from one component family | Five test instances (one per stat) drive the component with config inputs |
+| New track type requires zero new component code             | Test instantiates a hypothetical "Momentum" pip track via the same props  |
+| Pip track max=6, currentValue=4 ⇒ 4 filled + 2 empty        | Direct render + assert via `data-state` attributes                        |

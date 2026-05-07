@@ -1,0 +1,50 @@
+.stat-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-body);
+  color: var(--color-ink);
+}
+
+.stat-track__label {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.stat-track__row {
+  display: inline-flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.stat-track__pip,
+.stat-track__slot {
+  width: var(--spacing-md);
+  height: var(--spacing-md);
+  padding: 0;
+  margin: 0;
+  border: var(--border-width) solid var(--color-ink-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.stat-track__pip {
+  border-radius: 50%;
+}
+
+.stat-track__pip[data-state='filled'] {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.stat-track__slot {
+  border-radius: var(--radius-sm);
+}
+
+.stat-track__slot[data-state='marked'] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
