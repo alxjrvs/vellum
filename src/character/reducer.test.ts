@@ -130,4 +130,48 @@ describe('characterReducer', () => {
       expect(characterReducer(null, { type: 'ARMOR_TOGGLE_SLOT', index: 0 })).toBeNull();
     });
   });
+
+  describe('CONDITION_TOGGLE', () => {
+    it('flips an inactive core condition to active', () => {
+      const character = makeCharacter();
+      const next = characterReducer(character, { type: 'CONDITION_TOGGLE', condition: 'hidden' });
+      expect(next?.conditions.core.hidden).toBe(true);
+    });
+
+    it('flips an active core condition to inactive', () => {
+      const character = makeCharacter({
+        conditions: {
+          core: { hidden: false, restrained: true, vulnerable: false },
+          feature: {},
+        },
+      });
+      const next = characterReducer(character, {
+        type: 'CONDITION_TOGGLE',
+        condition: 'restrained',
+      });
+      expect(next?.conditions.core.restrained).toBe(false);
+    });
+
+    it('does not affect other conditions when toggling one', () => {
+      const character = makeCharacter({
+        conditions: {
+          core: { hidden: true, restrained: false, vulnerable: true },
+          feature: {},
+        },
+      });
+      const next = characterReducer(character, {
+        type: 'CONDITION_TOGGLE',
+        condition: 'restrained',
+      });
+      expect(next?.conditions.core).toEqual({
+        hidden: true,
+        restrained: true,
+        vulnerable: true,
+      });
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'CONDITION_TOGGLE', condition: 'hidden' })).toBeNull();
+    });
+  });
 });
