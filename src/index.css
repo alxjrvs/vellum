@@ -11,6 +11,13 @@ body {
   color: var(--color-ink);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
+  /* OBS overlays the cursor on player video tiles; hide on the
+     transparent canvas, restored on interactive surfaces. */
+  cursor: none;
+}
+
+button {
+  cursor: pointer;
 }
 
 h1,
