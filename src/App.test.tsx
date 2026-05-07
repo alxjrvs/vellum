@@ -23,6 +23,7 @@ function renderApp() {
 
 afterEach(() => {
   localStorage.clear();
+  window.history.replaceState({}, '', '/');
 });
 
 describe('App', () => {
@@ -50,5 +51,26 @@ describe('App', () => {
     renderApp();
 
     expect(screen.getByLabelText('Character identity').textContent).toBe('Seraphine — Bard, Elf');
+  });
+
+  describe('?mode=gm', () => {
+    it('renders the GM HUD with only the Fear track and no player tracks', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 5, hp: [], stress: [], armorSlots: [] },
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
+      window.history.replaceState({}, '', '/?mode=gm');
+
+      renderApp();
+
+      expect(screen.getByLabelText('GM HUD')).toBeInTheDocument();
+      expect(screen.getByLabelText('Fear')).toBeInTheDocument();
+      expect(screen.queryByLabelText('Hope')).toBeNull();
+      expect(screen.queryByLabelText('HP')).toBeNull();
+      expect(screen.queryByLabelText('Stress')).toBeNull();
+      expect(screen.queryByLabelText('Armor')).toBeNull();
+      expect(screen.queryByLabelText('Conditions panel')).toBeNull();
+      expect(screen.queryByLabelText('Character identity')).toBeNull();
+    });
   });
 });

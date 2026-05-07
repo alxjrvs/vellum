@@ -6,6 +6,8 @@ export type CharacterAction =
   | { type: 'CLEAR_CHARACTER' }
   | { type: 'HOPE_INCREMENT'; max: number }
   | { type: 'HOPE_DECREMENT' }
+  | { type: 'FEAR_INCREMENT'; max: number }
+  | { type: 'FEAR_DECREMENT' }
   | { type: 'HP_TOGGLE_SLOT'; index: number }
   | { type: 'STRESS_TOGGLE_SLOT'; index: number }
   | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
@@ -32,6 +34,18 @@ export function characterReducer(
       return {
         ...state,
         stats: { ...state.stats, hope: Math.max(state.stats.hope - 1, 0) },
+      };
+    case 'FEAR_INCREMENT':
+      if (!state) return state;
+      return {
+        ...state,
+        stats: { ...state.stats, fear: Math.min((state.stats.fear ?? 0) + 1, action.max) },
+      };
+    case 'FEAR_DECREMENT':
+      if (!state) return state;
+      return {
+        ...state,
+        stats: { ...state.stats, fear: Math.max((state.stats.fear ?? 0) - 1, 0) },
       };
     case 'HP_TOGGLE_SLOT':
       if (!state) return state;

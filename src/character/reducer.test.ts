@@ -55,6 +55,50 @@ describe('characterReducer', () => {
     });
   });
 
+  describe('FEAR_INCREMENT', () => {
+    it('adds 1 to fear (treating absent fear as 0)', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_INCREMENT', max: 12 });
+      expect(next?.stats.fear).toBe(1);
+    });
+
+    it('caps at the supplied max', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 12, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_INCREMENT', max: 12 });
+      expect(next?.stats.fear).toBe(12);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'FEAR_INCREMENT', max: 12 })).toBeNull();
+    });
+  });
+
+  describe('FEAR_DECREMENT', () => {
+    it('subtracts 1 from fear', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 4, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_DECREMENT' });
+      expect(next?.stats.fear).toBe(3);
+    });
+
+    it('floors at 0 (treating absent fear as 0)', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_DECREMENT' });
+      expect(next?.stats.fear).toBe(0);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'FEAR_DECREMENT' })).toBeNull();
+    });
+  });
+
   describe('HP_TOGGLE_SLOT', () => {
     it('marks an unmarked slot', () => {
       const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
