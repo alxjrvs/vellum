@@ -27,10 +27,14 @@ export interface ThemeLayout {
   readonly borderWidth: string;
 }
 
-export interface ThemeConfig {
-  readonly id: string;
+export interface DaggerheartThemeConfig {
+  readonly id: 'daggerheart';
   readonly label: string;
   readonly colors: ThemeColors;
   readonly typography: ThemeTypography;
   readonly layout: ThemeLayout;
 }
+
+export type ThemeConfig = DaggerheartThemeConfig;
+
+export type ThemeId = ThemeConfig['id'];
