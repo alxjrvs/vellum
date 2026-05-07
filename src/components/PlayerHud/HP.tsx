@@ -12,6 +12,7 @@ export function HP() {
       markedSlots={character.stats.hp}
       onToggleSlot={(index) => dispatch({ type: 'HP_TOGGLE_SLOT', index })}
       onIncrement={() => {}}
+      thresholds={character.thresholds}
     />
   );
 }

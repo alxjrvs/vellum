@@ -48,3 +48,31 @@
   background: var(--color-accent);
   border-color: var(--color-accent);
 }
+
+.stat-track__slot[data-threshold] {
+  position: relative;
+}
+
+.stat-track__slot[data-threshold]::after {
+  position: absolute;
+  bottom: calc(-1 * var(--spacing-sm));
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.06em;
+  color: var(--color-ink-muted);
+  pointer-events: none;
+}
+
+.stat-track__slot[data-threshold='major']::after {
+  content: 'M';
+}
+
+.stat-track__slot[data-threshold='severe']::after {
+  content: 'S';
+}
+
+.stat-track__slot[data-threshold='major-severe']::after {
+  content: 'M/S';
+}

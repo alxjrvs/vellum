@@ -111,6 +111,40 @@ describe('StatTrack — slot mode (presence of markedSlots)', () => {
     expect(onToggleSlot).toHaveBeenCalledWith(3);
   });
 
+  it('tags slot buttons with data-threshold at the configured Major/Severe positions', () => {
+    render(
+      <StatTrack
+        label="HP"
+        trackLength={6}
+        currentValue={0}
+        markedSlots={[]}
+        onToggleSlot={() => {}}
+        onIncrement={() => {}}
+        thresholds={{ major: 2, severe: 4 }}
+      />
+    );
+    const all = slotsOf('HP');
+    expect(all[1].dataset.threshold).toBe('major');
+    expect(all[3].dataset.threshold).toBe('severe');
+    expect(all[0].dataset.threshold).toBeUndefined();
+    expect(all[2].dataset.threshold).toBeUndefined();
+  });
+
+  it('combines into a single major-severe marker when both thresholds resolve to the same slot', () => {
+    render(
+      <StatTrack
+        label="HP"
+        trackLength={4}
+        currentValue={0}
+        markedSlots={[]}
+        onToggleSlot={() => {}}
+        onIncrement={() => {}}
+        thresholds={{ major: 2, severe: 2 }}
+      />
+    );
+    expect(slotsOf('HP')[1].dataset.threshold).toBe('major-severe');
+  });
+
   it('renders Armor with 0 / 3 / 4 slot configurations from system config', () => {
     for (const armorType of ['unarmored', 'gambeson', 'chainmail'] as const) {
       const expected = daggerheartSystem.armorTable[armorType];
