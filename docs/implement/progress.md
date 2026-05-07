@@ -1,6 +1,6 @@
-# Implement progress — Issue #22: Full-group OBS pipeline rehearsal
+# Implement progress — Issue #23: Character JSON preparation
 
-- **Branch:** feat/22-m2-gate-2-rehearsal
+- **Branch:** feat/23-character-json-prep
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,30 +8,43 @@
 
 ## Plan summary
 
-Issue #22 explicitly notes "Minimal AI leverage — this is logistical
-coordination work." The acceptance criteria require:
+Issue #23 explicitly notes "Minimal AI leverage — character data is
+transcribed from players' Demiplane sheets." The transcription is
+inherently per-player manual work: I don't have access to anyone's
+Demiplane sheet and shouldn't be inventing values.
 
-| AC                                                          | Status                                              |
-| ----------------------------------------------------------- | --------------------------------------------------- |
-| Each player + GM reaches working HUD-on-Discord state       | **DEFERRED** — operational, requires real rehearsal |
-| Non-OBS-expert can follow setup doc with ≤1 clarifying ping | **DEFERRED** — operational tester touchpoint        |
+What this PR ships is the operator-facing scaffolding that makes the
+transcription quick and unambiguous:
 
-What this PR ships is the only deliverable that exists independent of
-the rehearsal itself: a written procedure document that the operator
-runs on the day of the rehearsal. The procedure cross-references the
-existing `docs/obs-pipeline-verification.md` (M1 Gate 1 individual
-setup) and `docs/legibility-validation.md` (the calibration check from
-issue #20), and adds the multi-participant choreography that isn't
-present in either of those.
+- A canonical empty template at `characters/template.character.json`
+  that parses cleanly via `parseCharacterJson` (locked in by a new
+  test)
+- A `characters/README.md` walkthrough explaining how each field maps
+  to a Daggerheart sheet, including the class/HP and armor/slot
+  tables so the operator doesn't need to look them up
+- A `.gitignore` rule that keeps per-player JSONs local (only the
+  template is tracked — players' character data shouldn't leak into
+  the public repo)
+
+| AC                                                         | Status                                                                    |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Class-correct stat caps + identity render from JSON import | Template + walkthrough shipped; per-player transcription is operator work |
+| No manual HUD corrections needed after import              | **DEFERRED** — verified by each player at the issue #22 rehearsal         |
 
 ## Files
 
-- `docs/m2-gate-2-rehearsal.md` (new) — full-group rehearsal procedure
+- `characters/template.character.json` (new) — canonical empty
+  character matching schema version 1
+- `characters/README.md` (new) — walkthrough + class/armor reference
+  tables
+- `src/character/template.test.ts` (new) — asserts the template
+  parses cleanly (regression guard)
+- `.gitignore` — ignore per-player `*.character.json` files but
+  keep the template tracked
 
 ## Out of scope
 
-- Running the rehearsal itself (operational; tracked by closing the
-  issue with sign-off comments)
-- Updates to `docs/obs-pipeline-verification.md` — no gaps found
-  during planning; if the non-expert tester touchpoint surfaces a
-  gap, that's a follow-up issue
+- Each player's transcribed character JSON (operator/player work,
+  files don't live in the repo)
+- Validation of per-player JSONs against the operator's sheet —
+  per-player verification happens at the #22 rehearsal
