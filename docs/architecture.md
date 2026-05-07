@@ -128,7 +128,7 @@ All channels are local. There are no network sockets, no WebSocket connections, 
 |------|---------|---------------------|
 | Render TTRPG stat HUD composited onto webcam feed visible in Discord | Static locally-served web app consumed as OBS browser source; OBS composites browser source over webcam; OBS Virtual Camera exposes result to Discord | React 19 + Vite dev server (local) / static file serve (session) |
 | Zero network calls after initial load; fully local | All assets bundled at build time; no CDN assets, no telemetry, no runtime fetch calls | Vite production build (all assets inlined/bundled); no runtime fetch |
-| TypeScript throughout with strict mode (REQ-033) | All source `.ts` / `.tsx`; strict config; discriminated unions for system/theme config shapes | TypeScript 5.x, strict config |
+| TypeScript throughout with strict mode (REQ-033) | All source `.ts` / `.tsx`; strict config; discriminated unions for system/theme config shapes | TypeScript 6.x, strict config |
 | Data-driven stat model so second system frame is config + reuse, not a rewrite (REQ-018, REQ-019, REQ-020) | System config and theme config are TypeScript data files loaded at runtime; generic `StatTrack` component family renders any pip/slot track from config inputs | Discriminated-union TS types for configs; React component props derived from config shape |
 | Session state survives OBS browser source reload in <1 s (REQ-031) | Write all mutable stat state to `localStorage` on every change; read synchronously on mount | Browser `localStorage` API (synchronous, zero-latency reads) |
 | Portable character files across sessions (REQ-022, REQ-023, REQ-041) | JSON import via browser `<input type="file">` File API; JSON export via `Blob` + `URL.createObjectURL` | Browser-native File API; no filesystem server |
@@ -548,7 +548,7 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 
 | Layer | Technology | Version / Notes |
 |-------|-----------|----------------|
-| Language | TypeScript | 5.x, strict mode, no `any` in production paths |
+| Language | TypeScript | 6.x, strict mode, no `any` in production paths |
 | UI Framework | React | 19; component model drives the `StatTrack` generic family |
 | Build Tool | Vite | 6; `@vitejs/plugin-react`; `base: './'` for file:// safety |
 | Package Manager | Bun | Latest stable; used for install, script running, and lockfile |
@@ -1816,7 +1816,7 @@ This is a single-developer personal project.
 
 | Team Member | Primary Focus | Tech Stack |
 |-------------|---------------|------------|
-| alxjrvs (owner) | All engineering, architecture decisions, milestone gates, and group coordination | TypeScript 5.x, React 19, Vite 6, Vitest, CSS Modules |
+| alxjrvs (owner) | All engineering, architecture decisions, milestone gates, and group coordination | TypeScript 6.x, React 19, Vite 6, Vitest, CSS Modules |
 
 #### External Contributors (On-Call, No Commitment)
 
