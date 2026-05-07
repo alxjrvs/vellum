@@ -1,6 +1,6 @@
-# Implement progress — Issue #14: Core condition badges
+# Implement progress — Issue #15: Feature condition badges and conditions panel
 
-- **Branch:** feat/14-core-condition-badges
+- **Branch:** feat/15-conditions-panel
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,33 +8,36 @@
 
 ## Plan summary
 
-Adds the three core condition badges (Hidden, Restrained, Vulnerable) to
-the Player HUD. Each badge is a button that toggles the corresponding
-`character.conditions.core[id]` boolean. No modal — single-click toggle.
+Adds a Conditions panel that hosts both core (Hidden/Restrained/Vulnerable)
+and feature condition badges. Panel open/close is local React `useState`
+(not persisted). Per REQ-026, one open step before toggle is acceptable —
+the AC explicitly says badges are visible only when the panel is open, so
+this refactors #14's always-on display into the panel.
 
-The system config already declares `coreConditions: [{id, label}]` and
-character state already carries `conditions.core: Record<CoreConditionId, boolean>`.
+Feature conditions come from `character.featureConditions: readonly string[]`
+(catalogue) with active state from `character.conditions.feature[name]`.
+Reducer adds `FEATURE_CONDITION_TOGGLE { name }`.
 
 ## Files
 
-- `src/character/reducer.ts` — `CONDITION_TOGGLE { condition: CoreConditionId }`
-- `src/character/reducer.test.ts` — toggle tests
-- `src/components/PlayerHud/CoreConditions.tsx` (new)
-- `src/components/PlayerHud/CoreConditions.css` (new)
-- `src/components/PlayerHud/CoreConditions.test.tsx` (new)
-- `src/components/PlayerHud/index.ts` — export CoreConditions
-- `src/App.tsx` — render `<CoreConditions />` after `<Armor />`
+- `src/character/reducer.ts` — `FEATURE_CONDITION_TOGGLE { name }` action
+- `src/character/reducer.test.ts` — feature toggle tests
+- `src/components/PlayerHud/ConditionsPanel.tsx` (new) — panel with toggle button + badges
+- `src/components/PlayerHud/ConditionsPanel.css` (new)
+- `src/components/PlayerHud/ConditionsPanel.test.tsx` (new)
+- `src/components/PlayerHud/index.ts` — export ConditionsPanel
+- `src/App.tsx` — replace `<CoreConditions />` with `<ConditionsPanel />`
 
 ## Acceptance criteria → verification
 
-| AC                                                            | Verification                                         |
-| ------------------------------------------------------------- | ---------------------------------------------------- |
-| Three badges shown (Hidden, Restrained, Vulnerable), inactive | CoreConditions.test.tsx default-fixture assertion    |
-| Click inactive → renders active; no modal                     | CoreConditions.test.tsx click → data-state='active'  |
-| Click active → renders inactive (toggle off)                  | CoreConditions.test.tsx pre-set + click → 'inactive' |
-| State persisted to localStorage synchronously                 | CharacterProvider auto-persists (already covered)    |
+| AC                                                                           | Verification                                                       |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Feature conditions from JSON appear alongside core when panel open           | ConditionsPanel.test.tsx with featureConditions: ['On Fire']       |
+| Panel toggle button opens the panel; all badges visible/toggleable when open | ConditionsPanel.test.tsx click toggle → badges queryable           |
+| Feature condition toggle persists synchronously                              | Reducer tests + CharacterProvider auto-persist (existing coverage) |
+| Zero feature conditions → only the three core badges shown (no placeholders) | ConditionsPanel.test.tsx with featureConditions: []                |
 
 ## Out of scope
 
-- Feature condition badges (issue #15)
-- Custom condition catalogue management (out of M2 scope)
+- Cross-checking featureConditions against an SRD catalogue (filed as #30)
+- Editing the feature conditions list at runtime (M3 / out)

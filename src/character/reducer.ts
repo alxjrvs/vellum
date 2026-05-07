@@ -9,7 +9,8 @@ export type CharacterAction =
   | { type: 'HP_TOGGLE_SLOT'; index: number }
   | { type: 'STRESS_TOGGLE_SLOT'; index: number }
   | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
-  | { type: 'CONDITION_TOGGLE'; condition: CoreConditionId };
+  | { type: 'CONDITION_TOGGLE'; condition: CoreConditionId }
+  | { type: 'FEATURE_CONDITION_TOGGLE'; name: string };
 
 export function characterReducer(
   state: CharacterState | null,
@@ -59,6 +60,18 @@ export function characterReducer(
           core: {
             ...state.conditions.core,
             [action.condition]: !state.conditions.core[action.condition],
+          },
+        },
+      };
+    case 'FEATURE_CONDITION_TOGGLE':
+      if (!state) return state;
+      return {
+        ...state,
+        conditions: {
+          ...state.conditions,
+          feature: {
+            ...state.conditions.feature,
+            [action.name]: !state.conditions.feature[action.name],
           },
         },
       };
