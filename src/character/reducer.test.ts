@@ -110,4 +110,24 @@ describe('characterReducer', () => {
       expect(characterReducer(null, { type: 'STRESS_TOGGLE_SLOT', index: 0 })).toBeNull();
     });
   });
+
+  describe('ARMOR_TOGGLE_SLOT', () => {
+    it('marks an unmarked slot', () => {
+      const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'ARMOR_TOGGLE_SLOT', index: 0 });
+      expect(next?.stats.armorSlots).toEqual([0]);
+    });
+
+    it('unmarks a marked slot', () => {
+      const character = makeCharacter({
+        stats: { hope: 2, hp: [], stress: [], armorSlots: [0, 1] },
+      });
+      const next = characterReducer(character, { type: 'ARMOR_TOGGLE_SLOT', index: 0 });
+      expect(next?.stats.armorSlots).toEqual([1]);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'ARMOR_TOGGLE_SLOT', index: 0 })).toBeNull();
+    });
+  });
 });

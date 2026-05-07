@@ -6,7 +6,8 @@ export type CharacterAction =
   | { type: 'HOPE_INCREMENT'; max: number }
   | { type: 'HOPE_DECREMENT' }
   | { type: 'HP_TOGGLE_SLOT'; index: number }
-  | { type: 'STRESS_TOGGLE_SLOT'; index: number };
+  | { type: 'STRESS_TOGGLE_SLOT'; index: number }
+  | { type: 'ARMOR_TOGGLE_SLOT'; index: number };
 
 export function characterReducer(
   state: CharacterState | null,
@@ -40,6 +41,12 @@ export function characterReducer(
       return {
         ...state,
         stats: { ...state.stats, stress: toggleIndex(state.stats.stress, action.index) },
+      };
+    case 'ARMOR_TOGGLE_SLOT':
+      if (!state) return state;
+      return {
+        ...state,
+        stats: { ...state.stats, armorSlots: toggleIndex(state.stats.armorSlots, action.index) },
       };
   }
 }
