@@ -1,0 +1,16 @@
+/* Alpha-channel transparency for OBS browser source compositing (architecture §8.2). */
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+}
