@@ -174,4 +174,49 @@ describe('characterReducer', () => {
       expect(characterReducer(null, { type: 'CONDITION_TOGGLE', condition: 'hidden' })).toBeNull();
     });
   });
+
+  describe('FEATURE_CONDITION_TOGGLE', () => {
+    it('flips an absent feature condition to true', () => {
+      const character = makeCharacter();
+      const next = characterReducer(character, {
+        type: 'FEATURE_CONDITION_TOGGLE',
+        name: 'On Fire',
+      });
+      expect(next?.conditions.feature['On Fire']).toBe(true);
+    });
+
+    it('flips an active feature condition to false', () => {
+      const character = makeCharacter({
+        conditions: {
+          core: { hidden: false, restrained: false, vulnerable: false },
+          feature: { 'On Fire': true },
+        },
+      });
+      const next = characterReducer(character, {
+        type: 'FEATURE_CONDITION_TOGGLE',
+        name: 'On Fire',
+      });
+      expect(next?.conditions.feature['On Fire']).toBe(false);
+    });
+
+    it('does not affect other feature conditions when toggling one', () => {
+      const character = makeCharacter({
+        conditions: {
+          core: { hidden: false, restrained: false, vulnerable: false },
+          feature: { 'On Fire': true, Stunned: true },
+        },
+      });
+      const next = characterReducer(character, {
+        type: 'FEATURE_CONDITION_TOGGLE',
+        name: 'On Fire',
+      });
+      expect(next?.conditions.feature).toEqual({ 'On Fire': false, Stunned: true });
+    });
+
+    it('returns null state unchanged', () => {
+      expect(
+        characterReducer(null, { type: 'FEATURE_CONDITION_TOGGLE', name: 'On Fire' })
+      ).toBeNull();
+    });
+  });
 });
