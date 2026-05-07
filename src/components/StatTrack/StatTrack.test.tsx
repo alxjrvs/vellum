@@ -73,6 +73,21 @@ describe('StatTrack — slot mode (presence of markedSlots)', () => {
     expect(slots[2].dataset.state).toBe('unmarked');
   });
 
+  it('clicking a slot without onToggleSlot does NOT fall back to onIncrement', () => {
+    const onIncrement = vi.fn();
+    render(
+      <StatTrack
+        label="HP"
+        trackLength={3}
+        currentValue={0}
+        markedSlots={[]}
+        onIncrement={onIncrement}
+      />
+    );
+    fireEvent.click(slotsOf('HP')[0]);
+    expect(onIncrement).not.toHaveBeenCalled();
+  });
+
   it('fires onToggleSlot with the clicked slot index', () => {
     const onToggleSlot = vi.fn();
     render(

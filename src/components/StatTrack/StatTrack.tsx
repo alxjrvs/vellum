@@ -50,9 +50,9 @@ function PipRow({ trackLength, currentValue, label, onIncrement, onDecrement }: 
   );
 }
 
-function SlotRow({ trackLength, label, markedSlots, onToggleSlot, onIncrement }: StatTrackProps) {
+function SlotRow({ trackLength, label, markedSlots, onToggleSlot }: StatTrackProps) {
   const marked = new Set(markedSlots ?? []);
-  const handleToggle = onToggleSlot ?? (() => onIncrement());
+  const handleToggle = onToggleSlot ?? (() => {});
   return (
     <div className="stat-track__row" role="group" aria-label={`${label} slots`}>
       {Array.from({ length: trackLength }, (_, i) => {
