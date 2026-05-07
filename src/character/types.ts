@@ -28,6 +28,11 @@ export interface CharacterConditions {
   readonly feature: Readonly<Record<string, boolean>>;
 }
 
+export interface CharacterThresholds {
+  readonly major: number;
+  readonly severe: number;
+}
+
 export const CHARACTER_SCHEMA_VERSION = 1 as const;
 
 export interface CharacterState {
@@ -36,6 +41,7 @@ export interface CharacterState {
   readonly identity: CharacterIdentity;
   readonly stats: CharacterStats;
   readonly slotCounts: CharacterSlotCounts;
+  readonly thresholds?: CharacterThresholds;
   readonly conditions: CharacterConditions;
   readonly featureConditions: readonly string[];
 }

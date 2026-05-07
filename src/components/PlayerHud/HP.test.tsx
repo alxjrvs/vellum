@@ -64,4 +64,41 @@ describe('HP', () => {
     expect(slots()[0].dataset.state).toBe('unmarked');
     expect(slots()[1].dataset.state).toBe('marked');
   });
+
+  it('renders Major/Severe markers at the configured threshold positions (Gambeson L1)', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      thresholds: { major: 2, severe: 3 },
+    });
+    const all = slots();
+    expect(all[0].dataset.threshold).toBeUndefined();
+    expect(all[1].dataset.threshold).toBe('major');
+    expect(all[2].dataset.threshold).toBe('severe');
+    expect(all[3].dataset.threshold).toBeUndefined();
+  });
+
+  it('renders Major at slot 1 and Severe at slot 2 for an unarmored L1 character', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      thresholds: { major: 1, severe: 2 },
+    });
+    const all = slots();
+    expect(all[0].dataset.threshold).toBe('major');
+    expect(all[1].dataset.threshold).toBe('severe');
+  });
+
+  it('renders no threshold markers when thresholds are not set on the character', () => {
+    renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
+    expect(slots().every((s) => s.dataset.threshold === undefined)).toBe(true);
+  });
+
+  it('clicking a slot at a threshold position toggles the slot — visual marker only, no special handling', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      thresholds: { major: 2, severe: 3 },
+    });
+    fireEvent.click(slots()[1]);
+    expect(slots()[1].dataset.state).toBe('marked');
+    expect(slots()[1].dataset.threshold).toBe('major');
+  });
 });
