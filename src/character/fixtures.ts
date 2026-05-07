@@ -1,7 +1,8 @@
-import type { CharacterState } from './types';
+import { CHARACTER_SCHEMA_VERSION, type CharacterState } from './types';
 
 export function makeCharacter(overrides: Partial<CharacterState> = {}): CharacterState {
   return {
+    version: CHARACTER_SCHEMA_VERSION,
     system: 'daggerheart',
     identity: {
       name: 'Seraphine',

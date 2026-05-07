@@ -28,7 +28,10 @@ export interface CharacterConditions {
   readonly feature: Readonly<Record<string, boolean>>;
 }
 
+export const CHARACTER_SCHEMA_VERSION = 1 as const;
+
 export interface CharacterState {
+  readonly version: typeof CHARACTER_SCHEMA_VERSION;
   readonly system: SystemId;
   readonly identity: CharacterIdentity;
   readonly stats: CharacterStats;
