@@ -1,4 +1,5 @@
 import type { CharacterState } from './types';
+import type { CoreConditionId } from '../systems/types';
 
 export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }
@@ -7,7 +8,8 @@ export type CharacterAction =
   | { type: 'HOPE_DECREMENT' }
   | { type: 'HP_TOGGLE_SLOT'; index: number }
   | { type: 'STRESS_TOGGLE_SLOT'; index: number }
-  | { type: 'ARMOR_TOGGLE_SLOT'; index: number };
+  | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
+  | { type: 'CONDITION_TOGGLE'; condition: CoreConditionId };
 
 export function characterReducer(
   state: CharacterState | null,
@@ -47,6 +49,18 @@ export function characterReducer(
       return {
         ...state,
         stats: { ...state.stats, armorSlots: toggleIndex(state.stats.armorSlots, action.index) },
+      };
+    case 'CONDITION_TOGGLE':
+      if (!state) return state;
+      return {
+        ...state,
+        conditions: {
+          ...state.conditions,
+          core: {
+            ...state.conditions.core,
+            [action.condition]: !state.conditions.core[action.condition],
+          },
+        },
       };
   }
 }

@@ -1,0 +1,31 @@
+.core-conditions {
+  font-family: var(--font-family-body);
+  color: var(--color-ink);
+}
+
+.core-conditions__list {
+  display: inline-flex;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.core-conditions__badge {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--color-ink-muted);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.core-conditions__badge[data-state='active'] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
