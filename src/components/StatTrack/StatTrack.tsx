@@ -35,15 +35,7 @@ function PipRow({ trackLength, currentValue, label, onIncrement, onDecrement }: 
           className="stat-track__pip"
           data-state={filled ? 'filled' : 'empty'}
           aria-label={`${label} pip ${i + 1} ${filled ? 'filled' : 'empty'}`}
-          onClick={onIncrement}
-          onContextMenu={
-            onDecrement
-              ? (e) => {
-                  e.preventDefault();
-                  onDecrement();
-                }
-              : undefined
-          }
+          onClick={filled && onDecrement ? onDecrement : onIncrement}
         />
       ))}
     </div>

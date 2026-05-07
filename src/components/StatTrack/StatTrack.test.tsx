@@ -31,26 +31,33 @@ describe('StatTrack — pip mode', () => {
     expect(pips.filter((p) => p.dataset.state === 'empty')).toHaveLength(2);
   });
 
-  it('fires onIncrement when a pip is clicked (one-click manipulation)', () => {
+  it('fires onIncrement when any pip is clicked when only onIncrement is supplied', () => {
     const onIncrement = vi.fn();
     render(<StatTrack label="Hope" trackLength={6} currentValue={2} onIncrement={onIncrement} />);
     fireEvent.click(pipsOf('Hope')[0]);
-    expect(onIncrement).toHaveBeenCalledTimes(1);
+    fireEvent.click(pipsOf('Hope')[5]);
+    expect(onIncrement).toHaveBeenCalledTimes(2);
   });
 
-  it('fires onDecrement on right-click when supplied', () => {
+  it('routes click on empty pip to onIncrement and click on filled pip to onDecrement when both supplied', () => {
+    const onIncrement = vi.fn();
     const onDecrement = vi.fn();
     render(
       <StatTrack
-        label="Fear"
-        trackLength={daggerheartSystem.fear.max}
-        currentValue={3}
-        onIncrement={() => {}}
+        label="Hope"
+        trackLength={6}
+        currentValue={4}
+        onIncrement={onIncrement}
         onDecrement={onDecrement}
       />
     );
-    fireEvent.contextMenu(pipsOf('Fear')[0]);
+    fireEvent.click(pipsOf('Hope')[4]);
+    expect(onIncrement).toHaveBeenCalledTimes(1);
+    expect(onDecrement).not.toHaveBeenCalled();
+
+    fireEvent.click(pipsOf('Hope')[3]);
     expect(onDecrement).toHaveBeenCalledTimes(1);
+    expect(onIncrement).toHaveBeenCalledTimes(1);
   });
 });
 

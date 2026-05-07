@@ -1,6 +1,7 @@
 import { useCharacter } from './character/useCharacter';
 import { CharacterImport } from './components/CharacterImport';
 import { CharacterExport } from './components/CharacterExport';
+import { Hope } from './components/PlayerHud';
 import { useSystem } from './systems/useSystem';
 import { useTheme } from './themes/useTheme';
 
@@ -16,10 +17,13 @@ export function App() {
         System: {system.label} · Theme: {theme.label}
       </p>
       {character ? (
-        <p>
-          Loaded: {character.identity.name} ({character.identity.ancestry}{' '}
-          {character.identity.class})
-        </p>
+        <>
+          <p>
+            Loaded: {character.identity.name} ({character.identity.ancestry}{' '}
+            {character.identity.class})
+          </p>
+          <Hope />
+        </>
       ) : (
         <p>Import a character to begin.</p>
       )}
