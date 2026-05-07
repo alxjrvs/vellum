@@ -1,7 +1,7 @@
 import { useCharacter } from './character/useCharacter';
 import { CharacterImport } from './components/CharacterImport';
 import { CharacterExport } from './components/CharacterExport';
-import { Hope } from './components/PlayerHud';
+import { Hope, HP } from './components/PlayerHud';
 import { useSystem } from './systems/useSystem';
 import { useTheme } from './themes/useTheme';
 
@@ -23,6 +23,7 @@ export function App() {
             {character.identity.class})
           </p>
           <Hope />
+          <HP />
         </>
       ) : (
         <p>Import a character to begin.</p>
