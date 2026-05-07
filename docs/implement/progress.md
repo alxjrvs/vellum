@@ -25,16 +25,16 @@ scenarios in issue #1 are the verification gates.
 - Task 3: app skeleton + smoke test ✓
 - Task 4: pre-commit hook (simple-git-hooks + lint-staged) ✓ (config only — see verification gap below)
 - Task 5: verify all four AC ✓
-- Task 6: commit + push + PR (in progress)
+- Task 6: commit + push + PR ✓ (PR #25 — https://github.com/alxjrvs/vellum/pull/25, commit f502fb9)
 
 ## Verification record
 
-| AC | Status | Evidence |
-|----|--------|----------|
-| `bun install && bun run dev` serves at :5173 | ✓ | Curl returned HTTP 200 with React Refresh injected |
-| `bun run check` exits 0 (eslint + prettier + tsc) | ✓ | All three sub-commands return clean |
-| `bun run test` reports ≥1 passing test with coverage | ✓ | 1 test passing; v8 coverage summary printed |
-| Pre-commit rejects TS errors / lint violations | partial | Hook *command* (`lint-staged && typecheck`) verified to exit non-zero on bad code (TS error → exit 2; lint error → exit 1). Hook *installation* via `simple-git-hooks` postinstall blocked by agent sandbox (`.git/hooks/` is non-writable). The user's `bun install` outside the agent installs the hook automatically. |
+| AC                                                   | Status  | Evidence                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `bun install && bun run dev` serves at :5173         | ✓       | Curl returned HTTP 200 with React Refresh injected                                                                                                                                                                                                                                                                       |
+| `bun run check` exits 0 (eslint + prettier + tsc)    | ✓       | All three sub-commands return clean                                                                                                                                                                                                                                                                                      |
+| `bun run test` reports ≥1 passing test with coverage | ✓       | 1 test passing; v8 coverage summary printed                                                                                                                                                                                                                                                                              |
+| Pre-commit rejects TS errors / lint violations       | partial | Hook _command_ (`lint-staged && typecheck`) verified to exit non-zero on bad code (TS error → exit 2; lint error → exit 1). Hook _installation_ via `simple-git-hooks` postinstall blocked by agent sandbox (`.git/hooks/` is non-writable). The user's `bun install` outside the agent installs the hook automatically. |
 
 ## Verification gap
 
