@@ -1,6 +1,6 @@
-# Implement progress — Issue #21: Daggerheart visual theme
+# Implement progress — Issue #22: Full-group OBS pipeline rehearsal
 
-- **Branch:** feat/21-daggerheart-visual-theme
+- **Branch:** feat/22-m2-gate-2-rehearsal
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,53 +8,30 @@
 
 ## Plan summary
 
-Issue #21 has three ACs:
+Issue #22 explicitly notes "Minimal AI leverage — this is logistical
+coordination work." The acceptance criteria require:
 
-| AC                                                         | Status                                                                |
-| ---------------------------------------------------------- | --------------------------------------------------------------------- |
-| Visual treatment reflects parchment / card / gold-black    | First-pass card frame shipped; final aesthetic gated by #22 rehearsal |
-| Group review: 3+ players + GM agree it feels Daggerheart   | **DEFERRED** — operational gate on #22 (M2 Gate 2)                    |
-| No hardcoded color/typography values; all use `var(--...)` | Already true on `main`; assertion test added to lock in               |
+| AC                                                          | Status                                              |
+| ----------------------------------------------------------- | --------------------------------------------------- |
+| Each player + GM reaches working HUD-on-Discord state       | **DEFERRED** — operational, requires real rehearsal |
+| Non-OBS-expert can follow setup doc with ≤1 clarifying ping | **DEFERRED** — operational tester touchpoint        |
 
-The `cardSurface`, `cardBorder`, and `gold` theme tokens are defined in
-`daggerheart.theme.ts` but currently **unused** by any component CSS.
-This PR wires them into a parchment-card frame around both the Player
-HUD and GM HUD, and uses gold for the identity name + display
-headings — making the previously theoretical aesthetic register
-visible on screen.
-
-These nudges are intentionally a first pass — the values can be tuned
-during the #22 rehearsal without restructuring the markup.
-
-## Concrete changes
-
-- New `PlayerHud.tsx` wrapper component renders the player stats stack
-  inside a card frame using `--color-card-surface` /
-  `--color-card-border`
-- `GmHud.css` adds the same card frame treatment
-- `IdentityLabel.css` — name span uses `--color-gold`
-- `index.css` — `h1, h2, h3` headings use `--color-gold` as the
-  display accent (was `--color-ink`)
-- `App.tsx` uses `<PlayerHud />` instead of inlining the player stats
-- Regression test added: scan repo CSS files and assert no hardcoded
-  `#hex` / `rgb()` / `rgba()` values exist outside `src/themes/`
+What this PR ships is the only deliverable that exists independent of
+the rehearsal itself: a written procedure document that the operator
+runs on the day of the rehearsal. The procedure cross-references the
+existing `docs/obs-pipeline-verification.md` (M1 Gate 1 individual
+setup) and `docs/legibility-validation.md` (the calibration check from
+issue #20), and adds the multi-participant choreography that isn't
+present in either of those.
 
 ## Files
 
-- `src/components/PlayerHud/PlayerHud.tsx` (new)
-- `src/components/PlayerHud/PlayerHud.css` (new)
-- `src/components/PlayerHud/PlayerHud.test.tsx` (new)
-- `src/components/PlayerHud/index.ts` — export `PlayerHud`
-- `src/components/PlayerHud/IdentityLabel.css` — name uses
-  `--color-gold`
-- `src/components/GmHud/GmHud.css` — add card frame
-- `src/index.css` — headings use `--color-gold`
-- `src/App.tsx` — replace inline stats with `<PlayerHud />`
-- `src/themes/no-hardcoded-values.test.ts` (new) — regression assertion
+- `docs/m2-gate-2-rehearsal.md` (new) — full-group rehearsal procedure
 
 ## Out of scope
 
-- Final aesthetic values — pinned by #22 rehearsal
-- Frame flourishes (corner ornaments, parchment textures) — would need
-  an asset pipeline; deferred until rehearsal validates the simpler
-  treatment
+- Running the rehearsal itself (operational; tracked by closing the
+  issue with sign-off comments)
+- Updates to `docs/obs-pipeline-verification.md` — no gaps found
+  during planning; if the non-expert tester touchpoint surfaces a
+  gap, that's a follow-up issue
