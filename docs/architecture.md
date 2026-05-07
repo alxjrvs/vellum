@@ -219,6 +219,7 @@ All channels are local. There are no network sockets, no WebSocket connections, 
 **Deliverables:**
 - OBS renders app without blank page or CORS errors; transparency is intact when composited over webcam scene
 - Discord receives a 16:9 webcam feed with the Vellum layer composited; no format rejection
+- Documented manual smoke-test procedure: [docs/obs-pipeline-verification.md](obs-pipeline-verification.md)
 
 **Dependencies:**
 - 1A (app must boot and serve)
