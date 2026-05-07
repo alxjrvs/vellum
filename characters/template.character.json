@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "system": "daggerheart",
+  "identity": {
+    "name": "REPLACE_ME",
+    "class": "REPLACE_ME",
+    "ancestry": "REPLACE_ME",
+    "subclass": "REPLACE_ME",
+    "community": "REPLACE_ME",
+    "level": 1
+  },
+  "stats": {
+    "hope": 2,
+    "hp": [],
+    "stress": [],
+    "armorSlots": []
+  },
+  "slotCounts": {
+    "hp": 6,
+    "stress": 6,
+    "armorSlots": 3
+  },
+  "thresholds": {
+    "major": 3,
+    "severe": 5
+  },
+  "conditions": {
+    "core": {
+      "hidden": false,
+      "restrained": false,
+      "vulnerable": false
+    },
+    "feature": {}
+  },
+  "featureConditions": []
+}

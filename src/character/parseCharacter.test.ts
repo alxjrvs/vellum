@@ -121,6 +121,26 @@ describe('parseCharacter', () => {
     }
   });
 
+  it('preserves thresholds when present and valid', () => {
+    const character = makeCharacter({ thresholds: { major: 3, severe: 5 } });
+    const result = parseCharacter(JSON.parse(JSON.stringify(character)));
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.character.thresholds).toEqual({ major: 3, severe: 5 });
+    }
+  });
+
+  it('rejects non-numeric threshold fields', () => {
+    const character = makeCharacter();
+    const input = JSON.parse(
+      JSON.stringify({ ...character, thresholds: { major: 'three', severe: 5 } })
+    );
+    expect(parseCharacter(input)).toMatchObject({
+      ok: false,
+      error: expect.stringContaining('thresholds.major'),
+    });
+  });
+
   it('round-trips a character built at the current schema version', () => {
     const character = makeCharacter();
     expect(character.version).toBe(CHARACTER_SCHEMA_VERSION);
