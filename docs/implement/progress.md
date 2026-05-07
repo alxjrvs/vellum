@@ -1,6 +1,6 @@
-# Implement progress — Issue #15: Feature condition badges and conditions panel
+# Implement progress — Issue #16: Character identity label
 
-- **Branch:** feat/15-conditions-panel
+- **Branch:** feat/16-identity-label
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,36 +8,32 @@
 
 ## Plan summary
 
-Adds a Conditions panel that hosts both core (Hidden/Restrained/Vulnerable)
-and feature condition badges. Panel open/close is local React `useState`
-(not persisted). Per REQ-026, one open step before toggle is acceptable —
-the AC explicitly says badges are visible only when the panel is open, so
-this refactors #14's always-on display into the panel.
+Adds an `IdentityLabel` component that renders `Name — Class, Ancestry`
+from `character.identity` whenever a character is loaded. Replaces the
+ad-hoc `<p>Loaded: ...</p>` line currently in `App.tsx`.
 
-Feature conditions come from `character.featureConditions: readonly string[]`
-(catalogue) with active state from `character.conditions.feature[name]`.
-Reducer adds `FEATURE_CONDITION_TOGGLE { name }`.
+When no character is loaded, the label renders nothing (no placeholders).
+Visual sizing targets ~640×360 video-tile legibility (REQ for #20 will
+formally validate this — for now, use existing display font + label size
+tokens).
 
 ## Files
 
-- `src/character/reducer.ts` — `FEATURE_CONDITION_TOGGLE { name }` action
-- `src/character/reducer.test.ts` — feature toggle tests
-- `src/components/PlayerHud/ConditionsPanel.tsx` (new) — panel with toggle button + badges
-- `src/components/PlayerHud/ConditionsPanel.css` (new)
-- `src/components/PlayerHud/ConditionsPanel.test.tsx` (new)
-- `src/components/PlayerHud/index.ts` — export ConditionsPanel
-- `src/App.tsx` — replace `<CoreConditions />` with `<ConditionsPanel />`
+- `src/components/PlayerHud/IdentityLabel.tsx` (new)
+- `src/components/PlayerHud/IdentityLabel.css` (new)
+- `src/components/PlayerHud/IdentityLabel.test.tsx` (new)
+- `src/components/PlayerHud/index.ts` — export `IdentityLabel`
+- `src/App.tsx` — replace ad-hoc `<p>Loaded: ...</p>` with `<IdentityLabel />`
 
 ## Acceptance criteria → verification
 
-| AC                                                                           | Verification                                                       |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Feature conditions from JSON appear alongside core when panel open           | ConditionsPanel.test.tsx with featureConditions: ['On Fire']       |
-| Panel toggle button opens the panel; all badges visible/toggleable when open | ConditionsPanel.test.tsx click toggle → badges queryable           |
-| Feature condition toggle persists synchronously                              | Reducer tests + CharacterProvider auto-persist (existing coverage) |
-| Zero feature conditions → only the three core badges shown (no placeholders) | ConditionsPanel.test.tsx with featureConditions: []                |
+| AC                                                     | Verification                                                        |
+| ------------------------------------------------------ | ------------------------------------------------------------------- |
+| Renders `Name — Class, Ancestry` from identity JSON    | IdentityLabel.test.tsx — assert exact text content                  |
+| No character loaded → no placeholder/hardcoded strings | IdentityLabel.test.tsx with null character → component returns null |
+| Legible at ~640×360                                    | Uses `--font-family-display` + `--font-size-label`; #20 validates   |
 
 ## Out of scope
 
-- Cross-checking featureConditions against an SRD catalogue (filed as #30)
-- Editing the feature conditions list at runtime (M3 / out)
+- Optional identity fields (subclass/community/level) — issue #17
+- Discord-scale legibility validation — issue #20

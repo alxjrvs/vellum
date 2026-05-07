@@ -49,6 +49,6 @@ describe('App', () => {
 
     renderApp();
 
-    expect(screen.getByText(/Loaded: Seraphine \(Elf Bard\)/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Character identity').textContent).toBe('Seraphine — Bard, Elf');
   });
 });
