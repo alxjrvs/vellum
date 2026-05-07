@@ -8,6 +8,7 @@
 
 .identity-label__name {
   font-weight: 600;
+  color: var(--color-gold);
 }
 
 .identity-label__detail {

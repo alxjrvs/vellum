@@ -1,6 +1,6 @@
-# Implement progress — Issue #20: Discord-scale legibility validation
+# Implement progress — Issue #21: Daggerheart visual theme
 
-- **Branch:** feat/20-legibility-calibration
+- **Branch:** feat/21-daggerheart-visual-theme
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,50 +8,53 @@
 
 ## Plan summary
 
-Issue #20 explicitly notes "Minimal AI leverage on this deliverable" —
-final calibration requires the M2 Gate 2 group rehearsal on a real
-Discord call (#22). What this PR ships is a **first-pass calibration**
-that bumps font and pip dimensions toward sizes more likely to be
-legible at ~640×360 effective resolution, plus a calibration notes doc
-documenting the validation procedure for the operator to use during
-the rehearsal.
+Issue #21 has three ACs:
 
-Concrete changes:
+| AC                                                         | Status                                                                |
+| ---------------------------------------------------------- | --------------------------------------------------------------------- |
+| Visual treatment reflects parchment / card / gold-black    | First-pass card frame shipped; final aesthetic gated by #22 rehearsal |
+| Group review: 3+ players + GM agree it feels Daggerheart   | **DEFERRED** — operational gate on #22 (M2 Gate 2)                    |
+| No hardcoded color/typography values; all use `var(--...)` | Already true on `main`; assertion test added to lock in               |
 
-- `font-size-label` 12px → 16px (+33%)
-- `font-size-base` 16px → 18px (+12.5%)
-- `font-size-heading` 28px → 32px (+14%)
-- New `--pip-size` token at 24px (was using `--spacing-md` = 16px, +50%)
-- StatTrack pip + slot consume `--pip-size`
-- Extend `--spacing-md` consumers unchanged (only the visual stat
-  surfaces grow)
+The `cardSurface`, `cardBorder`, and `gold` theme tokens are defined in
+`daggerheart.theme.ts` but currently **unused** by any component CSS.
+This PR wires them into a parchment-card frame around both the Player
+HUD and GM HUD, and uses gold for the identity name + display
+headings — making the previously theoretical aesthetic register
+visible on screen.
 
-These nudges are intentionally modest — large enough to materially help
-thumbnail visibility, small enough that they're unlikely to break the
-1920×1080 layout before the rehearsal validates the final values.
+These nudges are intentionally a first pass — the values can be tuned
+during the #22 rehearsal without restructuring the markup.
 
-AC #3 (group review on a real Discord call) is **operationally gated by
-issue #22** and is not closed by this PR.
+## Concrete changes
+
+- New `PlayerHud.tsx` wrapper component renders the player stats stack
+  inside a card frame using `--color-card-surface` /
+  `--color-card-border`
+- `GmHud.css` adds the same card frame treatment
+- `IdentityLabel.css` — name span uses `--color-gold`
+- `index.css` — `h1, h2, h3` headings use `--color-gold` as the
+  display accent (was `--color-ink`)
+- `App.tsx` uses `<PlayerHud />` instead of inlining the player stats
+- Regression test added: scan repo CSS files and assert no hardcoded
+  `#hex` / `rgb()` / `rgba()` values exist outside `src/themes/`
 
 ## Files
 
-- `src/themes/types.ts` — add `pipSize` to `LayoutTokens`; bump font defaults
-- `src/themes/daggerheart.theme.ts` — set `pipSize: '24px'`; bump font sizes
-- `src/themes/cssVars.ts` — emit `--pip-size`
-- `src/themes/cssVars.test.ts` — assert new values + `--pip-size`
-- `src/themes/ThemeProvider.test.tsx` — same
-- `src/components/StatTrack/StatTrack.css` — pip/slot use `var(--pip-size)`
-- `docs/legibility-validation.md` (new) — procedure for M2 Gate 2
-
-## Acceptance criteria → verification
-
-| AC                                                   | Status                                                                  |
-| ---------------------------------------------------- | ----------------------------------------------------------------------- |
-| 640×360: all four core stats + identity legible      | First-pass calibration shipped; final validation gated by #22 rehearsal |
-| Thumbnail tiles (200–300px): identity + Hope visible | First-pass calibration shipped; final validation gated by #22 rehearsal |
-| Group review on real Discord call confirms usability | **DEFERRED** — operational gate on #22 (M2 Gate 2)                      |
+- `src/components/PlayerHud/PlayerHud.tsx` (new)
+- `src/components/PlayerHud/PlayerHud.css` (new)
+- `src/components/PlayerHud/PlayerHud.test.tsx` (new)
+- `src/components/PlayerHud/index.ts` — export `PlayerHud`
+- `src/components/PlayerHud/IdentityLabel.css` — name uses
+  `--color-gold`
+- `src/components/GmHud/GmHud.css` — add card frame
+- `src/index.css` — headings use `--color-gold`
+- `src/App.tsx` — replace inline stats with `<PlayerHud />`
+- `src/themes/no-hardcoded-values.test.ts` (new) — regression assertion
 
 ## Out of scope
 
-- Final calibration values — pinned by #22 rehearsal
-- Visual theming polish — issue #21
+- Final aesthetic values — pinned by #22 rehearsal
+- Frame flourishes (corner ornaments, parchment textures) — would need
+  an asset pipeline; deferred until rehearsal validates the simpler
+  treatment
