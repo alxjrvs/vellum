@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.vite
+docs/architecture.md
+docs/PRD.md
+.github/architecture-audit.md
+.github/prd-audit.md
+
+# Bun lockfile (machine-generated)
+bun.*ock
