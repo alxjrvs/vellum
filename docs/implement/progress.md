@@ -1,6 +1,6 @@
-# Implement progress — Issue #11: HP Major/Severe threshold indicators
+# Implement progress — Issue #12: Stress slot track
 
-- **Branch:** feat/11-hp-threshold-indicators
+- **Branch:** feat/12-stress-slot-track
 - **Base branch:** main
 - **PR strategy:** one
 - **Skill-retro opt-in:** yes (deferred to milestone-end)
@@ -8,38 +8,31 @@
 
 ## Plan summary
 
-Adds visual Major and Severe damage threshold markers to the HP slot track.
-Visual marker only — no automatic damage resolution (per AC).
+Stress is the third HUD stat track and structurally identical to HP:
+slot mode with mark/unmark. Slot count comes from
+`character.slotCounts.stress` (default 6, up to 12 via advancement).
 
-Adds an optional top-level `thresholds: { major: number; severe: number }`
-to `CharacterState` (1-indexed position on the HP track). The HP component
-forwards them to `StatTrack`, which tags the slot button at the threshold
-position with `data-threshold` (`major`, `severe`, or `major-severe` when
-they collide). CSS renders an inline label.
-
-Threshold values are sourced from the imported character JSON; deriving
-them from level + armor base is out of scope here (no level/equipment
-tracking yet).
+Reuses the existing `toggleIndex` helper in `reducer.ts`.
 
 ## Files
 
-- `src/character/types.ts` — add optional `thresholds` field to `CharacterState`
-- `src/components/StatTrack/StatTrack.tsx` — accept `thresholds` prop; tag slot buttons
-- `src/components/StatTrack/StatTrack.css` — visual M/S marker styling
-- `src/components/StatTrack/StatTrack.test.tsx` — coverage for the new prop
-- `src/components/PlayerHud/HP.tsx` — forward `character.thresholds`
-- `src/components/PlayerHud/HP.test.tsx` — coverage for marker rendering
+- `src/character/reducer.ts` — `STRESS_TOGGLE_SLOT { index }` action
+- `src/character/reducer.test.ts` — coverage for toggle (mark, unmark, preserve, null state)
+- `src/components/PlayerHud/Stress.tsx` (new) — wires `useCharacter` → `StatTrack` slot mode
+- `src/components/PlayerHud/Stress.test.tsx` (new)
+- `src/components/PlayerHud/index.ts` — export Stress
+- `src/App.tsx` — render `<Stress />` after `<HP />`
 
 ## Acceptance criteria → verification
 
-| AC                                                                | Verification                                                     |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Gambeson + Level 1 character → Major at position 2, Severe at 3   | HP.test.tsx with thresholds: { major: 2, severe: 3 }             |
-| Unarmored + Level 1 → Major at 1 (Level), Severe at 2 (Level × 2) | HP.test.tsx with thresholds: { major: 1, severe: 2 }             |
-| Indicators are visual only — no auto damage resolution            | StatTrack tests assert no extra event handlers / state mutations |
-| Character with no thresholds renders no markers                   | HP.test.tsx asserts absence of [data-threshold] when omitted     |
+| AC                                             | Verification                                                    |
+| ---------------------------------------------- | --------------------------------------------------------------- |
+| Default Stress cap=6 → renders 6 slots         | Stress.test.tsx default fixture                                 |
+| Advanced cap=9 via slotCounts.stress → 9 slots | Stress.test.tsx with slotCounts.stress=9                        |
+| Click unmarked → marks; click marked → unmarks | Stress.test.tsx assertions                                      |
+| State persisted to localStorage synchronously  | CharacterProvider auto-persists via useEffect (already covered) |
 
 ## Out of scope
 
-- Computing thresholds from level + armor base (no level/equipment fields yet)
-- Damage application / auto-marking slots when a threshold is crossed
+- Stress thresholds (Daggerheart doesn't use them on the Stress track)
+- Stress max enforcement at the reducer level (slotCounts already gates render)

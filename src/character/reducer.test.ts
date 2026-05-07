@@ -82,4 +82,32 @@ describe('characterReducer', () => {
       expect(characterReducer(null, { type: 'HP_TOGGLE_SLOT', index: 0 })).toBeNull();
     });
   });
+
+  describe('STRESS_TOGGLE_SLOT', () => {
+    it('marks an unmarked slot', () => {
+      const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 0 });
+      expect(next?.stats.stress).toEqual([0]);
+    });
+
+    it('unmarks a marked slot', () => {
+      const character = makeCharacter({
+        stats: { hope: 2, hp: [], stress: [0, 1], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 0 });
+      expect(next?.stats.stress).toEqual([1]);
+    });
+
+    it('preserves other marked slots when toggling one', () => {
+      const character = makeCharacter({
+        stats: { hope: 2, hp: [], stress: [0, 2, 4], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 1 });
+      expect([...(next?.stats.stress ?? [])].sort()).toEqual([0, 1, 2, 4]);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'STRESS_TOGGLE_SLOT', index: 0 })).toBeNull();
+    });
+  });
 });
