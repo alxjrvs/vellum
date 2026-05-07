@@ -4,7 +4,8 @@ export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }
   | { type: 'CLEAR_CHARACTER' }
   | { type: 'HOPE_INCREMENT'; max: number }
-  | { type: 'HOPE_DECREMENT' };
+  | { type: 'HOPE_DECREMENT' }
+  | { type: 'HP_TOGGLE_SLOT'; index: number };
 
 export function characterReducer(
   state: CharacterState | null,
@@ -27,5 +28,15 @@ export function characterReducer(
         ...state,
         stats: { ...state.stats, hope: Math.max(state.stats.hope - 1, 0) },
       };
+    case 'HP_TOGGLE_SLOT':
+      if (!state) return state;
+      return {
+        ...state,
+        stats: { ...state.stats, hp: toggleIndex(state.stats.hp, action.index) },
+      };
   }
+}
+
+function toggleIndex(slots: readonly number[], index: number): readonly number[] {
+  return slots.includes(index) ? slots.filter((i) => i !== index) : [...slots, index];
 }
