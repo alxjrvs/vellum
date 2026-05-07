@@ -18,4 +18,40 @@ describe('characterReducer', () => {
     const character = makeCharacter();
     expect(characterReducer(character, { type: 'CLEAR_CHARACTER' })).toBeNull();
   });
+
+  describe('HOPE_INCREMENT', () => {
+    it('adds 1 to hope', () => {
+      const character = makeCharacter({ stats: { hope: 4, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_INCREMENT', max: 6 });
+      expect(next?.stats.hope).toBe(5);
+    });
+
+    it('caps at the supplied max', () => {
+      const character = makeCharacter({ stats: { hope: 6, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_INCREMENT', max: 6 });
+      expect(next?.stats.hope).toBe(6);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'HOPE_INCREMENT', max: 6 })).toBeNull();
+    });
+  });
+
+  describe('HOPE_DECREMENT', () => {
+    it('subtracts 1 from hope', () => {
+      const character = makeCharacter({ stats: { hope: 4, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_DECREMENT' });
+      expect(next?.stats.hope).toBe(3);
+    });
+
+    it('floors at 0', () => {
+      const character = makeCharacter({ stats: { hope: 0, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_DECREMENT' });
+      expect(next?.stats.hope).toBe(0);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'HOPE_DECREMENT' })).toBeNull();
+    });
+  });
 });
