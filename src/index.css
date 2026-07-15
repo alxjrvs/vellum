@@ -20,6 +20,13 @@ button {
   cursor: pointer;
 }
 
+.overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
 h1,
 h2,
 h3 {

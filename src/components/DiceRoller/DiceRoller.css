@@ -1,0 +1,190 @@
+.dice-roller {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-card-surface);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  min-width: 260px;
+}
+
+.dice-roller__title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading);
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.dice-roller__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.dice-roller__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.dice-roller__field-label {
+  font-size: var(--font-size-label);
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--spacing-xs);
+}
+
+.dice-roller__stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.dice-roller__step {
+  width: var(--font-size-heading);
+  height: var(--font-size-heading);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-size: var(--font-size-base);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dice-roller__step:hover {
+  background: var(--color-gold);
+}
+
+.dice-roller__mod-value {
+  min-width: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.dice-roller__toggle {
+  display: inline-flex;
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.dice-roller__toggle-option {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-left: var(--border-width) solid var(--color-card-border);
+  background: var(--color-parchment);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}
+
+.dice-roller__toggle-option:first-child {
+  border-left: none;
+}
+
+.dice-roller__toggle-option[data-active='true'] {
+  background: var(--color-accent);
+  color: var(--color-parchment);
+}
+
+.dice-roller__roll {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-parchment);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.dice-roller__roll:hover {
+  background: var(--color-danger);
+}
+
+.dice-roller__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-parchment);
+}
+
+.dice-roller__total {
+  font-family: var(--font-family-display);
+  font-size: calc(var(--font-size-heading) * 2);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+
+.dice-roller__outcome {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--spacing-xs);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.dice-roller__result[data-outcome='hope'] .dice-roller__outcome {
+  color: var(--color-gold);
+}
+
+.dice-roller__result[data-outcome='fear'] .dice-roller__outcome {
+  color: var(--color-danger);
+}
+
+.dice-roller__result[data-outcome='critical hope'] .dice-roller__outcome {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.dice-roller__breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.dice-roller__die {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: var(--font-size-heading);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-card-surface);
+}
+
+.dice-roller__die dt {
+  font-size: var(--font-size-label);
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+}
+
+.dice-roller__die dd {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.dice-roller__die[data-kind='hope'] dd {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.dice-roller__die[data-kind='fear'] dd {
+  color: var(--color-danger);
+  font-weight: 700;
+}

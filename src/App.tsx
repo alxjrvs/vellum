@@ -2,6 +2,7 @@ import { useCharacter } from './character/useCharacter';
 import { CharacterImport } from './components/CharacterImport';
 import { CharacterExport } from './components/CharacterExport';
 import { PlayerHud } from './components/PlayerHud';
+import { DiceRoller } from './components/DiceRoller';
 import { GmHud } from './components/GmHud';
 import { useSystem } from './systems/useSystem';
 import { useTheme } from './themes/useTheme';
@@ -27,7 +28,10 @@ export function App() {
       <p>
         System: {system.label} · Theme: {theme.label}
       </p>
-      {character ? <PlayerHud /> : <p>Import a character to begin.</p>}
+      <div className="overview">
+        {character ? <PlayerHud /> : <p>Import a character to begin.</p>}
+        <DiceRoller />
+      </div>
       <CharacterImport />
       <CharacterExport />
     </main>

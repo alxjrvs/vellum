@@ -5,6 +5,7 @@
     "": {
       "name": "vellum",
       "dependencies": {
+        "@randsum/daggerheart": "0.27.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
       },
@@ -178,6 +179,10 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@randsum/daggerheart": ["@randsum/daggerheart@0.27.0", "", { "dependencies": { "@randsum/roller": "~0.26.11" } }, "sha512-6k5v4e6DtAhZS6dUAbWJwwbIGs4L6GupJK/lRY5cq8+nR4EkiIiel4YESLy/qFYIdBRHzbyE5hWDbhfLEtevJg=="],
+
+    "@randsum/roller": ["@randsum/roller@0.26.11", "", { "bin": { "@randsum/roller": "bin/randsum" } }, "sha512-nk1790WJJ7RoJvVAxiCjp4rV1aYk0+031VJ1kHJ/rB4kFTnh4cwINgYqtGZvOEK5dzVJl4vtl6LjG4Zq+V9c+A=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
 
