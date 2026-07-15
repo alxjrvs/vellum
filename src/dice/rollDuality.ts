@@ -1,4 +1,4 @@
-import { roll } from '@randsum/daggerheart';
+import { rollDaggerheart } from '@randsum/daggerheart';
 
 /**
  * Daggerheart's Duality Dice: a d12 Hope die and a d12 Fear die rolled
@@ -46,24 +46,18 @@ export function rollDuality(input: DualityRollInput = {}): DualityRoll {
   const modifier = input.modifier ?? 0;
   const rolledWith = input.advantage ?? 'none';
 
-  const { total, result, details } = roll({
+  const { result } = rollDaggerheart({
     modifier,
     ...(rolledWith !== 'none' ? { rollingWith: ADVANTAGE_ARG[rolledWith] } : {}),
   });
 
-  // The roller engine types `details` as optional, but a Daggerheart roll
-  // always resolves the duality dice — a missing payload is a contract break.
-  if (!details) {
-    throw new Error('randsum daggerheart roll returned no duality details');
-  }
-
   return {
-    total,
-    outcome: result,
-    hope: details.hope.roll,
-    fear: details.fear.roll,
-    modifier: details.modifier,
-    advantageValue: details.advantage?.roll,
+    total: result.total,
+    outcome: result.type,
+    hope: result.details.hope.roll,
+    fear: result.details.fear.roll,
+    modifier: result.details.modifier,
+    advantageValue: result.details.advantage?.roll,
     rolledWith,
   };
 }

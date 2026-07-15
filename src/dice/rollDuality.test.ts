@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { rollDuality } from './rollDuality';
 
-const roll = vi.hoisted(() => vi.fn());
-vi.mock('@randsum/daggerheart', () => ({ roll }));
+const rollDaggerheart = vi.hoisted(() => vi.fn());
+vi.mock('@randsum/daggerheart', () => ({ rollDaggerheart }));
 
 function engineResult(over: {
   total: number;
@@ -13,14 +13,15 @@ function engineResult(over: {
   advantage?: number;
 }) {
   return {
-    rolls: [],
-    total: over.total,
-    result: over.type,
-    details: {
-      hope: { roll: over.hope, amplified: false },
-      fear: { roll: over.fear, amplified: false },
-      modifier: over.modifier,
-      ...(over.advantage !== undefined ? { advantage: { roll: over.advantage } } : {}),
+    result: {
+      total: over.total,
+      type: over.type,
+      details: {
+        hope: { roll: over.hope, amplified: false },
+        fear: { roll: over.fear, amplified: false },
+        modifier: over.modifier,
+        ...(over.advantage !== undefined ? { advantage: { roll: over.advantage } } : {}),
+      },
     },
   };
 }
@@ -29,37 +30,43 @@ afterEach(() => vi.clearAllMocks());
 
 describe('rollDuality — engine argument mapping', () => {
   it('passes a zero modifier and no rollingWith when called with no input', () => {
-    roll.mockReturnValue(engineResult({ total: 10, type: 'hope', hope: 6, fear: 4, modifier: 0 }));
+    rollDaggerheart.mockReturnValue(
+      engineResult({ total: 10, type: 'hope', hope: 6, fear: 4, modifier: 0 })
+    );
     rollDuality();
-    expect(roll).toHaveBeenCalledWith({ modifier: 0 });
+    expect(rollDaggerheart).toHaveBeenCalledWith({ modifier: 0 });
   });
 
   it('forwards the modifier and omits rollingWith when advantage is "none"', () => {
-    roll.mockReturnValue(engineResult({ total: 13, type: 'hope', hope: 8, fear: 3, modifier: 2 }));
+    rollDaggerheart.mockReturnValue(
+      engineResult({ total: 13, type: 'hope', hope: 8, fear: 3, modifier: 2 })
+    );
     rollDuality({ modifier: 2, advantage: 'none' });
-    expect(roll).toHaveBeenCalledWith({ modifier: 2 });
+    expect(rollDaggerheart).toHaveBeenCalledWith({ modifier: 2 });
   });
 
   it('maps advantage to rollingWith: "Advantage"', () => {
-    roll.mockReturnValue(
+    rollDaggerheart.mockReturnValue(
       engineResult({ total: 15, type: 'hope', hope: 7, fear: 5, modifier: 0, advantage: 3 })
     );
     rollDuality({ advantage: 'advantage' });
-    expect(roll).toHaveBeenCalledWith({ modifier: 0, rollingWith: 'Advantage' });
+    expect(rollDaggerheart).toHaveBeenCalledWith({ modifier: 0, rollingWith: 'Advantage' });
   });
 
   it('maps disadvantage to rollingWith: "Disadvantage"', () => {
-    roll.mockReturnValue(
+    rollDaggerheart.mockReturnValue(
       engineResult({ total: 6, type: 'fear', hope: 4, fear: 5, modifier: 1, advantage: -4 })
     );
     rollDuality({ modifier: 1, advantage: 'disadvantage' });
-    expect(roll).toHaveBeenCalledWith({ modifier: 1, rollingWith: 'Disadvantage' });
+    expect(rollDaggerheart).toHaveBeenCalledWith({ modifier: 1, rollingWith: 'Disadvantage' });
   });
 });
 
 describe('rollDuality — result normalization', () => {
   it('flattens the engine result into a DualityRoll', () => {
-    roll.mockReturnValue(engineResult({ total: 15, type: 'hope', hope: 7, fear: 5, modifier: 3 }));
+    rollDaggerheart.mockReturnValue(
+      engineResult({ total: 15, type: 'hope', hope: 7, fear: 5, modifier: 3 })
+    );
     expect(rollDuality({ modifier: 3 })).toEqual({
       total: 15,
       outcome: 'hope',
@@ -72,7 +79,7 @@ describe('rollDuality — result normalization', () => {
   });
 
   it('surfaces the signed advantage die when present', () => {
-    roll.mockReturnValue(
+    rollDaggerheart.mockReturnValue(
       engineResult({ total: 12, type: 'fear', hope: 4, fear: 6, modifier: -1, advantage: -3 })
     );
     expect(rollDuality({ modifier: -1, advantage: 'disadvantage' })).toMatchObject({
