@@ -18,9 +18,13 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
-    "@randsum/daggerheart": "0.27.0",
+    "@randsum/daggerheart": "1.1.0",
+    "@randsum/roller": "1.1.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
+  },
+  "overrides": {
+    "@randsum/roller": "1.1.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
