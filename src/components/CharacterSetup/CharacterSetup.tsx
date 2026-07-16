@@ -2,6 +2,7 @@ import './CharacterSetup.css';
 import { useId, useState, type ComponentProps } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { useSystem } from '../../systems/useSystem';
+import { encodeCharacterToShareParam } from '../../character/shareCode';
 import { CHARACTER_SCHEMA_VERSION, type CharacterState } from '../../character/types';
 
 interface CharacterSetupProps {
@@ -51,6 +52,16 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
   const system = useSystem();
   const [form, setForm] = useState<FormState>(() => initialForm(character));
   const [error, setError] = useState<string | null>(null);
+  const [shareCopied, setShareCopied] = useState(false);
+
+  const handleCopyShareLink = () => {
+    if (!character) return;
+    const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}`;
+    void navigator.clipboard.writeText(url).then(
+      () => setShareCopied(true),
+      () => setShareCopied(false)
+    );
+  };
 
   const set =
     <K extends keyof FormState>(key: K) =>
@@ -161,6 +172,21 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
           </button>
         )}
       </div>
+
+      {character && (
+        <div className="character-setup__share">
+          <button
+            type="button"
+            className="character-setup__share-button"
+            onClick={handleCopyShareLink}
+          >
+            {shareCopied ? 'Share link copied' : 'Copy share link'}
+          </button>
+          <p className="character-setup__share-hint">
+            Paste this link into OBS to load {character.identity.name} with no Interact window.
+          </p>
+        </div>
+      )}
     </form>
   );
 }

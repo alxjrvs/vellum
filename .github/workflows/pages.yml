@@ -1,13 +1,20 @@
 name: Deploy site to GitHub Pages
 
-# Publishes the static marketing/landing site in `site/` to GitHub Pages.
-# The Vellum app itself is local-only and is not deployed here — this is docs/marketing only.
+# Publishes the static marketing/landing site in `site/` to GitHub Pages,
+# alongside the built Vellum app. The app is served at /app/ (latest) and at
+# the version-pinned /app/v0.2.0/ (roadmap M-A). The site (docs/marketing)
+# remains at the Pages root; the app is a subtree, not a separate deployment.
 
 on:
   push:
     branches: [main]
     paths:
       - 'site/**'
+      - 'src/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'package.json'
+      - 'tsconfig*.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -34,10 +41,29 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload site artifact
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build Vellum app
+        # Runs `tsc -b && vite build && obs:check`; outputs to `dist/`.
+        run: bun run build
+
+      - name: Assemble combined Pages artifact
+        # Site at the root; the built app served at /app/ (latest) and the
+        # version-pinned /app/v0.2.0/ mirror (roadmap M-A).
+        run: |
+          mkdir -p _pages/app/v0.2.0
+          cp -R site/. _pages/
+          cp -R dist/. _pages/app/
+          cp -R dist/. _pages/app/v0.2.0/
+
+      - name: Upload combined artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: _pages
 
       - name: Deploy to GitHub Pages
         id: deployment
