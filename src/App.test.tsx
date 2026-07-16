@@ -57,13 +57,16 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /character details/i })).toBeInTheDocument();
   });
 
-  describe('?mode=gm', () => {
+  describe.each([
+    ['hash route #/daggerheart/gm', '/#/daggerheart/gm'],
+    ['legacy ?mode=gm', '/?mode=gm'],
+  ])('GM scene via %s', (_label, url) => {
     it('renders the GM HUD with only the Fear track and no player tracks', () => {
       const character = makeCharacter({
         stats: { hope: 0, fear: 5, hp: [], stress: [], armorSlots: [] },
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
-      window.history.replaceState({}, '', '/?mode=gm');
+      window.history.replaceState({}, '', url);
 
       renderApp();
 
@@ -76,5 +79,15 @@ describe('App', () => {
       expect(screen.queryByLabelText('Conditions panel')).toBeNull();
       expect(screen.queryByLabelText('Character identity')).toBeNull();
     });
+  });
+
+  it('renders the Player HUD for the hash route #/daggerheart/player', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
+    window.history.replaceState({}, '', '/#/daggerheart/player');
+
+    renderApp();
+
+    expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
+    expect(screen.queryByLabelText('GM HUD')).toBeNull();
   });
 });

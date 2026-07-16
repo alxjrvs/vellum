@@ -12,7 +12,8 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
 
 1. **Open the app** → **https://alxjrvs.github.io/vellum/app/**
    It runs in your normal browser tab. (GM? Open
-   `https://alxjrvs.github.io/vellum/app/?mode=gm` for the Fear-only view.)
+   `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` for the Fear-only
+   view.)
 
 2. **Configure your character.** Fill the **Character details** form with the
    numbers from your Daggerheart sheet (name/class + HP / Stress / Armor / Hope

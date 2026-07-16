@@ -68,9 +68,10 @@ Demiplane for stat tracking.
 ### GM only — the Fear view
 
 The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
-browser source at `https://alxjrvs.github.io/vellum/app/?mode=gm` (or keep a
-second scene collection whose source uses that URL). GM mode shows **only the
-Fear track** — no player tracks, no identity.
+browser source at `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` (or
+keep a second scene collection whose source uses that URL). GM mode shows
+**only the Fear track** — no player tracks, no identity. (Older
+`?mode=gm` links still work, so existing OBS setups don't need updating.)
 
 ---
 
@@ -85,7 +86,7 @@ Fear track** — no player tracks, no identity.
   reload restores every value within ~1 second. You do **not** need to
   re-enter your details after a reload; click **Edit details** only if a max
   value was wrong.
-- **GM:** adjust the Fear track the same way in the `?mode=gm` view.
+- **GM:** adjust the Fear track the same way in the `#/daggerheart/gm` view.
 
 ### Rolling — the Duality Dice panel
 
@@ -127,12 +128,12 @@ budget and what counts as a real fallback.
 
 ## Quick reference
 
-| Where            | URL                                                    |
-| ---------------- | ------------------------------------------------------ |
-| Player HUD       | `https://alxjrvs.github.io/vellum/app/`                |
-| GM / Fear view   | `https://alxjrvs.github.io/vellum/app/?mode=gm`        |
-| Marketing / docs | `https://alxjrvs.github.io/vellum/`                    |
-| Your character   | your **share link** (Copy share link → paste into OBS) |
+| Where            | URL                                                         |
+| ---------------- | ----------------------------------------------------------- |
+| Player HUD       | `https://alxjrvs.github.io/vellum/app/#/daggerheart/player` |
+| GM / Fear view   | `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`     |
+| Marketing / docs | `https://alxjrvs.github.io/vellum/`                         |
+| Your character   | your **share link** (Copy share link → paste into OBS)      |
 
 Extending Vellum (systems, themes) or running from source is a developer path —
 see the repo `README.md` and `docs/RELEASE-STRATEGY.md`.
