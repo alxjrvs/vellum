@@ -268,23 +268,25 @@ describe('StatTrack — box shape (toggle interaction)', () => {
 });
 
 describe('StatTrack — heart shape (level interaction)', () => {
-  it('renders hearts; a damaged (filled) count of 2 leaves 2 empty and the rest full', () => {
+  it('renders hearts; currentValue (remaining health) fills full from the left', () => {
     render(
       <StatTrack label="HP" shape="heart" interaction="level" trackLength={6} currentValue={2} />
     );
     const hearts = heartsOf('HP');
     expect(hearts).toHaveLength(6);
-    // filled = damaged = data-state "empty"; unfilled = healthy = data-state "full".
-    expect(hearts.filter((h) => h.dataset.state === 'empty')).toHaveLength(2);
-    expect(hearts.filter((h) => h.dataset.state === 'full')).toHaveLength(4);
+    // filled = remaining health = data-state "full" on the left; the rest are "empty".
+    expect(hearts.filter((h) => h.dataset.state === 'full')).toHaveLength(2);
+    expect(hearts.filter((h) => h.dataset.state === 'empty')).toHaveLength(4);
+    expect(hearts[0].dataset.state).toBe('full');
+    expect(hearts[5].dataset.state).toBe('empty');
     expect(hearts.every((h) => h.querySelector('svg.stat-track__heart-glyph'))).toBe(true);
   });
 
-  it('reads out health remaining (trackLength - currentValue) over the track length', () => {
+  it('reads out currentValue (remaining health) over the track length', () => {
     render(
       <StatTrack label="HP" shape="heart" interaction="level" trackLength={6} currentValue={2} />
     );
-    expect(sectionOf('HP').querySelector('.stat-track__count')).toHaveTextContent('4/6');
+    expect(sectionOf('HP').querySelector('.stat-track__count')).toHaveTextContent('2/6');
   });
 
   it('labels hearts with full/empty wording', () => {
@@ -292,8 +294,8 @@ describe('StatTrack — heart shape (level interaction)', () => {
       <StatTrack label="HP" shape="heart" interaction="level" trackLength={6} currentValue={2} />
     );
     const hearts = heartsOf('HP');
-    expect(hearts[0]).toHaveAttribute('aria-label', 'HP heart 1 empty');
-    expect(hearts[5]).toHaveAttribute('aria-label', 'HP heart 6 full');
+    expect(hearts[0]).toHaveAttribute('aria-label', 'HP heart 1 full');
+    expect(hearts[5]).toHaveAttribute('aria-label', 'HP heart 6 empty');
   });
 
   it('clicking a heart drives onSetValue cumulatively', () => {

@@ -62,16 +62,15 @@ export function StatTrack(props: StatTrackProps) {
     >
       <header className="stat-track__label">
         <span className="stat-track__name">{label}</span>
-        <span className="stat-track__count">{trackReadout(props, shape)}</span>
+        <span className="stat-track__count">{trackReadout(props)}</span>
       </header>
       <TrackRow {...props} shape={shape} interaction={interaction} />
     </section>
   );
 }
 
-function trackReadout(props: StatTrackProps, shape: StatTrackShape): string {
-  // Hearts read as health remaining; every other track reads as how much is filled.
-  if (shape === 'heart') return `${props.trackLength - props.currentValue}/${props.trackLength}`;
+function trackReadout(props: StatTrackProps): string {
+  // Every track's currentValue is what's filled — HP hearts pass remaining health.
   return `${props.currentValue}/${props.trackLength}`;
 }
 
@@ -88,7 +87,7 @@ function thresholdTier(index: number, thresholds: StatTrackThresholds | undefine
 
 /** Per-shape `data-state` / aria wording for a filled vs. empty position. */
 function positionState(shape: StatTrackShape, filled: boolean): string {
-  if (shape === 'heart') return filled ? 'empty' : 'full'; // filled = damaged heart
+  if (shape === 'heart') return filled ? 'full' : 'empty'; // filled = remaining health
   if (shape === 'box') return filled ? 'marked' : 'unmarked';
   return filled ? 'filled' : 'empty';
 }
