@@ -57,8 +57,8 @@ interface SceneDef {
 ```
 
 - Daggerheart ships `player` (Hope/HP/Stress/Armor/Conditions/Identity) and `gm` (Fear only).
-- Addressing: `/?system=daggerheart&scene=gm` (or a path route `/daggerheart/gm`).
-- **Back-compat:** `?mode=gm` → `scene=gm`, `?mode=player`/no param → `scene=player`. Old OBS URLs keep working.
+- Addressing (shipped): a **hash route** `#/daggerheart/gm` — hash, not a path route, so `base: './'` stays intact and the same build runs on Pages under `/vellum/app/`, from `file://`, and in OBS with no server rewrites. The bare `#/gm` shorthand also resolves.
+- **Back-compat:** `?mode=gm` → `gm`, `?mode=player`/no param → `player`. Old OBS URLs keep working.
 - Different systems declare different scenes. A GM-less PbtA system might ship `mc` + `player`. A game with a shared board might ship a `table` scene meant for a screen-share tile, not a webcam. **The role taxonomy belongs to the system, not the core.** This is the whole reason to make scenes first-class rather than hardcoding player/GM.
 
 ### Widget

@@ -83,5 +83,7 @@ points at the hosted app — no `dist`).
 ## GM view
 
 For the GM's Fear-only view, edit the `Vellum HUD` source (double-click →
-Properties) and append `?mode=gm` to the URL, or keep a second collection whose
-browser source points at `https://alxjrvs.github.io/vellum/app/?mode=gm`.
+Properties) and set the URL to
+`https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`, or keep a second
+collection whose browser source points at that URL. (Older `?mode=gm` links
+still resolve, so existing sources keep working.)

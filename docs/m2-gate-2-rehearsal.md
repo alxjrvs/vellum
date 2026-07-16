@@ -73,7 +73,7 @@ expensive enough to drop frames in OBS — file a follow-up issue.
 
 ### Part D — GM view differentiation (5 min)
 
-1. The GM switches their view to `?mode=gm` (URL parameter on the
+1. The GM switches their view to `#/daggerheart/gm` (URL hash on the
    browser source).
 2. The group confirms the GM tile shows Fear and looks distinct
    from the player tiles.
