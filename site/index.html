@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Vellum — The character sheet, on camera.</title>
+    <meta
+      name="description"
+      content="Vellum is a local-only, system-aware camera overlay for tabletop RPGs. It renders a live character HUD over your webcam for the virtual table — no account, no server, no telemetry."
+    />
+    <meta property="og:title" content="Vellum — The character sheet, on camera." />
+    <meta
+      property="og:description"
+      content="A local-only, system-aware camera overlay that puts live tabletop stats on your webcam — for any system you teach it."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..640&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
+   Vellum brand tokens — docs/branding/BRANDING.md
+   Light: Vellum ground, Iron Gall ink. Dark: the gold sings.
+   ============================================================ */
+      :root {
+        --bg: #f6efde; /* Vellum */
+        --surface: #eae0c6; /* Vellum Shade */
+        --ink: #1c1510; /* Iron Gall */
+        --ink-2: #5c5140; /* Sepia — secondary text */
+        --accent: #7d6120; /* Gilt Deep — text-safe gold on light */
+        --gilt: #c9a14a; /* Gilt — ornament only on light */
+        --rule: #8a7e6c; /* Plummet — hairlines, both treatments */
+        --rubric: #9e2b2b; /* Rubric — step numbering */
+        --code-kw: #96431a; /* Ember Deep */
+        --code-str: #7d6120; /* Gilt Deep */
+        --code-type: #3e7360; /* Verdigris */
+        --btn-bg: #1c1510;
+        --btn-fg: #f6efde;
+
+        --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+        --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1c1510; /* Iron Gall */
+          --surface: #282017; /* Iron Gall Raised */
+          --ink: #f6efde; /* Vellum */
+          --ink-2: #b5a88d; /* Parchment Dim */
+          --accent: #c9a14a; /* Gilt — links & accents on dark */
+          --rubric: #d96a5a; /* Rubric Bright */
+          --code-kw: #d96a5a; /* Rubric Bright */
+          --code-str: #c9a14a; /* Gilt */
+          --code-type: #7fb89f; /* Verdigris Bright */
+          --btn-bg: #c9a14a;
+          --btn-fg: #1c1510;
+        }
+      }
+
+      /* ---------- base ---------- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 1rem; /* 16px base */
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      ::selection {
+        background: var(--gilt);
+        color: #1c1510;
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-thickness: 2px;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      .wrap {
+        max-width: 66rem;
+        margin-inline: auto;
+        padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: 0;
+        background: var(--ink);
+        color: var(--bg);
+        padding: 0.5rem 1rem;
+        z-index: 10;
+      }
+      .skip-link:focus {
+        left: 0;
+      }
+
+      /* Major-third type scale — Fraunces top three steps only */
+      h1,
+      h2 {
+        font-family: var(--font-display);
+        font-optical-sizing: auto;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+      }
+      h1 {
+        font-weight: 600;
+        font-size: clamp(2.4rem, 6.5vw, 3.8125rem);
+        line-height: 1.05;
+      } /* 61 */
+      h2 {
+        font-weight: 560;
+        font-size: clamp(1.75rem, 4.5vw, 2.4375rem);
+        line-height: 1.15;
+      } /* 39 */
+      h3 {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 1.5625rem;
+        line-height: 1.3;
+      } /* 25 */
+      .eyebrow {
+        font-size: 0.78125rem; /* 12.5 micro */
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+        line-height: 1.4;
+      }
+      .small {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        color: var(--ink-2);
+      }
+      p {
+        max-width: 62ch;
+      }
+
+      /* ---------- the ruling line ---------- */
+      .rule {
+        border: 0;
+        height: 1px;
+        background: var(--rule);
+        margin: 0;
+      }
+      .rule-tick {
+        position: relative;
+        overflow: visible;
+      }
+      /* One gilt fold-triangle terminal — the signature device, used once. */
+      .rule-tick::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: -3.5px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid var(--gilt);
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+      }
+
+      section {
+        padding-block: clamp(3.5rem, 9vw, 6.5rem);
+      }
+
+      /* ---------- header ---------- */
+      header.site {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--bg);
+        border-bottom: 1px solid var(--rule);
+      }
+      .masthead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding-block: 0.875rem;
+      }
+      .masthead .wordmark svg {
+        display: block;
+        height: 44px;
+        width: auto;
+      }
+      /* Wordmark letters follow the treatment ink (light/dark files differ only here);
+   the V's gold facets are fixed and never recolored. */
+      .wm-stroke {
+        stroke: var(--ink);
+      }
+      .wm-fill {
+        fill: var(--ink);
+      }
+      nav.site-nav {
+        display: flex;
+        gap: clamp(1rem, 3vw, 2rem);
+        flex-wrap: wrap;
+      }
+      nav.site-nav a {
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-bottom: 1px solid transparent;
+        padding-block: 2px;
+      }
+      nav.site-nav a:hover {
+        border-bottom-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ---------- hero ---------- */
+      .hero {
+        position: relative;
+        padding-block: clamp(4rem, 10vw, 7rem) clamp(3.5rem, 8vw, 5.5rem);
+      }
+      /* The ruled page: faint plummet guide lines, laid down before the writing. */
+      .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent calc(2.75rem - 1px),
+          color-mix(in srgb, var(--rule) 22%, transparent) calc(2.75rem - 1px),
+          color-mix(in srgb, var(--rule) 22%, transparent) 2.75rem
+        );
+        mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+      }
+      .hero .wrap {
+        position: relative;
+      }
+      .hero .eyebrow {
+        margin-bottom: 1.25rem;
+      }
+      .hero h1 {
+        max-width: 16ch;
+      }
+      .hero .subhead {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-optical-sizing: auto;
+        font-size: clamp(1.25rem, 2.6vw, 1.5625rem);
+        line-height: 1.3;
+        color: var(--ink-2);
+        margin-top: 1rem;
+        max-width: 30ch;
+      }
+      .hero .lede {
+        margin-top: 1.5rem;
+        color: var(--ink);
+      }
+      .cta-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2.25rem;
+      }
+      .btn {
+        display: inline-block;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        line-height: 1;
+        padding: 0.9rem 1.5rem;
+        border-radius: 7px;
+      }
+      .btn-primary {
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        border: 1px solid var(--btn-bg);
+      }
+      .btn-primary:hover {
+        filter: brightness(1.12);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--rule);
+      }
+      .btn-secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .rise {
+          animation: rise 0.7s ease both;
+        }
+        .rise-1 {
+          animation-delay: 0.06s;
+        }
+        .rise-2 {
+          animation-delay: 0.12s;
+        }
+        .rise-3 {
+          animation-delay: 0.18s;
+        }
+        .rise-4 {
+          animation-delay: 0.26s;
+        }
+        @keyframes rise {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+      }
+
+      /* ---------- demo placeholder: the overlay sheet ---------- */
+      .demo {
+        margin-top: clamp(2.5rem, 6vw, 4rem);
+      }
+      .demo-frame {
+        aspect-ratio: 16 / 9;
+        background: #282017; /* a video tile is dark in both treatments */
+        border: 1px solid var(--rule);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .demo-frame svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .demo figcaption {
+        margin-top: 0.75rem;
+      }
+
+      /* ---------- the shift ---------- */
+      .shift-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1.5rem, 4vw, 3rem);
+        margin-top: 2.5rem;
+      }
+      .shift-grid > div {
+        border-top: 1px solid var(--rule);
+        padding-top: 1.25rem;
+      }
+      .shift-grid .eyebrow {
+        margin-bottom: 0.5rem;
+      }
+      .shift-grid h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      /* ---------- pillars ---------- */
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1.5rem, 4vw, 3rem);
+        margin-top: 2.5rem;
+      }
+      .pillar {
+        border-top: 1px solid var(--rule);
+        padding-top: 1.25rem;
+      }
+      .pillar .eyebrow {
+        margin-bottom: 0.75rem;
+        color: var(--accent);
+      }
+      .pillar h3 {
+        margin-bottom: 0.625rem;
+        font-size: 1.25rem;
+      }
+      .pillar p {
+        color: var(--ink-2);
+      }
+
+      /* ---------- compose ---------- */
+      .compose-grid {
+        display: grid;
+        grid-template-columns: 5fr 6fr;
+        gap: clamp(2rem, 5vw, 4rem);
+        margin-top: 2.5rem;
+        align-items: start;
+      }
+      .compose-copy p + p {
+        margin-top: 1rem;
+      }
+      .compose-copy .chain {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--ink-2);
+        margin-top: 1.5rem;
+        display: block;
+      }
+      .compose-copy .chain b {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .codeblock {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+      .codeblock pre {
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        line-height: 1.65;
+        padding: 1.25rem 1.5rem;
+        min-width: max-content;
+      }
+      .codeblock .c {
+        color: var(--ink-2);
+      } /* comment */
+      .codeblock .k {
+        color: var(--code-kw);
+      } /* keyword */
+      .codeblock .s {
+        color: var(--code-str);
+      } /* string */
+      .codeblock .t {
+        color: var(--code-type);
+      } /* type */
+
+      /* ---------- quick start ---------- */
+      .steps {
+        list-style: none;
+        counter-reset: step;
+        margin-top: 2.5rem;
+        max-width: 46rem;
+      }
+      .steps li {
+        counter-increment: step;
+        display: grid;
+        grid-template-columns: 3.5rem 1fr;
+        gap: 1.25rem;
+        padding-block: 1.5rem;
+        border-top: 1px solid var(--rule);
+      }
+      .steps li::before {
+        content: counter(step);
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-optical-sizing: auto;
+        font-size: 2.4375rem;
+        line-height: 1;
+        color: var(--rubric); /* rubrication: red ink for the numbered headings */
+      }
+      .steps h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.375rem;
+      }
+      .steps p {
+        color: var(--ink-2);
+      }
+      .steps code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        padding: 0.1em 0.4em;
+        color: var(--ink);
+        overflow-wrap: anywhere;
+      }
+      .steps li > div {
+        min-width: 0;
+      }
+
+      /* ---------- footer ---------- */
+      footer.site {
+        border-top: 1px solid var(--rule);
+        padding-block: 2.5rem 3rem;
+      }
+      .foot-grid {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .foot-mark svg {
+        display: block;
+        width: 40px;
+        height: 40px;
+      }
+      .foot-meta {
+        max-width: 46rem;
+      }
+      .foot-meta p + p {
+        margin-top: 0.5rem;
+      }
+      footer.site a {
+        color: var(--accent);
+      }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 47rem) {
+        .shift-grid,
+        .pillars,
+        .compose-grid {
+          grid-template-columns: 1fr;
+        }
+        .masthead .wordmark svg {
+          height: 36px;
+        }
+        .steps li {
+          grid-template-columns: 2.5rem 1fr;
+          gap: 1rem;
+        }
+        .steps li::before {
+          font-size: 1.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site">
+      <div class="wrap masthead">
+        <a class="wordmark" href="#top" aria-label="Vellum — home">
+          <!-- Vellum wordmark (docs/branding). Letters take the treatment ink via CSS;
+           the folded-V mark's three gold facets are fixed. -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 285 120"
+            role="img"
+            aria-label="Vellum"
+          >
+            <g>
+              <polygon points="30,40 41,40 53.5,80 42.5,80" fill="#C9A14A" />
+              <polygon points="55,40 66,40 53.5,80 42.5,80" fill="#9A7930" />
+              <polygon points="48,62.4 53.5,80 42.5,80" fill="#6B5316" />
+            </g>
+            <g class="wm-stroke" stroke-width="6" fill="none">
+              <path d="M101 43 H82 V77 H101" />
+              <path d="M79 58.5 H96" />
+              <path d="M117 40 V77 H134" />
+              <path d="M150 40 V77 H167" />
+              <path d="M183 40 V67 A10 10 0 0 0 203 67 V40" />
+            </g>
+            <path
+              class="wm-fill"
+              d="M219 80 V40 H226.97 L234 56.4 L241.03 40 H249 V80 H243 V50.6 L234 71.6 L225 50.6 V80 Z"
+            />
+          </svg>
+        </a>
+        <nav class="site-nav" aria-label="Site">
+          <a href="#what">What it is</a>
+          <a href="#compose">Compose</a>
+          <a href="#quick-start">Quick start</a>
+          <a href="https://github.com/alxjrvs/vellum">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============ hero ============ -->
+      <section class="hero" id="top" aria-labelledby="hero-h">
+        <div class="wrap">
+          <p class="eyebrow rise">Open source · Local-only · 0.1.0 beta</p>
+          <h1 id="hero-h" class="rise rise-1">The character sheet, on&nbsp;camera.</h1>
+          <p class="subhead rise rise-2">A layer of story over every camera.</p>
+          <p class="lede rise rise-2">
+            Vellum renders a live character HUD over your webcam — through OBS, into your video call
+            — so your table sees your stats where they're already looking.
+          </p>
+          <div class="cta-row rise rise-3">
+            <a class="btn btn-primary" href="https://github.com/alxjrvs/vellum/releases"
+              >Get Vellum</a
+            >
+            <a class="btn btn-secondary" href="#what">See how it works</a>
+          </div>
+
+          <figure class="demo rise rise-4">
+            <div class="demo-frame">
+              <!-- The overlay sheet: a drafting-vellum wireframe of the player HUD,
+               ruled in plummet over the space where the player sits. -->
+              <svg
+                viewBox="0 0 640 360"
+                role="img"
+                aria-label="Wireframe sketch of the player HUD: hope pips, HP and stress tracks, condition badges, and a nameplate arranged around a webcam silhouette, drawn like a drafting overlay sheet."
+              >
+                <g stroke="#8A7E6C" fill="none" stroke-width="1">
+                  <!-- registration corners -->
+                  <path d="M16 28 V16 H28 M612 16 H624 V28 M624 332 V344 H612 M28 344 H16 V332" />
+                </g>
+                <!-- silhouette: the player behind the sheet -->
+                <g
+                  stroke="#8A7E6C"
+                  fill="none"
+                  stroke-width="1.25"
+                  stroke-dasharray="5 5"
+                  opacity="0.75"
+                >
+                  <circle cx="410" cy="150" r="52" />
+                  <path d="M310 330 C 318 244, 502 244, 510 330" />
+                </g>
+                <!-- hope pips -->
+                <g font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1.5">
+                  <text x="40" y="52" fill="#B5A88D">HOPE</text>
+                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
+                    <circle cx="47" cy="72" r="7" fill="#C9A14A" stroke="none" />
+                    <circle cx="71" cy="72" r="7" fill="#C9A14A" stroke="none" />
+                    <circle cx="95" cy="72" r="7" />
+                    <circle cx="119" cy="72" r="7" />
+                    <circle cx="143" cy="72" r="7" />
+                    <circle cx="167" cy="72" r="7" />
+                  </g>
+                  <!-- hp / stress slots -->
+                  <text x="40" y="112" fill="#B5A88D">HP</text>
+                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
+                    <rect x="40" y="122" width="16" height="16" />
+                    <rect x="64" y="122" width="16" height="16" />
+                    <rect x="88" y="122" width="16" height="16" />
+                    <rect x="112" y="122" width="16" height="16" />
+                    <rect x="136" y="122" width="16" height="16" />
+                    <rect x="160" y="122" width="16" height="16" />
+                  </g>
+                  <text x="40" y="168" fill="#B5A88D">STRESS</text>
+                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
+                    <rect x="40" y="178" width="16" height="16" />
+                    <rect x="64" y="178" width="16" height="16" />
+                    <rect x="88" y="178" width="16" height="16" />
+                    <rect x="112" y="178" width="16" height="16" />
+                    <rect x="136" y="178" width="16" height="16" />
+                  </g>
+                  <!-- conditions -->
+                  <text x="492" y="52" fill="#B5A88D">CONDITIONS</text>
+                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
+                    <rect x="492" y="62" width="72" height="20" rx="10" />
+                    <rect x="492" y="90" width="96" height="20" rx="10" />
+                  </g>
+                  <!-- nameplate -->
+                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
+                    <rect x="40" y="288" width="212" height="38" rx="4" />
+                  </g>
+                  <text x="54" y="311" fill="#B5A88D">NAME · CLASS &amp; HERITAGE</text>
+                  <!-- title block, like a drafting sheet -->
+                  <g stroke="#8A7E6C" fill="none">
+                    <rect x="428" y="288" width="172" height="38" />
+                    <path d="M428 307 H600" />
+                  </g>
+                  <text x="438" y="302" fill="#B5A88D">VELLUM · SCENE: PLAYER</text>
+                  <text x="438" y="320" fill="#B5A88D">OVERLAY SHEET · 16:9</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption class="small">
+              Live HUD composited on a Discord call — demo clip coming at 0.1.0.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <div class="wrap"><hr class="rule rule-tick" /></div>
+
+      <!-- ============ the shift ============ -->
+      <section id="what" aria-labelledby="what-h">
+        <div class="wrap">
+          <p class="eyebrow">The shift</p>
+          <h2 id="what-h">Off the tab, onto the table.</h2>
+          <p style="margin-top: 1.25rem">
+            In a remote session, everyone's stats live in a character-sheet tab off-camera —
+            private, invisible, and a tab-switch away. Vellum composites them onto the webcam feed
+            itself: OBS renders the HUD over your camera, the virtual camera carries it into the
+            call, and your character state becomes ambient information the whole table shares.
+          </p>
+          <div class="shift-grid">
+            <div>
+              <p class="eyebrow">Before</p>
+              <h3>The other tab</h3>
+              <p class="small">
+                Hope, HP, and conditions sit in a browser tab nobody else can see. Every check
+                starts with "hang on, let me look."
+              </p>
+            </div>
+            <div>
+              <p class="eyebrow">After</p>
+              <h3>The frame</h3>
+              <p class="small">
+                Your stats ride your camera tile — visible to everyone, updated live, exactly where
+                the table is already looking.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap"><hr class="rule" /></div>
+
+      <!-- ============ pillars ============ -->
+      <section aria-labelledby="pillars-h">
+        <div class="wrap">
+          <h2 id="pillars-h">Built like a good tool.</h2>
+          <div class="pillars">
+            <div class="pillar">
+              <p class="eyebrow">Local-only &amp; yours</p>
+              <h3>Nothing leaves your machine</h3>
+              <p>
+                No account, no server, no telemetry. Vellum runs from a static file and writes to
+                localStorage — there is nothing to sign up for and nothing to phone home to.
+              </p>
+            </div>
+            <div class="pillar">
+              <p class="eyebrow">Composable</p>
+              <h3>Daggerheart in the box, your system next</h3>
+              <p>
+                Systems, scenes, and themes are config, not core code. Daggerheart ships as the
+                reference implementation; the platform exists so you can teach it yours.
+              </p>
+            </div>
+            <div class="pillar">
+              <p class="eyebrow">Made for the call</p>
+              <h3>Not the stream</h3>
+              <p>
+                Designed for a 4–6 person Discord call at 480p — legible at thumbnail size, calm on
+                camera. A table tool, not a broadcast package.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap"><hr class="rule" /></div>
+
+      <!-- ============ compose ============ -->
+      <section id="compose" aria-labelledby="compose-h">
+        <div class="wrap">
+          <p class="eyebrow">For system authors</p>
+          <h2 id="compose-h">Compose it.</h2>
+          <div class="compose-grid">
+            <div class="compose-copy">
+              <p>
+                A <strong>system</strong> declares its resources, conditions, and character schema.
+                It offers <strong>scenes</strong> — URL-addressable HUDs, one per role, each the
+                target of an OBS browser source. Scenes compose <strong>widgets</strong>: generic
+                pip tracks, slot tracks, badges, and nameplates bound to your config.
+              </p>
+              <p>Add your system as one folder — config plus a few components, no core edits.</p>
+              <span class="chain" aria-hidden="true"
+                ><b>System</b> → <b>Scenes</b> → <b>Widgets</b></span
+              >
+            </div>
+            <div class="codeblock">
+              <pre><code><span class="c">// systems/daggerheart/index.ts — illustrative</span>
+<span class="k">export const</span> daggerheart: <span class="t">SystemDefinition</span> = {
+  id: <span class="s">"daggerheart"</span>,
+  label: <span class="s">"Daggerheart"</span>,
+  resources: [
+    pipTrack(<span class="s">"hope"</span>, { max: <span class="k">6</span> }),
+    slotTrack(<span class="s">"hp"</span>, { thresholds: <span class="k">true</span> }),
+    slotTrack(<span class="s">"stress"</span>),
+  ],
+  conditions: coreConditions,
+  characterSchema,
+  scenes: [
+    scene(<span class="s">"player"</span>, [<span class="s">"identity"</span>, <span class="s">"hope"</span>, <span class="s">"hp"</span>, <span class="s">"stress"</span>]),
+    scene(<span class="s">"gm"</span>, [<span class="s">"fear"</span>]),
+  ],
+  defaultTheme: <span class="s">"daggerheart"</span>,
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap"><hr class="rule" /></div>
+
+      <!-- ============ quick start ============ -->
+      <section id="quick-start" aria-labelledby="qs-h">
+        <div class="wrap">
+          <p class="eyebrow">Quick start</p>
+          <h2 id="qs-h">Four steps to the table.</h2>
+          <ol class="steps">
+            <li>
+              <div>
+                <h3>Get the build</h3>
+                <p>
+                  Clone the repo and run <code>bun install &amp;&amp; bun run build</code> — or,
+                  once 0.1.0 ships, download the static bundle from GitHub Releases and unzip it. No
+                  server required.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Point OBS at a scene</h3>
+                <p>
+                  Add a browser source over your camera and aim it at a scene URL:
+                  <code>index.html?system=daggerheart&amp;scene=player</code>. The GM aims theirs at
+                  <code>scene=gm</code>.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Go virtual</h3>
+                <p>
+                  Start the OBS Virtual Camera and select it as your camera in Discord. Your tile is
+                  now camera plus HUD.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3>Bring your character</h3>
+                <p>
+                  Import your character JSON. Stats update in one click and persist in localStorage
+                  between sessions — a refresh restores everything.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap foot-grid">
+        <div class="foot-mark" aria-hidden="true">
+          <!-- The folded-V mark (docs/branding/favicon.svg) -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+            <rect width="64" height="64" rx="14" fill="#1C1510" />
+            <polygon points="14,12 25,12 37.5,52 26.5,52" fill="#C9A14A" />
+            <polygon points="39,12 50,12 37.5,52 26.5,52" fill="#9A7930" />
+            <polygon points="32,34.4 37.5,52 26.5,52" fill="#6B5316" />
+          </svg>
+        </div>
+        <div class="foot-meta">
+          <p class="small">
+            Vellum is open source on <a href="https://github.com/alxjrvs/vellum">GitHub</a> — MIT
+            license planned for the 0.1.0 release.
+          </p>
+          <p class="small">
+            Vellum is not affiliated with Darrington Press. Daggerheart is a trademark of its owner;
+            Vellum's Daggerheart module encodes SRD-derived mechanics only — no rulebook text or
+            art.
+          </p>
+          <p class="small">Local, legible, yours.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

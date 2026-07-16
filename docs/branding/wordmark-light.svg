@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 285 120" role="img" aria-label="Vellum">
+  <!-- Vellum wordmark (for light backgrounds).
+       The V is the brand mark: a single gold band folded into a V, cut flat like a chisel nib.
+       E L L U M are constructed monoline capitals drawn as paths - no font dependency. -->
+  <!-- V mark -->
+  <g>
+    <polygon points="30,40 41,40 53.5,80 42.5,80" fill="#C9A14A"/>
+    <polygon points="55,40 66,40 53.5,80 42.5,80" fill="#9A7930"/>
+    <polygon points="48,62.4 53.5,80 42.5,80" fill="#6B5316"/>
+  </g>
+  <!-- E L L U M -->
+  <g stroke="#1C1510" stroke-width="6" fill="none">
+    <path d="M101 43 H82 V77 H101"/>
+    <path d="M79 58.5 H96"/>
+    <path d="M117 40 V77 H134"/>
+    <path d="M150 40 V77 H167"/>
+    <path d="M183 40 V67 A10 10 0 0 0 203 67 V40"/>
+  </g>
+  <path d="M219 80 V40 H226.97 L234 56.4 L241.03 40 H249 V80 H243 V50.6 L234 71.6 L225 50.6 V80 Z" fill="#1C1510"/>
+</svg>

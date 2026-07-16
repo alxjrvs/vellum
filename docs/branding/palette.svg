@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" role="img" aria-label="Vellum brand palette, light and dark treatments" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+  <!-- Vellum brand palette reference sheet. Contrast ratios are WCAG 2.1,
+       measured against each panel's background. Self-contained; system font stack. -->
+
+  <!-- ===== Light treatment: on Vellum ===== -->
+  <rect x="0" y="0" width="880" height="280" fill="#F6EFDE"/>
+  <text x="40" y="44" font-size="17" font-weight="700" fill="#1C1510">Vellum · brand palette — light, on Vellum #F6EFDE</text>
+
+  <g>
+    <rect x="40" y="72" width="84" height="56" rx="8" fill="#1C1510"/>
+    <text x="40" y="152" font-size="12" font-weight="600" fill="#1C1510">Iron Gall</text>
+    <text x="40" y="170" font-size="11" fill="#5C5140">#1C1510</text>
+    <text x="40" y="188" font-size="10.5" fill="#5C5140">Text · 15.7:1</text>
+
+    <rect x="140" y="72" width="84" height="56" rx="8" fill="#5C5140"/>
+    <text x="140" y="152" font-size="12" font-weight="600" fill="#1C1510">Sepia</text>
+    <text x="140" y="170" font-size="11" fill="#5C5140">#5C5140</text>
+    <text x="140" y="188" font-size="10.5" fill="#5C5140">Secondary · 6.8:1</text>
+
+    <rect x="240" y="72" width="84" height="56" rx="8" fill="#7D6120"/>
+    <text x="240" y="152" font-size="12" font-weight="600" fill="#1C1510">Gilt Deep</text>
+    <text x="240" y="170" font-size="11" fill="#5C5140">#7D6120</text>
+    <text x="240" y="188" font-size="10.5" fill="#5C5140">Gold text · 5.1:1</text>
+
+    <rect x="340" y="72" width="84" height="56" rx="8" fill="#9E2B2B"/>
+    <text x="340" y="152" font-size="12" font-weight="600" fill="#1C1510">Rubric</text>
+    <text x="340" y="170" font-size="11" fill="#5C5140">#9E2B2B</text>
+    <text x="340" y="188" font-size="10.5" fill="#5C5140">Danger · 6.5:1</text>
+
+    <rect x="440" y="72" width="84" height="56" rx="8" fill="#96431A"/>
+    <text x="440" y="152" font-size="12" font-weight="600" fill="#1C1510">Ember Deep</text>
+    <text x="440" y="170" font-size="11" fill="#5C5140">#96431A</text>
+    <text x="440" y="188" font-size="10.5" fill="#5C5140">Warning text · 5.9:1</text>
+
+    <rect x="540" y="72" width="84" height="56" rx="8" fill="#3E7360"/>
+    <text x="540" y="152" font-size="12" font-weight="600" fill="#1C1510">Verdigris</text>
+    <text x="540" y="170" font-size="11" fill="#5C5140">#3E7360</text>
+    <text x="540" y="188" font-size="10.5" fill="#5C5140">Success · 4.8:1</text>
+
+    <rect x="640" y="72" width="84" height="56" rx="8" fill="#EAE0C6" stroke="#8A7E6C" stroke-width="1"/>
+    <text x="640" y="152" font-size="12" font-weight="600" fill="#1C1510">Vellum Shade</text>
+    <text x="640" y="170" font-size="11" fill="#5C5140">#EAE0C6</text>
+    <text x="640" y="188" font-size="10.5" fill="#5C5140">Raised surface</text>
+
+    <rect x="740" y="72" width="84" height="56" rx="8" fill="#C9A14A"/>
+    <text x="740" y="152" font-size="12" font-weight="600" fill="#1C1510">Gilt</text>
+    <text x="740" y="170" font-size="11" fill="#5C5140">#C9A14A</text>
+    <text x="740" y="188" font-size="10.5" fill="#5C5140">Ornament only here</text>
+  </g>
+
+  <!-- plummet ruling line, the brand's structural hairline -->
+  <line x1="40" y1="222" x2="840" y2="222" stroke="#8A7E6C" stroke-width="1"/>
+  <text x="40" y="246" font-size="11" fill="#5C5140">Plummet #8A7E6C — hairline rules and borders, both treatments. Gilt fails as text on Vellum (2.1:1); use Gilt Deep instead.</text>
+
+  <!-- ===== Dark treatment: on Iron Gall ===== -->
+  <rect x="0" y="280" width="880" height="280" fill="#1C1510"/>
+  <text x="40" y="324" font-size="17" font-weight="700" fill="#F6EFDE">Dark, on Iron Gall #1C1510</text>
+
+  <g>
+    <rect x="40" y="352" width="84" height="56" rx="8" fill="#F6EFDE"/>
+    <text x="40" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Vellum</text>
+    <text x="40" y="450" font-size="11" fill="#B5A88D">#F6EFDE</text>
+    <text x="40" y="468" font-size="10.5" fill="#B5A88D">Text · 15.7:1</text>
+
+    <rect x="140" y="352" width="84" height="56" rx="8" fill="#B5A88D"/>
+    <text x="140" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Parchment Dim</text>
+    <text x="140" y="450" font-size="11" fill="#B5A88D">#B5A88D</text>
+    <text x="140" y="468" font-size="10.5" fill="#B5A88D">Secondary · 7.7:1</text>
+
+    <rect x="240" y="352" width="84" height="56" rx="8" fill="#C9A14A"/>
+    <text x="240" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Gilt</text>
+    <text x="240" y="450" font-size="11" fill="#B5A88D">#C9A14A</text>
+    <text x="240" y="468" font-size="10.5" fill="#B5A88D">Gold text · 7.5:1</text>
+
+    <rect x="340" y="352" width="84" height="56" rx="8" fill="#D96A5A"/>
+    <text x="340" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Rubric Bright</text>
+    <text x="340" y="450" font-size="11" fill="#B5A88D">#D96A5A</text>
+    <text x="340" y="468" font-size="10.5" fill="#B5A88D">Danger · 5.3:1</text>
+
+    <rect x="440" y="352" width="84" height="56" rx="8" fill="#C2612F"/>
+    <text x="440" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Ember</text>
+    <text x="440" y="450" font-size="11" fill="#B5A88D">#C2612F</text>
+    <text x="440" y="468" font-size="10.5" fill="#B5A88D">Warning · 4.3:1</text>
+
+    <rect x="540" y="352" width="84" height="56" rx="8" fill="#7FB89F"/>
+    <text x="540" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Verdigris Bright</text>
+    <text x="540" y="450" font-size="11" fill="#B5A88D">#7FB89F</text>
+    <text x="540" y="468" font-size="10.5" fill="#B5A88D">Success · 8.0:1</text>
+
+    <rect x="640" y="352" width="84" height="56" rx="8" fill="#282017" stroke="#8A7E6C" stroke-width="1"/>
+    <text x="640" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Iron Gall Raised</text>
+    <text x="640" y="450" font-size="11" fill="#B5A88D">#282017</text>
+    <text x="640" y="468" font-size="10.5" fill="#B5A88D">Raised surface</text>
+
+    <rect x="740" y="352" width="84" height="56" rx="8" fill="#8A7E6C"/>
+    <text x="740" y="432" font-size="12" font-weight="600" fill="#F6EFDE">Plummet</text>
+    <text x="740" y="450" font-size="11" fill="#B5A88D">#8A7E6C</text>
+    <text x="740" y="468" font-size="10.5" fill="#B5A88D">Rules, borders</text>
+  </g>
+
+  <line x1="40" y1="502" x2="840" y2="502" stroke="#8A7E6C" stroke-width="1"/>
+  <text x="40" y="526" font-size="11" fill="#B5A88D">Contrast ratios are WCAG 2.1 against this panel's background. Ember is accent / large-text only in both treatments.</text>
+</svg>
