@@ -20,6 +20,24 @@ button {
   cursor: pointer;
 }
 
+.overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+.edit-details {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-label);
+}
+
 h1,
 h2,
 h3 {

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "system": "daggerheart",
+  "identity": {
+    "name": "Seraphine Duskwhisper",
+    "class": "Bard",
+    "ancestry": "Elf",
+    "subclass": "Wordsmith",
+    "community": "Loreborne",
+    "level": 3
+  },
+  "stats": {
+    "hope": 4,
+    "hp": [0, 1],
+    "stress": [0, 1, 2],
+    "armorSlots": [0]
+  },
+  "slotCounts": {
+    "hp": 6,
+    "stress": 6,
+    "armorSlots": 3
+  },
+  "thresholds": {
+    "major": 3,
+    "severe": 5
+  },
+  "conditions": {
+    "core": {
+      "hidden": false,
+      "restrained": false,
+      "vulnerable": false
+    },
+    "feature": {}
+  },
+  "featureConditions": []
+}

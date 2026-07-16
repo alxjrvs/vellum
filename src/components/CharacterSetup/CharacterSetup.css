@@ -1,0 +1,95 @@
+.character-setup {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-card-surface);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  min-width: 320px;
+}
+
+.character-setup__title {
+  font-family: var(--font-family-display);
+  color: var(--color-accent);
+}
+
+.character-setup__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+}
+
+.character-setup__group legend {
+  padding: 0 var(--spacing-xs);
+  font-size: var(--font-size-label);
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--spacing-xs);
+}
+
+.character-setup__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.character-setup__field label {
+  font-size: var(--font-size-label);
+}
+
+.character-setup__field input {
+  width: 12ch;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+}
+
+.character-setup__error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-label);
+}
+
+.character-setup__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.character-setup__submit {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-parchment);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.character-setup__submit:hover {
+  background: var(--color-danger);
+}
+
+.character-setup__cancel {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}

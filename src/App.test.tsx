@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { App } from './App';
 import { CharacterProvider } from './character/CharacterProvider';
 import { STORAGE_KEY } from './character/storage';
@@ -37,12 +37,13 @@ describe('App', () => {
     expect(screen.getByText(/Daggerheart · Theme: Daggerheart/i)).toBeInTheDocument();
   });
 
-  it('shows an import prompt when no character is loaded', () => {
+  it('shows the character setup form when no character is loaded', () => {
     renderApp();
-    expect(screen.getByText(/import a character to begin/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /character details/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/^name/i)).toBeInTheDocument();
   });
 
-  it('shows the loaded character identity when localStorage has one', () => {
+  it('shows the loaded character identity in the overlay when localStorage has one', () => {
     const character = makeCharacter({
       identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf' },
     });
@@ -51,6 +52,17 @@ describe('App', () => {
     renderApp();
 
     expect(screen.getByLabelText('Character identity').textContent).toBe('Seraphine — Bard, Elf');
+    // The setup form is not shown while the overlay is active.
+    expect(screen.queryByRole('heading', { name: /character details/i })).toBeNull();
+  });
+
+  it('reopens the setup form from the overlay via Edit details', () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
+    renderApp();
+
+    fireEvent.click(screen.getByRole('button', { name: /edit details/i }));
+
+    expect(screen.getByRole('heading', { name: /character details/i })).toBeInTheDocument();
   });
 
   describe('?mode=gm', () => {

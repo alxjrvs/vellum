@@ -1,0 +1,1 @@
+export { CharacterSetup } from './CharacterSetup';
