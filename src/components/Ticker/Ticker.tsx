@@ -1,5 +1,5 @@
 import './Ticker.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { readTickerFromStorage, writeTickerToStorage } from './storage';
 
 /**
@@ -11,16 +11,25 @@ export function Ticker() {
   const [text, setText] = useState(readTickerFromStorage);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
+  // Guards the edit session so it resolves exactly once: Escape must discard
+  // even though removing the focused input can also fire onBlur (which would
+  // otherwise commit the discarded draft), and Enter+blur must not double-save.
+  const resolvedRef = useRef(false);
 
   const startEditing = () => {
+    resolvedRef.current = false;
     setDraft(text);
     setEditing(true);
   };
 
-  const commit = () => {
-    const next = draft.trim();
-    setText(next);
-    writeTickerToStorage(next);
+  const finishEditing = (save: boolean) => {
+    if (resolvedRef.current) return;
+    resolvedRef.current = true;
+    if (save) {
+      const next = draft.trim();
+      setText(next);
+      writeTickerToStorage(next);
+    }
     setEditing(false);
   };
 
@@ -35,10 +44,10 @@ export function Ticker() {
           placeholder="Type ticker text…"
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
-          onBlur={commit}
+          onBlur={() => finishEditing(true)}
           onKeyDown={(event) => {
-            if (event.key === 'Enter') commit();
-            else if (event.key === 'Escape') setEditing(false);
+            if (event.key === 'Enter') finishEditing(true);
+            else if (event.key === 'Escape') finishEditing(false);
           }}
         />
       </div>

@@ -1,7 +1,7 @@
 .dice-roller {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   width: 440px;
   font-family: var(--font-family-body);
   color: var(--color-parchment);
@@ -30,7 +30,7 @@
 .dice-roller__log-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   margin: 0;
   padding: 0;
   list-style: none;
