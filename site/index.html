@@ -595,7 +595,7 @@
       <!-- ============ hero ============ -->
       <section class="hero" id="top" aria-labelledby="hero-h">
         <div class="wrap">
-          <p class="eyebrow rise">Open source · Local-only · 0.1.0 beta</p>
+          <p class="eyebrow rise">Open source · Local-only · 0.2.0 beta — live in your browser</p>
           <h1 id="hero-h" class="rise rise-1">The character sheet, on&nbsp;camera.</h1>
           <p class="subhead rise rise-2">A layer of story over every camera.</p>
           <p class="lede rise rise-2">
@@ -603,10 +603,8 @@
             — so your table sees your stats where they're already looking.
           </p>
           <div class="cta-row rise rise-3">
-            <a class="btn btn-primary" href="https://github.com/alxjrvs/vellum/releases"
-              >Get Vellum</a
-            >
-            <a class="btn btn-secondary" href="#what">See how it works</a>
+            <a class="btn btn-primary" href="app/">Open Vellum</a>
+            <a class="btn btn-secondary" href="#quick-start">Quick start</a>
           </div>
 
           <figure class="demo rise rise-4">
@@ -684,7 +682,7 @@
               </svg>
             </div>
             <figcaption class="small">
-              Live HUD composited on a Discord call — demo clip coming at 0.1.0.
+              Live HUD composited on a Discord call — demo clip coming soon.
             </figcaption>
           </figure>
         </div>
@@ -812,39 +810,40 @@
           <ol class="steps">
             <li>
               <div>
-                <h3>Get the build</h3>
+                <h3>Open Vellum</h3>
                 <p>
-                  Clone the repo and run <code>bun install &amp;&amp; bun run build</code> — or,
-                  once 0.1.0 ships, download the static bundle from GitHub Releases and unzip it. No
-                  server required.
+                  No install — <a href="app/">open the app in your browser</a>, or download the
+                  static bundle to run fully offline. Either way it runs entirely on your machine;
+                  nothing you enter is uploaded.
                 </p>
               </div>
             </li>
             <li>
               <div>
-                <h3>Point OBS at a scene</h3>
+                <h3>Build your character</h3>
                 <p>
-                  Add a browser source over your camera and aim it at a scene URL:
-                  <code>index.html?system=daggerheart&amp;scene=player</code>. The GM aims theirs at
-                  <code>scene=gm</code>.
+                  Fill in the character form, then hit <strong>Copy share link</strong>. Your whole
+                  sheet packs into a URL — no files to prepare or email around.
                 </p>
               </div>
             </li>
             <li>
               <div>
-                <h3>Go virtual</h3>
+                <h3>Drop it into OBS</h3>
                 <p>
-                  Start the OBS Virtual Camera and select it as your camera in Discord. Your tile is
-                  now camera plus HUD.
+                  Import the Vellum scene collection — <strong>macOS, Windows, or Linux</strong> —
+                  or add a browser source pointed at your share link. The in-app setup wizard walks
+                  you through the rest.
                 </p>
               </div>
             </li>
             <li>
               <div>
-                <h3>Bring your character</h3>
+                <h3>Go live in Discord</h3>
                 <p>
-                  Import your character JSON. Stats update in one click and persist in localStorage
-                  between sessions — a refresh restores everything.
+                  Add your webcam under the HUD, start the OBS Virtual Camera, and pick it in
+                  Discord. Your tile is now camera plus HUD — and every value persists across a
+                  reload.
                 </p>
               </div>
             </li>
@@ -867,7 +866,7 @@
         <div class="foot-meta">
           <p class="small">
             Vellum is open source on <a href="https://github.com/alxjrvs/vellum">GitHub</a> — MIT
-            license planned for the 0.1.0 release.
+            license planned.
           </p>
           <p class="small">
             Vellum is not affiliated with Darrington Press. Daggerheart is a trademark of its owner;
