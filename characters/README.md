@@ -1,25 +1,20 @@
-# Character JSON preparation (issue #23)
+# Character values reference (issue #23)
 
-Each player needs a Vellum character JSON file ready before the live
-Daggerheart session (issue #24). This directory holds the canonical
-template; players keep their own filled-in copies wherever they
-prefer.
+You enter your character directly in Vellum's in-app **Character details**
+form (there's no file to import). This doc is the reference for **what
+values to enter**, derived from each player's Daggerheart character sheet
+(Demiplane or paper).
 
-## The template
+> The form fields map 1:1 to the sections below: **Identity** (name, class,
+> ancestry, subclass, community, level), **Max values** (HP / Stress / Armor
+> slots, Starting Hope), and **HP thresholds** (Major / Severe). Current
+> HP/Stress/Armor marks start empty and fill in as you click during play.
 
-`template.character.json` is the canonical empty character. Copy it to
-a per-player file and fill in the values from each player's Daggerheart
-character sheet (Demiplane or paper).
+`template.character.json` and `sample.character.json` show the underlying
+data shape (also what's persisted to localStorage), handy if you're editing
+state by hand or building tooling — but day to day you just fill the form.
 
-```sh
-cp characters/template.character.json /path/to/your/<player-name>.character.json
-```
-
-Per-player JSONs contain personal player data and don't need to live
-in this repo — keep them local. The template is the only file
-tracked here.
-
-## How to fill out each field
+## What each value means
 
 ### `identity`
 
@@ -126,30 +121,23 @@ The mapping:
 Both arrays must contain the same set of names. If the player doesn't
 have any feature conditions, leave both as `[]` and `{}` respectively.
 
-## Testing your file
-
-Before session day:
+## Rehearse before session day
 
 1. Run `bun run dev` to start the dev server.
 2. Open the app in your browser at the URL it prints.
-3. Use the **Import character** button and select your filled-in
-   `<name>.character.json` file.
+3. Fill the **Character details** form with your values and click **Show
+   overlay**.
 4. Verify against your sheet that:
    - Identity label matches (name, class, ancestry, optional fields)
    - HP slot count matches
    - Stress slot count matches
    - Armor slot count matches the equipped armor
-   - All feature condition badges are present and labelled correctly
+   - The M / S threshold markers sit on the right HP slots
 
-If anything mismatches, edit the JSON and re-import. **No manual
-corrections in the HUD should be needed to match the sheet** —
-that's AC #2 of issue #23.
+If anything is off, click **Edit details**, fix the value, and **Show
+overlay** again.
 
-## Submitting your file
-
-Each player runs the test above on their own machine, then keeps the
-JSON locally for the session. The operator does not need a copy — the
-files don't live in this repo.
-
-For #24's pre-session check, each player should be ready to demo
-"import → HUD looks right" on the rehearsal call.
+The details persist to that browser's localStorage, so nothing needs to be
+submitted or shared — each player sets their own up on the machine they'll
+stream from. For #24's pre-session check, each player should be ready to
+demo "fill form → HUD looks right" on the rehearsal call.

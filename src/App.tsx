@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { useCharacter } from './character/useCharacter';
-import { CharacterImport } from './components/CharacterImport';
-import { CharacterExport } from './components/CharacterExport';
+import { CharacterSetup } from './components/CharacterSetup';
 import { PlayerHud } from './components/PlayerHud';
 import { DiceRoller } from './components/DiceRoller';
 import { GmHud } from './components/GmHud';
@@ -13,6 +13,7 @@ export function App() {
   const theme = useTheme();
   const { character } = useCharacter();
   const viewMode = useViewMode();
+  const [editing, setEditing] = useState(false);
 
   if (viewMode === 'gm') {
     return (
@@ -22,18 +23,27 @@ export function App() {
     );
   }
 
+  const showSetup = editing || !character;
+
   return (
     <main>
       <h1>Vellum</h1>
       <p>
         System: {system.label} · Theme: {theme.label}
       </p>
-      <div className="overview">
-        {character ? <PlayerHud /> : <p>Import a character to begin.</p>}
-        <DiceRoller />
-      </div>
-      <CharacterImport />
-      <CharacterExport />
+      {showSetup ? (
+        <CharacterSetup onDone={() => setEditing(false)} />
+      ) : (
+        <>
+          <div className="overview">
+            <PlayerHud />
+            <DiceRoller />
+          </div>
+          <button type="button" className="edit-details" onClick={() => setEditing(true)}>
+            Edit details
+          </button>
+        </>
+      )}
     </main>
   );
 }

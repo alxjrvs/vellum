@@ -50,32 +50,23 @@ Everyone in the group does this once and passes the M1 individual check
 
 ---
 
-## 2. Prepare your character JSON (before the session)
+## 2. Know your character's numbers (before the session)
 
-Full field-by-field guide: `characters/README.md`.
+You enter your character in an in-app **Character details** form — no files
+to prepare. Come with these values from your Daggerheart sheet ready to type:
 
-```sh
-cp characters/template.character.json ~/my-character.character.json
-# edit it to match your Daggerheart sheet
-```
-
-Key fields:
-
-- `identity` — name, class, ancestry (+ optional subclass / community /
-  level). Delete any key you don't use; don't leave `"REPLACE_ME"`.
-- `slotCounts` — the HUD's pip maximums: `hp` (by class table),
-  `stress` (default 6), `armorSlots` (by equipped armor). Tables are in
+- **Identity** — name, class, ancestry (+ optional subclass / community /
+  level).
+- **Max values** — the HUD's pip maximums: **HP slots** (by class),
+  **Stress slots** (default 6), **Armor slots** (by equipped armor), and
+  **Starting Hope** (usually 2). The class/armor tables are in
   `characters/README.md`.
-- `thresholds` — `major` / `severe` HP slot positions (1-indexed) → the
-  **M** / **S** markers on the HP track.
-- `stats.hope` — starting Hope (usually 2). Leave `hp` / `stress` /
-  `armorSlots` as `[]`; they fill in as you click during play.
-- `featureConditions` / `conditions.feature` — class-specific badges; keep
-  the label set identical in both.
+- **HP thresholds** (optional) — the **Major** / **Severe** HP slot
+  positions (1-indexed) → the **M** / **S** markers on the HP track.
 
-**Test it before game day:** `bun run dev`, open the printed URL, click
-**Import character**, and confirm the HUD matches your sheet with no manual
-corrections.
+Current HP/Stress/Armor marks start empty and fill in as you click during
+play. To rehearse before game day: `bun run dev`, open the printed URL, fill
+the form, and click **Show overlay**.
 
 ---
 
@@ -103,12 +94,17 @@ scene becomes active** OFF.
 
 </details>
 
-### b. Import your character
+### b. Set your character details
 
-- In the HUD, click **Import character** and select your
-  `<name>.character.json`.
-- Confirm identity label, HP / Stress / Armor slot counts, and any feature
-  badges match your sheet.
+The HUD is a live web page, so you drive it through OBS's Interact window:
+
+- Right-click **Vellum HUD → Interact** — a window opens where your clicks
+  reach the page.
+- Fill the **Character details** form (identity + max values from section 2)
+  and click **Show overlay**.
+- Confirm the identity label and HP / Stress / Armor slot counts match your
+  sheet. Need to change a max later? Click **Edit details** to return to the
+  form (current marks that still fit are kept).
 
 ### c. Go live into Discord
 
@@ -139,7 +135,8 @@ The GM runs the same pipeline but loads the HUD with `?mode=gm`:
   everyone on the call immediately.
 - State is saved to the browser's localStorage continuously — a page or OBS
   reload restores every value within ~1 second. You do **not** need to
-  re-import mid-session unless the original import was wrong.
+  re-enter your details after a reload; click **Edit details** only if a max
+  value was wrong.
 - **GM:** adjust the Fear track the same way in the `?mode=gm` view.
 
 ### Rolling — the Duality Dice panel
@@ -165,15 +162,15 @@ Vellum reports the dice, it doesn't auto-adjust your Hope/Fear tracks.
 
 ## 5. If something breaks (fast recovery)
 
-| Symptom                           | Fix                                                                                                                                       |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the Local file path points at a built `dist/index.html`.               |
-| Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, re-import your JSON (last-known-good is fine; you'll re-mark current state). |
-| Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                           |
-| Asset 404 in OBS log              | Rebuild: `bun run build` (its `obs:check` step catches broken asset paths). Point the source at the fresh `dist/`.                        |
-| You changed theme tokens recently | Re-run the legibility spot-check in `docs/legibility-validation.md` before relying on Discord-scale readability.                          |
+| Symptom                           | Fix                                                                                                                                         |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the Local file path points at a built `dist/index.html`.                 |
+| Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, click **Edit details** and re-enter your maxes (you'll re-mark current state). |
+| Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                             |
+| Asset 404 in OBS log              | Rebuild: `bun run build` (its `obs:check` step catches broken asset paths). Point the source at the fresh `dist/`.                          |
+| You changed theme tokens recently | Re-run the legibility spot-check in `docs/legibility-validation.md` before relying on Discord-scale readability.                            |
 
-A single bundle reload or one re-import recovered in under ~30 seconds is a
+A single bundle reload or one details re-entry recovered in under ~30 seconds is a
 normal minor hiccup — see `m3-gate-3-session.md` for the incident budget and
 what counts as a real fallback.
 
