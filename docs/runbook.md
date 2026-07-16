@@ -35,6 +35,16 @@ bun run build      # produces dist/index.html + dist/assets/
 `bun run build` runs `obs:check` last and fails if the bundle would break the
 OBS path — a clean build is your green light.
 
+- [ ] Install OBS and pre-load the Vellum scene collection (handles the
+      browser-source config for you):
+
+```sh
+brew install --cask obs
+obs/setup-obs.sh      # installs the "Vellum" browser-source scene collection
+```
+
+See `obs/README.md` for what's automated vs. the manual macOS/Discord steps.
+
 Everyone in the group does this once and passes the M1 individual check
 (`obs-pipeline-verification.md`) before the first real session.
 
@@ -76,17 +86,22 @@ is that nobody falls back to Demiplane for stat tracking.
 
 ### a. Load the HUD in OBS
 
-1. OBS → new scene (or your saved Vellum scene).
-2. **Sources → + → Browser**:
-   - **Local file:** ON → select this repo's `dist/index.html`
-   - **Width 1920**, **Height 1080**
-   - **Shutdown source when not visible:** OFF
-   - **Refresh browser when scene becomes active:** OFF
-3. **Sources → + → Video Capture Device** (your webcam) — place it
-   **below** the browser source so the HUD composites on top.
-4. Right-click the browser source → **Properties** and confirm the HUD
-   rendered (no blank page). Check **Help → Log Files → View Current Log**
-   for any `assets/*` 404.
+If you ran `obs/setup-obs.sh` (section 1), the browser source is already
+built:
+
+1. OBS → **Scene Collection → Vellum**.
+2. **Sources → + → Video Capture Device** (your webcam) — drag it **below**
+   `Vellum HUD` so the HUD composites on top.
+3. Confirm the HUD rendered (no blank page). Check **Help → Log Files → View
+   Current Log** for any `assets/*` 404.
+
+<details><summary>Adding the browser source by hand instead</summary>
+
+**Sources → + → Browser**: Local file ON → your built `dist/index.html`;
+Width 1920, Height 1080; **Shutdown when not visible** OFF; **Refresh when
+scene becomes active** OFF.
+
+</details>
 
 ### b. Import your character
 
