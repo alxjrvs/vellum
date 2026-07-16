@@ -74,6 +74,19 @@ A generic, config-bound HUD component. The MVP already has the seed of this (`St
 
 Scenes reference widgets by config; widgets read from the generic character state. **Adding a stat never means writing a new component.**
 
+### Theme — a quiet fourth axis, deliberately scoped
+
+Appearance is separable from mechanics and composition: a **theme** is a bundle of tokens (color, type, layout, and widget _representation_ — pip vs. heart vs. bar), reflected to CSS custom properties. The plumbing already exists (`themeToCssVars` → `document.documentElement`; the `no-hardcoded-values` test enforces token use), so restyling the same ruleset is a config change, not a fork. Selection becomes a third URL param: `?system=daggerheart&scene=player&theme=neon`; a system names a `defaultTheme`.
+
+**Be honest about what this is and isn't:**
+
+- A Vellum theme is **not** a downloadable OBS overlay pack (NerdOrDie/StreamSpell-style static assets installed into OBS). OBS points at a URL; the theme is values the app loads. Nobody installs anything into OBS. Framing it as the "OBS theme market" is a category error.
+- The real, near-term value is **narrow and concrete**: legibility tuning (a look for 480p Discord tiles vs. a crisp stream), an **accessibility** high-contrast variant, and a little player expression. That justifies shipping **2–3 first-party themes in-tree** — no more.
+- The `shape` prop on `StatTrack` (`pip | box | heart`) already exists; the only move needed for themes to control _representation_ (not just color) is to source that choice from theme/system config instead of the Daggerheart wrapper components. Small move, real payoff.
+- **What is explicitly deferred:** a theme _ecosystem_ — a gallery, selection UI, install flows, community theme trading, any "economy." That is a post-1.0 speculative bet, not a 0.1.0 need, and building it now is exactly the over-architecture the PRD flagged (R-6). Themes at 0.1.0 are a clean axis + a low-barrier _contribution_ path (a theme is values, no TypeScript, no rules knowledge — the easiest first PR), nothing more.
+
+Themes are a headline of the _architecture_, not of the _product_. Keep the seam clean because it's nearly free; don't sell a marketplace that doesn't exist.
+
 ---
 
 ## 3. What's coupled today (and must be generalized)
@@ -98,9 +111,9 @@ Each milestone is independently shippable and leaves `main` green + the Daggerhe
 ### M-A — Registry & Scene routing _(no behavior change)_
 
 - Introduce `SystemRegistry` + `registerSystem()`; register Daggerheart through it.
-- Add `?system=` + `?scene=` routing; map `?mode=gm` → `scene=gm` for back-compat.
+- Add `?system=` + `?scene=` + `?theme=` routing; map `?mode=gm` → `scene=gm` for back-compat. `?theme=` is optional and falls back to the system's `defaultTheme`.
 - Daggerheart's player/GM views become declared scenes.
-- **Exit:** existing OBS URLs unchanged in behavior; the app now resolves system+scene from the registry.
+- **Exit:** existing OBS URLs unchanged in behavior; the app now resolves system + scene + theme from the registry.
 
 ### M-B — Generic resource & character model
 
@@ -115,7 +128,9 @@ Each milestone is independently shippable and leaves `main` green + the Daggerhe
 - Promote `StatTrack` → `PipTrack` / `SlotTrack`; extract `ConditionBadges`, `IdentityLabel`, `DiceLog` as config-bound generics.
 - Daggerheart-named components become thin presets.
 - Scenes compose widgets from config.
-- **Exit:** Daggerheart player/GM scenes render entirely from config-composed generic widgets.
+- Source widget **representation** (`shape`: pip/box/heart) from theme/system config rather than the DH wrapper components — the one move that lets a theme restyle _form_, not just color.
+- Ship **2–3 first-party themes** for Daggerheart as the narrow, honest payoff: the default illuminated look, a **high-contrast/accessibility** variant, and a **480p-legibility** variant tuned for small Discord tiles. No gallery, no selection UI — just selectable via `?theme=`.
+- **Exit:** Daggerheart player/GM scenes render entirely from config-composed generic widgets; switching `?theme=` restyles the same HUD with zero component changes.
 
 ### M-D — Second system (the proof)
 
@@ -150,6 +165,7 @@ Carried from the PRD's Won't list — composability does **not** pull these in:
 - No mobile/native target; OBS + Chromium only.
 - No per-roll automation.
 - Marketplace / plugin-install-at-runtime is **post-0.1.0** — 0.1.0 systems are compiled-in modules in the repo, not downloaded plugins. (Registry is designed so a runtime plugin loader is an additive future step, not a rewrite.)
+- No **theme ecosystem** — no gallery, no in-app theme picker, no community theme trading or "download a theme" flow. Themes at 0.1.0 are a clean config axis + 2–3 shipped first-party looks (M-C) + a `docs/authoring-a-theme.md` contribution path (M-E). A Vellum theme is loaded values, never an installed OBS asset; the ecosystem is a post-1.0 bet, not a beta need (PRD R-6, over-architecture).
 
 ## 6. Definition of done for 0.1.0
 
