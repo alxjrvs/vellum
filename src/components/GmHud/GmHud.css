@@ -1,11 +1,7 @@
+/*
+ * The GM HUD only groups its regions for the a11y label; the regions
+ * position themselves against the .hud stage, so the wrapper generates no box.
+ */
 .gm-hud {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-card-surface);
-  border: var(--border-width) solid var(--color-card-border);
-  border-radius: var(--radius-md);
-  color: var(--color-ink);
-  font-family: var(--font-family-body);
+  display: contents;
 }

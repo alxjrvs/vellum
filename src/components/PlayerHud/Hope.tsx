@@ -9,11 +9,12 @@ export function Hope() {
   return (
     <StatTrack
       label="Hope"
+      shape="pip"
+      interaction="level"
+      tone="var(--color-gold)"
       trackLength={system.hope.max}
       currentValue={character.stats.hope}
-      onIncrement={() => dispatch({ type: 'HOPE_INCREMENT', max: system.hope.max })}
-      onDecrement={() => dispatch({ type: 'HOPE_DECREMENT' })}
-      tone="var(--color-gold)"
+      onSetValue={(value) => dispatch({ type: 'HOPE_SET', value, max: system.hope.max })}
     />
   );
 }

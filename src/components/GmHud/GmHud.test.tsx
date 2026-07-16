@@ -21,11 +21,18 @@ function renderHud() {
 }
 
 describe('GmHud', () => {
-  it('renders the Fear track inside a labelled GM HUD frame', () => {
+  it('renders the Fear pool inside a labelled GM HUD frame', () => {
     renderHud();
     const hud = screen.getByLabelText('GM HUD');
     expect(hud).toBeInTheDocument();
+    expect(hud.querySelector('[aria-label="Fear pool"]')).not.toBeNull();
     expect(hud.querySelector('[aria-label="Fear"]')).not.toBeNull();
+  });
+
+  it('renders the Duality dice roller alongside the Fear pool', () => {
+    renderHud();
+    expect(screen.getByLabelText('Duality dice roller')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Roll' })).toBeInTheDocument();
   });
 
   it('does not render any player stat tracks', () => {

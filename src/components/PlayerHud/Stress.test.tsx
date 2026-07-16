@@ -55,13 +55,15 @@ describe('Stress', () => {
     }
   });
 
-  it('clicking a marked slot unmarks it (correction)', () => {
+  it('clicking the topmost marked slot clears it (level step-down correction)', () => {
     renderStress({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       stats: { hope: 2, hp: [], stress: [0, 1], armorSlots: [] },
     });
-    fireEvent.click(slots()[0]);
-    expect(slots()[0].dataset.state).toBe('unmarked');
-    expect(slots()[1].dataset.state).toBe('marked');
+    // Stress fills cumulatively (box glyph, level interaction). Two marked slots;
+    // clicking the current top (index 1) steps the count down to 1.
+    fireEvent.click(slots()[1]);
+    expect(slots()[0].dataset.state).toBe('marked');
+    expect(slots()[1].dataset.state).toBe('unmarked');
   });
 });

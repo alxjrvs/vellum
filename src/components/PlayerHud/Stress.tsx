@@ -7,12 +7,12 @@ export function Stress() {
   return (
     <StatTrack
       label="Stress"
+      shape="box"
+      interaction="level"
+      tone="var(--color-accent)"
       trackLength={character.slotCounts.stress}
       currentValue={character.stats.stress.length}
-      markedSlots={character.stats.stress}
-      onToggleSlot={(index) => dispatch({ type: 'STRESS_TOGGLE_SLOT', index })}
-      onIncrement={() => {}}
-      tone="var(--color-accent)"
+      onSetValue={(count) => dispatch({ type: 'STRESS_SET', count })}
     />
   );
 }

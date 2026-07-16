@@ -7,14 +7,13 @@ export function HP() {
   return (
     <StatTrack
       label="HP"
+      shape="heart"
+      interaction="level"
+      tone="var(--color-health)"
       trackLength={character.slotCounts.hp}
       currentValue={character.stats.hp.length}
-      markedSlots={character.stats.hp}
-      onToggleSlot={(index) => dispatch({ type: 'HP_TOGGLE_SLOT', index })}
-      onIncrement={() => {}}
       thresholds={character.thresholds}
-      shape="heart"
-      tone="var(--color-health)"
+      onSetValue={(count) => dispatch({ type: 'HP_SET', count })}
     />
   );
 }

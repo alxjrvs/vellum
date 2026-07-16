@@ -4,12 +4,12 @@ import type { CoreConditionId } from '../systems/types';
 export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }
   | { type: 'CLEAR_CHARACTER' }
-  | { type: 'HOPE_INCREMENT'; max: number }
-  | { type: 'HOPE_DECREMENT' }
+  | { type: 'HOPE_SET'; value: number; max: number }
+  | { type: 'FEAR_SET'; value: number; max: number }
   | { type: 'FEAR_INCREMENT'; max: number }
   | { type: 'FEAR_DECREMENT' }
-  | { type: 'HP_TOGGLE_SLOT'; index: number }
-  | { type: 'STRESS_TOGGLE_SLOT'; index: number }
+  | { type: 'HP_SET'; count: number }
+  | { type: 'STRESS_SET'; count: number }
   | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
   | { type: 'CONDITION_TOGGLE'; condition: CoreConditionId }
   | { type: 'FEATURE_CONDITION_TOGGLE'; name: string };
@@ -23,17 +23,17 @@ export function characterReducer(
       return action.character;
     case 'CLEAR_CHARACTER':
       return null;
-    case 'HOPE_INCREMENT':
+    case 'HOPE_SET':
       if (!state) return state;
       return {
         ...state,
-        stats: { ...state.stats, hope: Math.min(state.stats.hope + 1, action.max) },
+        stats: { ...state.stats, hope: clamp(action.value, 0, action.max) },
       };
-    case 'HOPE_DECREMENT':
+    case 'FEAR_SET':
       if (!state) return state;
       return {
         ...state,
-        stats: { ...state.stats, hope: Math.max(state.stats.hope - 1, 0) },
+        stats: { ...state.stats, fear: clamp(action.value, 0, action.max) },
       };
     case 'FEAR_INCREMENT':
       if (!state) return state;
@@ -47,17 +47,17 @@ export function characterReducer(
         ...state,
         stats: { ...state.stats, fear: Math.max((state.stats.fear ?? 0) - 1, 0) },
       };
-    case 'HP_TOGGLE_SLOT':
+    case 'HP_SET':
       if (!state) return state;
       return {
         ...state,
-        stats: { ...state.stats, hp: toggleIndex(state.stats.hp, action.index) },
+        stats: { ...state.stats, hp: filledRange(action.count, state.slotCounts.hp) },
       };
-    case 'STRESS_TOGGLE_SLOT':
+    case 'STRESS_SET':
       if (!state) return state;
       return {
         ...state,
-        stats: { ...state.stats, stress: toggleIndex(state.stats.stress, action.index) },
+        stats: { ...state.stats, stress: filledRange(action.count, state.slotCounts.stress) },
       };
     case 'ARMOR_TOGGLE_SLOT':
       if (!state) return state;
@@ -94,4 +94,17 @@ export function characterReducer(
 
 function toggleIndex(slots: readonly number[], index: number): readonly number[] {
   return slots.includes(index) ? slots.filter((i) => i !== index) : [...slots, index];
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(value, max));
+}
+
+/**
+ * A "level" track is filled cumulatively from the left, so its marked slots
+ * are always the contiguous indices `[0, 1, … count-1]`. Setting the dial to
+ * N fills the N slots behind it; the count is clamped to the track length.
+ */
+function filledRange(count: number, length: number): readonly number[] {
+  return Array.from({ length: clamp(count, 0, length) }, (_, i) => i);
 }

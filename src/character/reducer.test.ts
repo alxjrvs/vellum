@@ -19,39 +19,57 @@ describe('characterReducer', () => {
     expect(characterReducer(character, { type: 'CLEAR_CHARACTER' })).toBeNull();
   });
 
-  describe('HOPE_INCREMENT', () => {
-    it('adds 1 to hope', () => {
-      const character = makeCharacter({ stats: { hope: 4, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'HOPE_INCREMENT', max: 6 });
+  describe('HOPE_SET', () => {
+    it('sets hope to the supplied value', () => {
+      const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_SET', value: 5, max: 6 });
       expect(next?.stats.hope).toBe(5);
     });
 
-    it('caps at the supplied max', () => {
-      const character = makeCharacter({ stats: { hope: 6, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'HOPE_INCREMENT', max: 6 });
+    it('clamps to the supplied max', () => {
+      const character = makeCharacter({ stats: { hope: 4, hp: [], stress: [], armorSlots: [] } });
+      const next = characterReducer(character, { type: 'HOPE_SET', value: 9, max: 6 });
       expect(next?.stats.hope).toBe(6);
     });
 
-    it('returns null state unchanged', () => {
-      expect(characterReducer(null, { type: 'HOPE_INCREMENT', max: 6 })).toBeNull();
-    });
-  });
-
-  describe('HOPE_DECREMENT', () => {
-    it('subtracts 1 from hope', () => {
+    it('clamps at 0 (negative values floor)', () => {
       const character = makeCharacter({ stats: { hope: 4, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'HOPE_DECREMENT' });
-      expect(next?.stats.hope).toBe(3);
-    });
-
-    it('floors at 0', () => {
-      const character = makeCharacter({ stats: { hope: 0, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'HOPE_DECREMENT' });
+      const next = characterReducer(character, { type: 'HOPE_SET', value: -3, max: 6 });
       expect(next?.stats.hope).toBe(0);
     });
 
     it('returns null state unchanged', () => {
-      expect(characterReducer(null, { type: 'HOPE_DECREMENT' })).toBeNull();
+      expect(characterReducer(null, { type: 'HOPE_SET', value: 3, max: 6 })).toBeNull();
+    });
+  });
+
+  describe('FEAR_SET', () => {
+    it('sets fear to the supplied value', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 2, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_SET', value: 8, max: 12 });
+      expect(next?.stats.fear).toBe(8);
+    });
+
+    it('clamps to the supplied max', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 4, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_SET', value: 20, max: 12 });
+      expect(next?.stats.fear).toBe(12);
+    });
+
+    it('clamps at 0 (negative values floor)', () => {
+      const character = makeCharacter({
+        stats: { hope: 0, fear: 4, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'FEAR_SET', value: -5, max: 12 });
+      expect(next?.stats.fear).toBe(0);
+    });
+
+    it('returns null state unchanged', () => {
+      expect(characterReducer(null, { type: 'FEAR_SET', value: 3, max: 12 })).toBeNull();
     });
   });
 
@@ -99,59 +117,78 @@ describe('characterReducer', () => {
     });
   });
 
-  describe('HP_TOGGLE_SLOT', () => {
-    it('marks an unmarked slot', () => {
-      const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'HP_TOGGLE_SLOT', index: 0 });
+  describe('HP_SET', () => {
+    it('fills a contiguous range [0..count-1]', () => {
+      const character = makeCharacter({
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'HP_SET', count: 3 });
+      expect(next?.stats.hp).toEqual([0, 1, 2]);
+    });
+
+    it('replaces the previous range rather than toggling', () => {
+      const character = makeCharacter({
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [0, 1, 2, 3], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'HP_SET', count: 1 });
       expect(next?.stats.hp).toEqual([0]);
     });
 
-    it('unmarks a marked slot', () => {
+    it('clamps count to slotCounts.hp (over-full requests fill the whole track)', () => {
       const character = makeCharacter({
-        stats: { hope: 2, hp: [0, 1], stress: [], armorSlots: [] },
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
       });
-      const next = characterReducer(character, { type: 'HP_TOGGLE_SLOT', index: 0 });
-      expect(next?.stats.hp).toEqual([1]);
+      const next = characterReducer(character, { type: 'HP_SET', count: 99 });
+      expect(next?.stats.hp).toEqual([0, 1, 2, 3, 4, 5]);
     });
 
-    it('preserves other marked slots when toggling one', () => {
+    it('empties the track when count is 0', () => {
       const character = makeCharacter({
-        stats: { hope: 2, hp: [0, 2, 4], stress: [], armorSlots: [] },
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [0, 1, 2], stress: [], armorSlots: [] },
       });
-      const next = characterReducer(character, { type: 'HP_TOGGLE_SLOT', index: 1 });
-      expect([...(next?.stats.hp ?? [])].sort()).toEqual([0, 1, 2, 4]);
+      const next = characterReducer(character, { type: 'HP_SET', count: 0 });
+      expect(next?.stats.hp).toEqual([]);
     });
 
     it('returns null state unchanged', () => {
-      expect(characterReducer(null, { type: 'HP_TOGGLE_SLOT', index: 0 })).toBeNull();
+      expect(characterReducer(null, { type: 'HP_SET', count: 3 })).toBeNull();
     });
   });
 
-  describe('STRESS_TOGGLE_SLOT', () => {
-    it('marks an unmarked slot', () => {
-      const character = makeCharacter({ stats: { hope: 2, hp: [], stress: [], armorSlots: [] } });
-      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 0 });
-      expect(next?.stats.stress).toEqual([0]);
+  describe('STRESS_SET', () => {
+    it('fills a contiguous range [0..count-1]', () => {
+      const character = makeCharacter({
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'STRESS_SET', count: 4 });
+      expect(next?.stats.stress).toEqual([0, 1, 2, 3]);
     });
 
-    it('unmarks a marked slot', () => {
+    it('clamps count to slotCounts.stress', () => {
       const character = makeCharacter({
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+        stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
+      });
+      const next = characterReducer(character, { type: 'STRESS_SET', count: 99 });
+      expect(next?.stats.stress).toEqual([0, 1, 2, 3, 4, 5]);
+    });
+
+    it('empties the track when count is 0', () => {
+      const character = makeCharacter({
+        slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
         stats: { hope: 2, hp: [], stress: [0, 1], armorSlots: [] },
       });
-      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 0 });
-      expect(next?.stats.stress).toEqual([1]);
-    });
-
-    it('preserves other marked slots when toggling one', () => {
-      const character = makeCharacter({
-        stats: { hope: 2, hp: [], stress: [0, 2, 4], armorSlots: [] },
-      });
-      const next = characterReducer(character, { type: 'STRESS_TOGGLE_SLOT', index: 1 });
-      expect([...(next?.stats.stress ?? [])].sort()).toEqual([0, 1, 2, 4]);
+      const next = characterReducer(character, { type: 'STRESS_SET', count: 0 });
+      expect(next?.stats.stress).toEqual([]);
     });
 
     it('returns null state unchanged', () => {
-      expect(characterReducer(null, { type: 'STRESS_TOGGLE_SLOT', index: 0 })).toBeNull();
+      expect(characterReducer(null, { type: 'STRESS_SET', count: 3 })).toBeNull();
     });
   });
 

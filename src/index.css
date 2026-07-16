@@ -34,6 +34,15 @@ button {
   display: flex;
 }
 
+/* Ticker band across the top center — sized to clear the top corners. */
+.hud__region--ticker {
+  top: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 820px;
+  justify-content: center;
+}
+
 .hud__region--vitals {
   top: var(--spacing-xl);
   left: var(--spacing-xl);

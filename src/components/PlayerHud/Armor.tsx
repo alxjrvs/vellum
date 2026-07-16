@@ -8,12 +8,13 @@ export function Armor() {
   return (
     <StatTrack
       label="Armor"
+      shape="box"
+      interaction="toggle"
+      tone="var(--color-steel)"
       trackLength={character.slotCounts.armorSlots}
       currentValue={character.stats.armorSlots.length}
       markedSlots={character.stats.armorSlots}
       onToggleSlot={(index) => dispatch({ type: 'ARMOR_TOGGLE_SLOT', index })}
-      onIncrement={() => {}}
-      tone="var(--color-steel)"
     />
   );
 }

@@ -2,6 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   font-family: var(--font-family-body);
 }
