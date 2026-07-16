@@ -12,6 +12,7 @@ export function Stress() {
       markedSlots={character.stats.stress}
       onToggleSlot={(index) => dispatch({ type: 'STRESS_TOGGLE_SLOT', index })}
       onIncrement={() => {}}
+      tone="var(--color-accent)"
     />
   );
 }

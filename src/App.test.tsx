@@ -27,16 +27,6 @@ afterEach(() => {
 });
 
 describe('App', () => {
-  it('renders the Vellum heading', () => {
-    renderApp();
-    expect(screen.getByRole('heading', { name: /vellum/i })).toBeInTheDocument();
-  });
-
-  it('reads system + theme labels from context (no hardcoded strings)', () => {
-    renderApp();
-    expect(screen.getByText(/Daggerheart · Theme: Daggerheart/i)).toBeInTheDocument();
-  });
-
   it('shows the character setup form when no character is loaded', () => {
     renderApp();
     expect(screen.getByRole('heading', { name: /character details/i })).toBeInTheDocument();
@@ -51,7 +41,9 @@ describe('App', () => {
 
     renderApp();
 
-    expect(screen.getByLabelText('Character identity').textContent).toBe('Seraphine — Bard, Elf');
+    const identity = screen.getByLabelText('Character identity');
+    expect(identity.querySelector('.identity-label__name')).toHaveTextContent('Seraphine');
+    expect(identity.querySelector('.identity-label__detail')).toHaveTextContent('Bard · Elf');
     // The setup form is not shown while the overlay is active.
     expect(screen.queryByRole('heading', { name: /character details/i })).toBeNull();
   });

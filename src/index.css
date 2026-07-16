@@ -20,22 +20,67 @@ button {
   cursor: pointer;
 }
 
-.overview {
+/*
+ * Game-UI HUD: free-floating widgets anchored to the four corners and the
+ * bottom-center of the 1920x1080 stage — not boxed together in one card.
+ */
+.hud {
+  position: absolute;
+  inset: 0;
+}
+
+.hud__region {
+  position: absolute;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
+}
+
+.hud__region--vitals {
+  top: var(--spacing-xl);
+  left: var(--spacing-xl);
+}
+
+.hud__region--status {
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
+}
+
+.hud__region--dice {
+  bottom: var(--spacing-xl);
+  left: var(--spacing-xl);
+}
+
+.hud__region--name {
+  bottom: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: center;
+}
+
+.hud__region--utility {
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
 }
 
 .edit-details {
-  margin-top: var(--spacing-md);
   padding: var(--spacing-xs) var(--spacing-md);
-  border: var(--border-width) solid var(--color-card-border);
+  border: var(--border-width) solid var(--color-hud-border);
   border-radius: var(--radius-sm);
-  background: var(--color-parchment);
-  color: var(--color-ink);
-  font-family: var(--font-family-body);
+  background: var(--color-hud-surface);
+  color: var(--color-parchment);
+  font-family: var(--font-family-display);
   font-size: var(--font-size-label);
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  transition: opacity 0.12s ease;
+}
+
+.edit-details:hover {
+  opacity: 1;
+}
+
+/* Setup form retains the plain document flow with breathing room. */
+.setup-shell {
+  padding: var(--spacing-xl);
 }
 
 h1,

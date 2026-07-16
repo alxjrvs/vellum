@@ -35,9 +35,11 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
     const root = document.documentElement;
-    expect(root.style.getPropertyValue('--font-size-base')).toBe('18px');
+    expect(root.style.getPropertyValue('--font-size-base')).toBe('24px');
     expect(root.style.getPropertyValue('--spacing-md')).toBe('16px');
-    expect(root.style.getPropertyValue('--pip-size')).toBe('24px');
+    expect(root.style.getPropertyValue('--spacing-xl')).toBe('40px');
+    expect(root.style.getPropertyValue('--pip-size')).toBe('30px');
+    expect(root.style.getPropertyValue('--heart-size')).toBe('52px');
   });
 
   it('exposes the theme to descendants via useTheme()', () => {
