@@ -10,7 +10,10 @@ export function HP() {
   // from the right. `stats.hp` stores marked (damaged) slots, so health is the
   // complement, and setting the dial to N health means N.hp damage taken.
   const total = character.slotCounts.hp;
-  const health = total - character.stats.hp.length;
+  const damage = character.stats.hp.length;
+  const health = total - damage;
+  const takeDamage = (amount: number) =>
+    dispatch({ type: 'HP_SET', count: Math.min(damage + amount, total) });
   return (
     <div className="hp">
       <StatTrack
@@ -22,7 +25,9 @@ export function HP() {
         currentValue={health}
         onSetValue={(nextHealth) => dispatch({ type: 'HP_SET', count: total - nextHealth })}
       />
-      {character.thresholds && <HpThresholds thresholds={character.thresholds} />}
+      {character.thresholds && (
+        <HpThresholds thresholds={character.thresholds} onTakeDamage={takeDamage} />
+      )}
     </div>
   );
 }

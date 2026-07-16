@@ -103,4 +103,27 @@ describe('HP', () => {
     // Hearts themselves no longer carry per-slot threshold markers.
     expect(hearts().every((h) => h.dataset.threshold === undefined)).toBe(true);
   });
+
+  it('clicking a damage tier marks that much HP', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      thresholds: { major: 7, severe: 12 },
+    });
+    // Full health; clicking Major marks 2 HP → 4 health (hearts 0–3 full, 4–5 empty).
+    fireEvent.click(screen.getByRole('button', { name: /take major damage/i }));
+    const all = hearts();
+    for (let i = 0; i < 4; i++) expect(all[i].dataset.state).toBe('full');
+    for (let i = 4; i < 6; i++) expect(all[i].dataset.state).toBe('empty');
+  });
+
+  it('clamps tier damage at maximum HP', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      stats: { hope: 2, hp: [0, 1, 2, 3, 4], stress: [], armorSlots: [] },
+      thresholds: { major: 7, severe: 12 },
+    });
+    // Only 1 health left; taking Severe (3) can't exceed the track → all empty.
+    fireEvent.click(screen.getByRole('button', { name: /take severe damage/i }));
+    expect(hearts().every((h) => h.dataset.state === 'empty')).toBe(true);
+  });
 });
