@@ -1,5 +1,6 @@
 import { CHARACTER_SCHEMA_VERSION, type CharacterState } from './types';
 import { CORE_CONDITION_IDS, SYSTEM_IDS, type CoreConditionId } from '../systems/types';
+import { migrateToCurrentVersion } from './migrations';
 
 export type ParseResult =
   | { readonly ok: true; readonly character: CharacterState }
@@ -31,7 +32,13 @@ export function parseCharacterJson(text: string): ParseResult {
   return parseCharacter(value);
 }
 
-export function parseCharacter(value: unknown): ParseResult {
+export function parseCharacter(rawValue: unknown): ParseResult {
+  // Lift older/legacy payloads up to the current schema before validating, so a
+  // migratable input is upgraded rather than rejected. A current-version input
+  // passes through untouched; a genuinely incompatible version stays as-is and
+  // is caught by the version check below.
+  const value = migrateToCurrentVersion(rawValue);
+
   if (!isObject(value)) return { ok: false, error: 'Character must be a JSON object.' };
 
   if (value.version !== CHARACTER_SCHEMA_VERSION) {

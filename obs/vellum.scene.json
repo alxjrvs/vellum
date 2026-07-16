@@ -8,12 +8,12 @@
     {
       "prev_ver": 503644929,
       "name": "Vellum HUD",
-      "uuid": "__BROWSER_UUID__",
+      "uuid": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
       "id": "browser_source",
       "versioned_id": "browser_source",
       "settings": {
-        "is_local_file": true,
-        "local_file": "__VELLUM_DIST__",
+        "is_local_file": false,
+        "url": "https://alxjrvs.github.io/vellum/app/",
         "width": 1920,
         "height": 1080,
         "reroute_audio": false,
@@ -40,7 +40,7 @@
     {
       "prev_ver": 503644929,
       "name": "Vellum",
-      "uuid": "__SCENE_UUID__",
+      "uuid": "f9e8d7c6-b5a4-4938-8271-6a5b4c3d2e1f",
       "id": "scene",
       "versioned_id": "scene",
       "settings": {
@@ -49,7 +49,7 @@
         "items": [
           {
             "name": "Vellum HUD",
-            "source_uuid": "__BROWSER_UUID__",
+            "source_uuid": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
             "visible": true,
             "locked": false,
             "rot": 0.0,

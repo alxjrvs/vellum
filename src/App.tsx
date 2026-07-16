@@ -5,6 +5,7 @@ import { PlayerHud, ConditionsPanel, IdentityLabel } from './components/PlayerHu
 import { DiceRoller } from './components/DiceRoller';
 import { GmHud } from './components/GmHud';
 import { Ticker } from './components/Ticker';
+import { SetupWizard } from './components/SetupWizard';
 import { useViewMode } from './viewMode/useViewMode';
 
 export function App() {
@@ -29,6 +30,7 @@ export function App() {
     return (
       <main className="setup-shell">
         <CharacterSetup onDone={() => setEditing(false)} />
+        <SetupWizard />
       </main>
     );
   }
@@ -55,6 +57,7 @@ export function App() {
           Edit details
         </button>
       </div>
+      <SetupWizard />
     </main>
   );
 }

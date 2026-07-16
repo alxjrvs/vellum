@@ -3,6 +3,7 @@ import { act, render, screen } from '@testing-library/react';
 import { CharacterProvider } from './CharacterProvider';
 import { useCharacter } from './useCharacter';
 import { STORAGE_KEY } from './storage';
+import { encodeCharacterToShareParam } from './shareCode';
 import { makeCharacter } from './fixtures';
 
 function Probe() {
@@ -20,6 +21,7 @@ function Probe() {
 
 afterEach(() => {
   localStorage.clear();
+  window.history.replaceState({}, '', '/');
 });
 
 describe('CharacterProvider', () => {
@@ -79,6 +81,94 @@ describe('CharacterProvider', () => {
 
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
     expect(screen.getByTestId('name').textContent).toBe('NONE');
+  });
+});
+
+describe('CharacterProvider ?c= share flow', () => {
+  it('hydrates from a valid ?c= share param', () => {
+    const character = makeCharacter({
+      identity: { name: 'Shared', class: 'Bard', ancestry: 'Elf' },
+    });
+    window.history.replaceState({}, '', `/?c=${encodeCharacterToShareParam(character)}`);
+
+    render(
+      <CharacterProvider>
+        <Probe />
+      </CharacterProvider>
+    );
+
+    expect(screen.getByTestId('name').textContent).toBe('Shared');
+  });
+
+  it('strips the consumed ?c= param while preserving other params and the hash', () => {
+    const character = makeCharacter({
+      identity: { name: 'Shared', class: 'Bard', ancestry: 'Elf' },
+    });
+    const param = encodeCharacterToShareParam(character);
+    window.history.replaceState({}, '', `/?c=${param}&mode=gm#sheet`);
+
+    render(
+      <CharacterProvider>
+        <Probe />
+      </CharacterProvider>
+    );
+
+    expect(screen.getByTestId('name').textContent).toBe('Shared');
+    expect(new URLSearchParams(window.location.search).has('c')).toBe(false);
+    expect(new URLSearchParams(window.location.search).get('mode')).toBe('gm');
+    expect(window.location.hash).toBe('#sheet');
+  });
+
+  it('promotes the shared character into localStorage as the live store', () => {
+    const character = makeCharacter({
+      identity: { name: 'Shared', class: 'Bard', ancestry: 'Elf' },
+    });
+    window.history.replaceState({}, '', `/?c=${encodeCharacterToShareParam(character)}`);
+
+    render(
+      <CharacterProvider>
+        <Probe />
+      </CharacterProvider>
+    );
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+    expect(stored).not.toBeNull();
+    expect(JSON.parse(stored as string).identity.name).toBe('Shared');
+  });
+
+  it('falls back to localStorage when no ?c= param is present', () => {
+    const character = makeCharacter({
+      identity: { name: 'Stored', class: 'Bard', ancestry: 'Elf' },
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
+    window.history.replaceState({}, '', '/');
+
+    render(
+      <CharacterProvider>
+        <Probe />
+      </CharacterProvider>
+    );
+
+    expect(screen.getByTestId('name').textContent).toBe('Stored');
+  });
+
+  it('falls back to localStorage and leaves an invalid ?c= param untouched', () => {
+    const character = makeCharacter({
+      identity: { name: 'Stored', class: 'Bard', ancestry: 'Elf' },
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
+    // A single base64url char is malformed (length ≡ 1 mod 4) → decode fails.
+    window.history.replaceState({}, '', '/?c=x');
+
+    render(
+      <CharacterProvider>
+        <Probe />
+      </CharacterProvider>
+    );
+
+    expect(screen.getByTestId('name').textContent).toBe('Stored');
+    // An unconsumed (invalid) param is not stripped from the URL.
+    expect(new URLSearchParams(window.location.search).get('c')).toBe('x');
   });
 });
 
