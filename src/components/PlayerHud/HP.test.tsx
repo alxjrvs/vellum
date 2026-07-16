@@ -84,44 +84,46 @@ describe('HP', () => {
     expect(hearts()[5].dataset.state).toBe('empty');
   });
 
-  it('mirrors damage thresholds to the depleting (right) end — Major before Severe', () => {
+  it('surfaces the Minor/Major/Severe damage thresholds when set on the character', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
-      thresholds: { major: 2, severe: 3 },
+      thresholds: { major: 7, severe: 12 },
     });
-    const all = hearts();
-    // Major (2nd point of damage) sits 2 from the right = index 4;
-    // Severe (3rd) sits 3 from the right = index 3.
-    expect(all[4].dataset.threshold).toBe('major');
-    expect(all[3].dataset.threshold).toBe('severe');
-    expect(all[0].dataset.threshold).toBeUndefined();
-    expect(all[5].dataset.threshold).toBeUndefined();
+    const strip = screen.getByRole('region', { name: /damage thresholds/i });
+    expect(within(strip).getByText('Minor')).toBeInTheDocument();
+    expect(within(strip).getByText('Major')).toBeInTheDocument();
+    expect(within(strip).getByText('Severe')).toBeInTheDocument();
+    expect(within(strip).getByText('7')).toBeInTheDocument();
+    expect(within(strip).getByText('12')).toBeInTheDocument();
   });
 
-  it('mirrors Major/Severe to the two rightmost hearts for an unarmored L1 (major 1, severe 2)', () => {
-    renderHP({
-      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
-      thresholds: { major: 1, severe: 2 },
-    });
-    const all = hearts();
-    expect(all[5].dataset.threshold).toBe('major');
-    expect(all[4].dataset.threshold).toBe('severe');
-  });
-
-  it('renders no threshold markers when thresholds are not set on the character', () => {
+  it('renders no threshold strip when thresholds are not set on the character', () => {
     renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
+    expect(screen.queryByRole('region', { name: /damage thresholds/i })).toBeNull();
+    // Hearts themselves no longer carry per-slot threshold markers.
     expect(hearts().every((h) => h.dataset.threshold === undefined)).toBe(true);
   });
 
-  it('threshold markers are cosmetic — clicking still follows the level fill', () => {
+  it('clicking a damage tier marks that much HP', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
-      thresholds: { major: 2, severe: 3 },
+      thresholds: { major: 7, severe: 12 },
     });
-    // Major marker sits on index 4; clicking index 3 sets health to 4, emptying
-    // index 4 while it keeps its marker.
-    fireEvent.click(hearts()[3]);
-    expect(hearts()[4].dataset.state).toBe('empty');
-    expect(hearts()[4].dataset.threshold).toBe('major');
+    // Full health; clicking Major marks 2 HP → 4 health (hearts 0–3 full, 4–5 empty).
+    fireEvent.click(screen.getByRole('button', { name: /take major damage/i }));
+    const all = hearts();
+    for (let i = 0; i < 4; i++) expect(all[i].dataset.state).toBe('full');
+    for (let i = 4; i < 6; i++) expect(all[i].dataset.state).toBe('empty');
+  });
+
+  it('clamps tier damage at maximum HP', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      stats: { hope: 2, hp: [0, 1, 2, 3, 4], stress: [], armorSlots: [] },
+      thresholds: { major: 7, severe: 12 },
+    });
+    // Only 1 health left; taking Severe (3) can't exceed the track → all empty.
+    fireEvent.click(screen.getByRole('button', { name: /take severe damage/i }));
+    expect(hearts().every((h) => h.dataset.state === 'empty')).toBe(true);
   });
 });
