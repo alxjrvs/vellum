@@ -13,6 +13,7 @@ export function Armor() {
       markedSlots={character.stats.armorSlots}
       onToggleSlot={(index) => dispatch({ type: 'ARMOR_TOGGLE_SLOT', index })}
       onIncrement={() => {}}
+      tone="var(--color-steel)"
     />
   );
 }

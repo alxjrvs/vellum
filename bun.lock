@@ -5,7 +5,7 @@
     "": {
       "name": "vellum",
       "dependencies": {
-        "@randsum/daggerheart": "0.27.0",
+        "@randsum/daggerheart": "1.1.1",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
       },
@@ -180,9 +180,9 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@randsum/daggerheart": ["@randsum/daggerheart@0.27.0", "", { "dependencies": { "@randsum/roller": "~0.26.11" } }, "sha512-6k5v4e6DtAhZS6dUAbWJwwbIGs4L6GupJK/lRY5cq8+nR4EkiIiel4YESLy/qFYIdBRHzbyE5hWDbhfLEtevJg=="],
+    "@randsum/daggerheart": ["@randsum/daggerheart@1.1.1", "", { "dependencies": { "@randsum/roller": "~1.1.2" } }, "sha512-JvyXxKNpWD50H1T5qutmOmvLEFuPyewBWSbfSQBA3fF57yjZ+fTywojyUqF5FpRhVGpCAZDB7m3ifV1k4O7aqA=="],
 
-    "@randsum/roller": ["@randsum/roller@0.26.11", "", { "bin": { "@randsum/roller": "bin/randsum" } }, "sha512-nk1790WJJ7RoJvVAxiCjp4rV1aYk0+031VJ1kHJ/rB4kFTnh4cwINgYqtGZvOEK5dzVJl4vtl6LjG4Zq+V9c+A=="],
+    "@randsum/roller": ["@randsum/roller@1.1.2", "", { "bin": { "roller": "bin/randsum" } }, "sha512-b/kt8/6MBKEw3t5TQT3LtnggTREPobqVDC0spjtbBhpiLXJ0oT/qs2BZpiQ5OF/jUCXVhbNdEQgZwcgbDfYZeA=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
 

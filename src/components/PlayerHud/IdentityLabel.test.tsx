@@ -19,6 +19,20 @@ function renderLabel(overrides: Partial<CharacterState> = {}) {
   );
 }
 
+function name(): string {
+  return (
+    screen.getByLabelText('Character identity').querySelector('.identity-label__name')
+      ?.textContent ?? ''
+  );
+}
+
+function detail(): string {
+  return (
+    screen.getByLabelText('Character identity').querySelector('.identity-label__detail')
+      ?.textContent ?? ''
+  );
+}
+
 describe('IdentityLabel', () => {
   it('renders nothing when no character is loaded', () => {
     const { container } = render(
@@ -31,44 +45,37 @@ describe('IdentityLabel', () => {
     expect(container.querySelector('[aria-label="Character identity"]')).toBeNull();
   });
 
-  it('renders "Name — Class, Ancestry" from the identity fields', () => {
+  it('renders the name and a "Class · Ancestry" detail from the identity fields', () => {
     renderLabel({ identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf' } });
-    const label = screen.getByLabelText('Character identity');
-    expect(label.textContent).toBe('Seraphine — Bard, Elf');
+    expect(name()).toBe('Seraphine');
+    expect(detail()).toBe('Bard · Elf');
   });
 
   it('reflects different identity values without hardcoding', () => {
     renderLabel({ identity: { name: 'Brakkar', class: 'Guardian', ancestry: 'Goblin' } });
-    expect(screen.getByLabelText('Character identity').textContent).toBe(
-      'Brakkar — Guardian, Goblin'
-    );
+    expect(name()).toBe('Brakkar');
+    expect(detail()).toBe('Guardian · Goblin');
   });
 
   it('includes level when provided', () => {
     renderLabel({
       identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', level: 3 },
     });
-    expect(screen.getByLabelText('Character identity').textContent).toBe(
-      'Seraphine — Lvl 3 Bard, Elf'
-    );
+    expect(detail()).toBe('Lvl 3 Bard · Elf');
   });
 
   it('includes subclass in parentheses when provided', () => {
     renderLabel({
       identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', subclass: 'Troubadour' },
     });
-    expect(screen.getByLabelText('Character identity').textContent).toBe(
-      'Seraphine — Bard (Troubadour), Elf'
-    );
+    expect(detail()).toBe('Bard (Troubadour) · Elf');
   });
 
   it('includes community after ancestry when provided', () => {
     renderLabel({
       identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf', community: 'Wildborne' },
     });
-    expect(screen.getByLabelText('Character identity').textContent).toBe(
-      'Seraphine — Bard, Elf, Wildborne'
-    );
+    expect(detail()).toBe('Bard · Elf, Wildborne');
   });
 
   it('combines all optional fields when present', () => {
@@ -82,14 +89,12 @@ describe('IdentityLabel', () => {
         level: 3,
       },
     });
-    expect(screen.getByLabelText('Character identity').textContent).toBe(
-      'Seraphine — Lvl 3 Bard (Troubadour), Elf, Wildborne'
-    );
+    expect(name()).toBe('Seraphine');
+    expect(detail()).toBe('Lvl 3 Bard (Troubadour) · Elf, Wildborne');
   });
 
   it('omits absent optional fields without placeholders', () => {
     renderLabel({ identity: { name: 'Seraphine', class: 'Bard', ancestry: 'Elf' } });
-    const text = screen.getByLabelText('Character identity').textContent ?? '';
-    expect(text).not.toMatch(/Lvl|\(|undefined|null/);
+    expect(detail()).not.toMatch(/Lvl|\(|undefined|null/);
   });
 });

@@ -13,6 +13,8 @@ export function HP() {
       onToggleSlot={(index) => dispatch({ type: 'HP_TOGGLE_SLOT', index })}
       onIncrement={() => {}}
       thresholds={character.thresholds}
+      shape="heart"
+      tone="var(--color-health)"
     />
   );
 }

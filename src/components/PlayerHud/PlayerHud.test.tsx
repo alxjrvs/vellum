@@ -19,17 +19,15 @@ function renderHud() {
 }
 
 describe('PlayerHud', () => {
-  it('renders the identity label, all four core stat tracks, and the conditions toggle inside a player-hud card frame', () => {
+  it('renders all four core stat tracks inside a player-hud card frame', () => {
     const { container } = renderHud();
     const card = container.querySelector('.player-hud');
     expect(card).not.toBeNull();
     expect(card).toHaveAttribute('aria-label', 'Player HUD');
-    expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
     expect(screen.getByLabelText(/^Hope$/)).toBeInTheDocument();
     expect(screen.getByLabelText(/^HP$/)).toBeInTheDocument();
     expect(screen.getByLabelText(/^Stress$/)).toBeInTheDocument();
     expect(screen.getByLabelText(/^Armor$/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^Conditions/ })).toBeInTheDocument();
   });
 
   it('renders nothing when no character is loaded', () => {

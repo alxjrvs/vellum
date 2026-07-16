@@ -9,14 +9,11 @@ export function IdentityLabel() {
   const leadingClass = level !== undefined ? `Lvl ${level} ${classPart}` : classPart;
   const ancestryPart = community ? `${ancestry}, ${community}` : ancestry;
   return (
-    <p className="identity-label" aria-label="Character identity">
-      <span className="identity-label__name">{name}</span>
-      <span className="identity-label__separator" aria-hidden="true">
-        {' — '}
-      </span>
-      <span className="identity-label__detail">
-        {leadingClass}, {ancestryPart}
-      </span>
-    </p>
+    <section className="identity-label" aria-label="Character identity">
+      <h2 className="identity-label__name">{name}</h2>
+      <p className="identity-label__detail">
+        {leadingClass} · {ancestryPart}
+      </p>
+    </section>
   );
 }

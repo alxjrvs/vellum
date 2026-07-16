@@ -13,6 +13,7 @@ export function Hope() {
       currentValue={character.stats.hope}
       onIncrement={() => dispatch({ type: 'HOPE_INCREMENT', max: system.hope.max })}
       onDecrement={() => dispatch({ type: 'HOPE_DECREMENT' })}
+      tone="var(--color-gold)"
     />
   );
 }

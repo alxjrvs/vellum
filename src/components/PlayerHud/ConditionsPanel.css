@@ -1,28 +1,35 @@
 .conditions-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
   font-family: var(--font-family-body);
-  color: var(--color-ink);
+  color: var(--color-parchment);
 }
 
 .conditions-panel__toggle {
   font-family: var(--font-family-display);
   font-size: var(--font-size-label);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: var(--border-width) solid var(--color-ink-muted);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-ink);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-hud-border);
+  border-radius: var(--radius-md);
+  background: var(--color-hud-surface);
+  color: var(--color-gold);
   cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
 }
 
 .conditions-panel__list {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: var(--spacing-xs);
-  margin: var(--spacing-xs) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
+  max-width: 520px;
 }
 
 .conditions-panel__badge {
@@ -30,16 +37,22 @@
   font-size: var(--font-size-label);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: var(--border-width) solid var(--color-ink-muted);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: var(--border-width) solid var(--color-hud-border);
   border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-ink-muted);
+  background: var(--color-hud-surface);
+  color: var(--color-parchment);
+  opacity: 0.6;
   cursor: pointer;
+  transition:
+    opacity 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
 .conditions-panel__badge[data-state='active'] {
   background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-ink);
+  border-color: var(--color-gold);
+  color: var(--color-parchment);
+  opacity: 1;
+  box-shadow: 0 0 12px 1px rgba(194, 97, 47, 0.6);
 }

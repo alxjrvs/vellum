@@ -19,8 +19,8 @@ function renderHP(overrides: Partial<CharacterState> = {}) {
   );
 }
 
-function slots() {
-  return within(screen.getByRole('group', { name: /HP slots/i })).getAllByRole('button');
+function hearts() {
+  return within(screen.getByRole('group', { name: /HP hearts/i })).getAllByRole('button');
 }
 
 describe('HP', () => {
@@ -35,34 +35,35 @@ describe('HP', () => {
     expect(container.querySelector('[aria-label="HP"]')).toBeNull();
   });
 
-  it('renders 6 slots for a Bard (slotCounts.hp=6)', () => {
+  it('renders 6 hearts for a Bard (slotCounts.hp=6), all full', () => {
     renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
-    expect(slots()).toHaveLength(6);
-    expect(slots().every((s) => s.dataset.state === 'unmarked')).toBe(true);
+    expect(hearts()).toHaveLength(6);
+    expect(hearts().every((h) => h.dataset.state === 'full')).toBe(true);
+    expect(hearts().every((h) => h.classList.contains('stat-track__heart'))).toBe(true);
   });
 
-  it('renders 7 slots for a Guardian-class character (slotCounts.hp=7)', () => {
+  it('renders 7 hearts for a Guardian-class character (slotCounts.hp=7)', () => {
     renderHP({ slotCounts: { hp: 7, stress: 6, armorSlots: 3 } });
-    expect(slots()).toHaveLength(7);
+    expect(hearts()).toHaveLength(7);
   });
 
-  it('clicking the first unmarked slot marks it; no other slot changes', () => {
+  it('clicking the first full heart empties it (damage); no other heart changes', () => {
     renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
-    fireEvent.click(slots()[0]);
-    expect(slots()[0].dataset.state).toBe('marked');
+    fireEvent.click(hearts()[0]);
+    expect(hearts()[0].dataset.state).toBe('empty');
     for (let i = 1; i < 6; i++) {
-      expect(slots()[i].dataset.state).toBe('unmarked');
+      expect(hearts()[i].dataset.state).toBe('full');
     }
   });
 
-  it('clicking a marked slot unmarks it (correction)', () => {
+  it('clicking an emptied heart refills it (correction)', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       stats: { hope: 2, hp: [0, 1], stress: [], armorSlots: [] },
     });
-    fireEvent.click(slots()[0]);
-    expect(slots()[0].dataset.state).toBe('unmarked');
-    expect(slots()[1].dataset.state).toBe('marked');
+    fireEvent.click(hearts()[0]);
+    expect(hearts()[0].dataset.state).toBe('full');
+    expect(hearts()[1].dataset.state).toBe('empty');
   });
 
   it('renders Major/Severe markers at the configured threshold positions (Gambeson L1)', () => {
@@ -70,35 +71,35 @@ describe('HP', () => {
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 2, severe: 3 },
     });
-    const all = slots();
+    const all = hearts();
     expect(all[0].dataset.threshold).toBeUndefined();
     expect(all[1].dataset.threshold).toBe('major');
     expect(all[2].dataset.threshold).toBe('severe');
     expect(all[3].dataset.threshold).toBeUndefined();
   });
 
-  it('renders Major at slot 1 and Severe at slot 2 for an unarmored L1 character', () => {
+  it('renders Major at heart 1 and Severe at heart 2 for an unarmored L1 character', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 1, severe: 2 },
     });
-    const all = slots();
+    const all = hearts();
     expect(all[0].dataset.threshold).toBe('major');
     expect(all[1].dataset.threshold).toBe('severe');
   });
 
   it('renders no threshold markers when thresholds are not set on the character', () => {
     renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
-    expect(slots().every((s) => s.dataset.threshold === undefined)).toBe(true);
+    expect(hearts().every((h) => h.dataset.threshold === undefined)).toBe(true);
   });
 
-  it('clicking a slot at a threshold position toggles the slot — visual marker only, no special handling', () => {
+  it('clicking a heart at a threshold position toggles the heart — visual marker only, no special handling', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 2, severe: 3 },
     });
-    fireEvent.click(slots()[1]);
-    expect(slots()[1].dataset.state).toBe('marked');
-    expect(slots()[1].dataset.threshold).toBe('major');
+    fireEvent.click(hearts()[1]);
+    expect(hearts()[1].dataset.state).toBe('empty');
+    expect(hearts()[1].dataset.threshold).toBe('major');
   });
 });
