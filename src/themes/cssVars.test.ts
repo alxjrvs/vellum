@@ -16,8 +16,8 @@ describe('themeToCssVars', () => {
     const vars = themeToCssVars(daggerheartTheme);
     expect(vars['--color-health']).toBe('#e4443a');
     expect(vars['--color-steel']).toBe('#7fa0c4');
-    expect(vars['--color-hud-surface']).toBe('rgba(22, 15, 7, 0.74)');
-    expect(vars['--color-hud-surface-strong']).toBe('rgba(14, 9, 4, 0.9)');
+    expect(vars['--color-hud-surface']).toBe('#1b140b');
+    expect(vars['--color-hud-surface-strong']).toBe('#0f0a05');
     expect(vars['--color-hud-border']).toBe('rgba(201, 161, 74, 0.55)');
   });
 

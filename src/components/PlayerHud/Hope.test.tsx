@@ -56,8 +56,8 @@ describe('Hope', () => {
     renderHope(5);
     fireEvent.click(pips()[5]);
     expect(pips().filter((p) => p.dataset.state === 'filled')).toHaveLength(6);
-    // At max, no empty pips remain to click — clicking a filled pip decrements
-    fireEvent.click(pips()[0]);
+    // At max, clicking the topmost filled pip steps the dial back down by one.
+    fireEvent.click(pips()[5]);
     expect(pips().filter((p) => p.dataset.state === 'filled')).toHaveLength(5);
   });
 

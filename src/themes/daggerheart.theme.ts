@@ -14,8 +14,8 @@ export const daggerheartTheme: ThemeConfig = {
     cardBorder: '#5a4a32',
     health: '#e4443a',
     steel: '#7fa0c4',
-    hudSurface: 'rgba(22, 15, 7, 0.74)',
-    hudSurfaceStrong: 'rgba(14, 9, 4, 0.9)',
+    hudSurface: '#1b140b',
+    hudSurfaceStrong: '#0f0a05',
     hudBorder: 'rgba(201, 161, 74, 0.55)',
   },
   typography: {

@@ -56,14 +56,31 @@ describe('HP', () => {
     }
   });
 
-  it('clicking an emptied heart refills it (correction)', () => {
+  it('clicking the topmost damaged heart heals it (level step-down), leaving lower damage intact', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       stats: { hope: 2, hp: [0, 1], stress: [], armorSlots: [] },
     });
-    fireEvent.click(hearts()[0]);
-    expect(hearts()[0].dataset.state).toBe('full');
-    expect(hearts()[1].dataset.state).toBe('empty');
+    // Two damaged hearts (indices 0,1). Clicking the current top (index 1) steps the
+    // damage count down to 1 → heart 1 heals, heart 0 stays damaged.
+    fireEvent.click(hearts()[1]);
+    expect(hearts()[0].dataset.state).toBe('empty');
+    expect(hearts()[1].dataset.state).toBe('full');
+  });
+
+  it('clicking a healthy heart applies damage cumulatively up to that heart', () => {
+    renderHP({
+      slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
+      stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
+    });
+    // No damage yet; clicking the 3rd heart (index 2) damages hearts 1–3.
+    fireEvent.click(hearts()[2]);
+    for (let i = 0; i < 3; i++) {
+      expect(hearts()[i].dataset.state).toBe('empty');
+    }
+    for (let i = 3; i < 6; i++) {
+      expect(hearts()[i].dataset.state).toBe('full');
+    }
   });
 
   it('renders Major/Severe markers at the configured threshold positions (Gambeson L1)', () => {

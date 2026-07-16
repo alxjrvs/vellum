@@ -13,8 +13,8 @@
   color: var(--color-parchment);
 }
 
-/* The HP track leads the vitals stack — give its hearts extra breathing room. */
-.stat-track[data-mode='slot']:has(.stat-track__heart) {
+/* The HP track leads the vitals stack — mark its heart panel in health red. */
+.stat-track[data-shape='heart'] {
   border-color: var(--color-health);
 }
 

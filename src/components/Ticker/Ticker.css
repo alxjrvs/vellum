@@ -1,0 +1,81 @@
+.ticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--font-size-heading) + var(--spacing-md));
+  padding: var(--spacing-xs) var(--spacing-lg);
+  background: var(--color-hud-surface-strong);
+  border: var(--border-width) solid var(--color-hud-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  color: var(--color-parchment);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading);
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Empty ticker stays out of the way on stream but remains clickable to edit. */
+.ticker[data-empty='true'] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ticker__placeholder {
+  font-size: var(--font-size-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-parchment);
+  opacity: 0.4;
+}
+
+.ticker__viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.ticker__track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 24s linear infinite;
+  will-change: transform;
+}
+
+.ticker__text {
+  display: inline-block;
+  padding-right: var(--spacing-xl);
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker--editing {
+  cursor: text;
+}
+
+.ticker__input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-parchment);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading);
+  letter-spacing: 0.04em;
+  text-align: center;
+  cursor: text;
+}
+
+.ticker__input::placeholder {
+  color: var(--color-parchment);
+  opacity: 0.4;
+}
