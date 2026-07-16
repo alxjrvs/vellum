@@ -114,9 +114,14 @@
   cursor: pointer;
 }
 
-.character-setup__share-button:hover {
+.character-setup__share-button:hover:not(:disabled) {
   background: var(--color-accent);
   color: var(--color-parchment);
+}
+
+.character-setup__share-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .character-setup__share-hint {

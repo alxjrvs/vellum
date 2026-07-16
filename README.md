@@ -1,10 +1,31 @@
 # Vellum
 
-A local-only, TTRPG-system-aware camera overlay. A web app renders a character HUD composited onto the player's webcam feed via OBS browser source plus OBS Virtual Camera, which Discord receives as the player's camera input.
+**Your character sheet, on your face.** A local-only, TTRPG-system-aware camera
+overlay: a web app renders your character HUD, OBS composites it over your
+webcam, and OBS Virtual Camera feeds that into Discord as your camera. Live
+Hope / HP / Stress / Armor, right on your video tile.
 
-MVP ships the Daggerheart frame: Player HUD (Hope / HP / Stress / Armor / Conditions / Identity) and GM Fear view. The system is built data-driven from day one so adding a future system frame is config + components, not a rewrite.
+Ships the Daggerheart frame — Player HUD (Hope / HP / Stress / Armor /
+Conditions / Identity) and a GM Fear view — and is built data-driven so adding a
+system is config + components, not a rewrite.
 
-**Target release:** MVP — the owner's group runs one complete Daggerheart session using Vellum with no fallback to Demiplane.
+## 60-second quick-start
+
+No download, no build, no terminal:
+
+1. Open **https://alxjrvs.github.io/vellum/app/** in a browser tab.
+2. Fill in your character; click **Copy share link**.
+3. In OBS, add a Browser Source with that link (or import the Vellum scene),
+   put your webcam **below** the HUD, and **Start Virtual Camera**.
+4. In Discord, pick **OBS Virtual Camera**.
+
+The full one-screen walkthrough is **[`docs/QUICKSTART.md`](docs/QUICKSTART.md)**,
+and an in-app wizard guides the manual OBS/Discord steps for you.
+
+**Runs entirely in your browser — nothing is uploaded.** No account, no server,
+no telemetry: your character lives in your browser's localStorage and travels in
+your share link, never to anyone. (Want zero network at load? The GitHub Release
+ships an offline zip.)
 
 ## Quality goals
 
@@ -21,9 +42,20 @@ MVP ships the Daggerheart frame: Player HUD (Hope / HP / Stress / Armor / Condit
 
 ## Documentation
 
+- `docs/QUICKSTART.md` — the one-screen "Paste and Play" onramp (start here).
+- `docs/runbook.md` — game-day operator manual (during-play, dice, recovery).
+- `obs/README.md` — get the Vellum scene into OBS (Import, or per-OS scripts).
+- `docs/validation-protocol.md` — the human macOS/Windows/Linux go/no-go check.
+- `docs/RELEASE-STRATEGY.md` — distribution, positioning, and release surface.
 - `docs/PRD.md` — product requirements (Ideate phase output).
 - `docs/architecture.md` — Arc42 architecture document (sections 1–12 + Appendices A–D).
 
 ## Status
 
-Pre-implementation. Issues, milestones, and the project board track the work breakdown from `docs/architecture.md` Appendix A.
+**0.2.0 "Paste-and-Play" — in progress.** 0.1.0 made Vellum composable; 0.2.0
+makes it obtainable: the app is hosted on GitHub Pages, character config travels
+in a share link, and the OBS scene installs on macOS, Windows, and Linux
+pointed at the hosted URL. Still honest work-in-progress — the in-app setup
+wizard and the cross-OS human validation (`docs/validation-protocol.md`) are the
+gate before tagging. Issues, milestones, and the project board track the work
+breakdown from `docs/architecture.md` Appendix A.

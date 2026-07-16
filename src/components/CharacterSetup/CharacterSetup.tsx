@@ -54,8 +54,14 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
   const [error, setError] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState(false);
 
+  // The share link encodes the *persisted* character, so unsaved form edits
+  // aren't in it yet. Compare against the pristine form to know when the two
+  // have diverged, and gate the copy action so the link is never stale-but-copied.
+  const hasUnsavedEdits =
+    character !== null && JSON.stringify(form) !== JSON.stringify(initialForm(character));
+
   const handleCopyShareLink = () => {
-    if (!character) return;
+    if (!character || hasUnsavedEdits) return;
     const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}`;
     void navigator.clipboard.writeText(url).then(
       () => setShareCopied(true),
@@ -179,11 +185,14 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
             type="button"
             className="character-setup__share-button"
             onClick={handleCopyShareLink}
+            disabled={hasUnsavedEdits}
           >
             {shareCopied ? 'Share link copied' : 'Copy share link'}
           </button>
           <p className="character-setup__share-hint">
-            Paste this link into OBS to load {character.identity.name} with no Interact window.
+            {hasUnsavedEdits
+              ? 'Show overlay to save your edits, then the link will carry them.'
+              : `Paste this link into OBS to load ${character.identity.name} with no Interact window.`}
           </p>
         </div>
       )}

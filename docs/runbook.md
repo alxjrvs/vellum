@@ -1,7 +1,10 @@
-# Vellum — game-day runbook
+# Vellum — game-day operator manual
 
-How to run Vellum as the stat tracker for a live Daggerheart session over
-Discord. This is the condensed operator + player flow; the deeper
+How to **run** Vellum during a live Daggerheart session over Discord. This is
+the operator + player flow for people who are already set up. If you have never
+done first-time setup, start with **`docs/QUICKSTART.md`** — that's the
+one-screen "Paste and Play" onramp. This doc picks up once the HUD is live and
+covers what happens during play and when something breaks. The deeper
 verification procedures live in `obs-pipeline-verification.md` (M1),
 `m2-gate-2-rehearsal.md` (M2), and `m3-gate-3-session.md` (M3).
 
@@ -10,123 +13,68 @@ transparent page → OBS composites it over your webcam → OBS Virtual Camera
 feeds that into Discord as your camera.
 
 ```
-Vellum (dist/index.html)  ──▶  OBS Browser Source  ─┐
-                                                     ├─▶ OBS scene ─▶ Virtual Camera ─▶ Discord
-Webcam ─────────────────────▶  Video Capture Device ─┘
+Vellum (hosted app)  ──▶  OBS Browser Source  ─┐
+                                                ├─▶ OBS scene ─▶ Virtual Camera ─▶ Discord
+Webcam ────────────────▶  Video Capture Device ─┘
 ```
 
 ---
 
-## 1. One-time setup (per machine, before game day)
+## 0. First time here? Set up first.
 
-- [ ] **OBS Studio ≥ 28** installed (built-in Virtual Camera). Check
-      **Help → About → CEF version ≥ 103**.
-- [ ] **Discord desktop client** (the browser client can't pick a virtual
-      camera on macOS).
-- [ ] A working webcam.
-- [ ] **bun** installed (`curl -fsSL https://bun.sh/install | bash`).
-- [ ] Repo cloned, then from the repo root run the two commands below.
+Everything up to "the HUD is live in Discord" is covered in one screen:
 
-```sh
-bun install
-bun run build      # produces dist/index.html + dist/assets/
-```
+- **`docs/QUICKSTART.md`** — open `https://alxjrvs.github.io/vellum/app/`,
+  configure your character, **Copy share link**, paste it into OBS (or import
+  the `Vellum` scene), add your webcam below the HUD, **Start Virtual Camera**,
+  pick **OBS Virtual Camera** in Discord.
+- **`obs/README.md`** — the three ways to get the Vellum scene into OBS (Import,
+  or the macOS/Linux/Windows install scripts) and the manual OS/hardware steps.
 
-`bun run build` runs `obs:check` last and fails if the bundle would break the
-OBS path — a clean build is your green light.
+The **in-app setup wizard** guides the un-scriptable parts (webcam ordering,
+Start Virtual Camera + the OS prompt, picking the camera in Discord) and ends in
+a self-test. Reopen it anytime from the always-available **Setup help**
+affordance. Nothing about setup blanks your HUD or camera — the wizard is a
+dismissible panel, and the HUD holds safe-mode if anything fails to load.
 
-- [ ] Install OBS and pre-load the Vellum scene collection (handles the
-      browser-source config for you):
-
-```sh
-brew install --cask obs
-obs/setup-obs.sh      # installs the "Vellum" browser-source scene collection
-```
-
-See `obs/README.md` for what's automated vs. the manual macOS/Discord steps.
-
-Everyone in the group does this once and passes the M1 individual check
-(`obs-pipeline-verification.md`) before the first real session.
+Everyone in the group does the QUICKSTART once and passes the M1 individual
+check (`obs-pipeline-verification.md`) before the first real session.
 
 ---
 
-## 2. Know your character's numbers (before the session)
+## 1. Game-day startup (~15 min before session)
 
-You enter your character in an in-app **Character details** form — no files
-to prepare. Come with these values from your Daggerheart sheet ready to type:
+If you're already set up, going live again is short. Do this per person; a "no"
+on any line delays the start — the whole point is that nobody falls back to
+Demiplane for stat tracking.
 
-- **Identity** — name, class, ancestry (+ optional subclass / community /
-  level).
-- **Max values** — the HUD's pip maximums: **HP slots** (by class),
-  **Stress slots** (default 6), **Armor slots** (by equipped armor), and
-  **Starting Hope** (usually 2). The class/armor tables are in
-  `characters/README.md`.
-- **HP thresholds** (optional) — the **Major** / **Severe** HP slot
-  positions (1-indexed) → the **M** / **S** markers on the HP track.
-
-Current HP/Stress/Armor marks start empty and fill in as you click during
-play. To rehearse before game day: `bun run dev`, open the printed URL, fill
-the form, and click **Show overlay**.
-
----
-
-## 3. Game-day startup (~30 min before session)
-
-Do this per person. A "no" on any line delays the start — the whole point
-is that nobody falls back to Demiplane for stat tracking.
-
-### a. Load the HUD in OBS
-
-If you ran `obs/setup-obs.sh` (section 1), the browser source is already
-built:
-
-1. OBS → **Scene Collection → Vellum**.
-2. **Sources → + → Video Capture Device** (your webcam) — drag it **below**
-   `Vellum HUD` so the HUD composites on top.
-3. Confirm the HUD rendered (no blank page). Check **Help → Log Files → View
-   Current Log** for any `assets/*` 404.
-
-<details><summary>Adding the browser source by hand instead</summary>
-
-**Sources → + → Browser**: Local file ON → your built `dist/index.html`;
-Width 1920, Height 1080; **Shutdown when not visible** OFF; **Refresh when
-scene becomes active** OFF.
-
-</details>
-
-### b. Set your character details
-
-The HUD is a live web page, so you drive it through OBS's Interact window:
-
-- Right-click **Vellum HUD → Interact** — a window opens where your clicks
-  reach the page.
-- Fill the **Character details** form (identity + max values from section 2)
-  and click **Show overlay**.
-- Confirm the identity label and HP / Stress / Armor slot counts match your
-  sheet. Need to change a max later? Click **Edit details** to return to the
-  form (current marks that still fit are kept).
-
-### c. Go live into Discord
-
-1. OBS → **Start Virtual Camera** (bottom-right Controls).
-2. Discord → **User Settings → Voice & Video → Camera** → select **OBS
-   Virtual Camera**.
-3. Join the session voice channel, camera on.
-4. **Group ping test:** each player marks one HP; everyone confirms they
-   saw it within ~1 second.
+1. **Open your scene in OBS** → **Scene Collection → Vellum**. The `Vellum HUD`
+   browser source loads the hosted app. Confirm the HUD rendered (no blank
+   page).
+2. **Confirm your character.** If your marks restored from a previous session,
+   you're done — localStorage kept them. If this is a fresh machine or the HUD
+   is unconfigured, re-open your **share link** (from `docs/QUICKSTART.md`
+   step 3) as the browser-source URL, or click **Edit details** in the HUD.
+   Confirm the identity label and HP / Stress / Armor slot counts match your
+   sheet.
+3. **Webcam still below the HUD?** The `Video Capture Device` source must sit
+   **below** `Vellum HUD` so the HUD composites on top.
+4. **Start Virtual Camera** (OBS, bottom-right Controls).
+5. **Discord → Settings → Voice & Video → Camera → OBS Virtual Camera.** Join
+   the session voice channel, camera on.
+6. **Group ping test:** each player marks one HP; everyone confirms they saw it
+   within ~1 second.
 
 ### GM only — the Fear view
 
-The GM runs the same pipeline but loads the HUD with `?mode=gm`:
-
-- Point the OBS browser source at `dist/index.html?mode=gm` (Local file ON
-  still works — append the query in the URL field), **or** run
-  `bun run dev` and use `http://localhost:5173/?mode=gm`.
-- GM mode shows **only the Fear track** — no player tracks, no identity.
+The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
+browser source at `https://alxjrvs.github.io/vellum/app/?mode=gm` (or keep a
+second scene collection whose source uses that URL). GM mode shows **only the
+Fear track** — no player tracks, no identity.
 
 ---
 
-## 4. During play
+## 2. During play
 
 ### Stats — click to change, no modals
 
@@ -160,28 +108,32 @@ Vellum reports the dice, it doesn't auto-adjust your Hope/Fear tracks.
 
 ---
 
-## 5. If something breaks (fast recovery)
+## 3. If something breaks (fast recovery)
 
-| Symptom                           | Fix                                                                                                                                         |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the Local file path points at a built `dist/index.html`.                 |
-| Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, click **Edit details** and re-enter your maxes (you'll re-mark current state). |
-| Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                             |
-| Asset 404 in OBS log              | Rebuild: `bun run build` (its `obs:check` step catches broken asset paths). Point the source at the fresh `dist/`.                          |
-| You changed theme tokens recently | Re-run the legibility spot-check in `docs/legibility-validation.md` before relying on Discord-scale readability.                            |
+| Symptom                           | Fix                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `https://alxjrvs.github.io/vellum/app/` (or your share link).                      |
+| Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, re-open your share link, or click **Edit details** and re-enter your maxes (you'll re-mark current state). |
+| Character didn't load in OBS      | OBS's browser source has its own isolated storage — set it up via the **share link** URL, not by configuring a separate tab. See `docs/QUICKSTART.md` step 3.           |
+| Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                                                         |
+| Wizard covering the HUD           | It's a dismissible panel — dismiss it; the HUD is underneath. Reopen later via **Setup help**.                                                                          |
+| You changed theme tokens recently | Re-run the legibility spot-check in `docs/legibility-validation.md` before relying on Discord-scale readability.                                                        |
 
-A single bundle reload or one details re-entry recovered in under ~30 seconds is a
-normal minor hiccup — see `m3-gate-3-session.md` for the incident budget and
-what counts as a real fallback.
+A single browser-source refresh or one details re-entry recovered in under ~30
+seconds is a normal minor hiccup — see `m3-gate-3-session.md` for the incident
+budget and what counts as a real fallback.
 
 ---
 
-## Quick command reference
+## Quick reference
 
-```sh
-bun install         # deps (first time / after a pull)
-bun run build       # production bundle for OBS (dist/) + obs:check gate
-bun run dev         # local dev server (browser testing, GM ?mode=gm)
-bun run check       # lint + format + typecheck
-bun run test        # full test suite
-```
+| Where            | URL                                                    |
+| ---------------- | ------------------------------------------------------ |
+| Player HUD       | `https://alxjrvs.github.io/vellum/app/`                |
+| GM / Fear view   | `https://alxjrvs.github.io/vellum/app/?mode=gm`        |
+| Marketing / docs | `https://alxjrvs.github.io/vellum/`                    |
+| Your character   | your **share link** (Copy share link → paste into OBS) |
+
+Extending Vellum (systems, themes) or running from source is a developer path —
+see the repo `README.md` and `docs/RELEASE-STRATEGY.md`.
+</content>

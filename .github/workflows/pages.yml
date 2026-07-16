@@ -53,12 +53,14 @@ jobs:
 
       - name: Assemble combined Pages artifact
         # Site at the root; the built app served at /app/ (latest) and the
-        # version-pinned /app/v0.2.0/ mirror (roadmap M-A).
+        # version-pinned /app/v${VERSION}/ mirror (roadmap M-A). VERSION is
+        # derived from package.json so a release bump needs no workflow edit.
         run: |
-          mkdir -p _pages/app/v0.2.0
+          VERSION=$(jq -r .version package.json)
+          mkdir -p "_pages/app/v${VERSION}"
           cp -R site/. _pages/
           cp -R dist/. _pages/app/
-          cp -R dist/. _pages/app/v0.2.0/
+          cp -R dist/. "_pages/app/v${VERSION}/"
 
       - name: Upload combined artifact
         uses: actions/upload-pages-artifact@v3

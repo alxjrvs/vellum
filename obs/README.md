@@ -4,8 +4,10 @@ Automates the Vellum-specific half of OBS setup: a scene collection with the
 **Vellum HUD** browser source pre-configured (1920×1080, transparent). The
 browser source points at the **hosted URL**
 `https://alxjrvs.github.io/vellum/app/`, so there is **no build or `dist` to
-produce** — install the collection and it renders the live app. See
-`docs/runbook.md` for the full game-day flow.
+produce** — install the collection and it renders the live app. This doc is the
+OBS-install detail; for the full first-time onramp (configure your character →
+copy share link → paste into OBS → go live in Discord) start with
+`docs/QUICKSTART.md`, and see `docs/runbook.md` for the game-day operator flow.
 
 ## Files
 

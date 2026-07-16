@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { CharacterSetup } from './CharacterSetup';
 import { CharacterProvider } from '../../character/CharacterProvider';
 import { STORAGE_KEY } from '../../character/storage';
@@ -95,5 +95,56 @@ describe('CharacterSetup', () => {
 
     expect(screen.getByTestId('hp-max')).toHaveTextContent('3');
     expect(screen.getByTestId('name')).toHaveTextContent('Mara');
+  });
+});
+
+describe('CharacterSetup share link', () => {
+  let writeText: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  function seedMara() {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(
+        makeCharacter({ identity: { name: 'Mara', class: 'Rogue', ancestry: 'Human' } })
+      )
+    );
+  }
+
+  it('copies a share link for a saved character with no unsaved edits', async () => {
+    seedMara();
+    renderSetup();
+
+    const button = screen.getByRole('button', { name: /copy share link/i });
+    expect(button).toBeEnabled();
+    fireEvent.click(button);
+
+    expect(writeText).toHaveBeenCalledOnce();
+    expect(writeText.mock.calls[0][0]).toContain('?c=');
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: /share link copied/i })).toBeInTheDocument()
+    );
+  });
+
+  it('disables the copy link and warns while the form has unsaved edits', () => {
+    seedMara();
+    renderSetup();
+
+    typeInto(/^name/i, 'Mara the Bold');
+
+    const button = screen.getByRole('button', { name: /copy share link/i });
+    expect(button).toBeDisabled();
+    expect(screen.getByText(/show overlay to save your edits/i)).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(writeText).not.toHaveBeenCalled();
   });
 });
