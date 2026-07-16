@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Vellum mark">
+  <!-- Vellum mark: a V folded from a single gold band, cut flat like a chisel nib.
+       Self-contained; no fonts, no external refs. Reads at 16x16. -->
+  <rect width="64" height="64" rx="14" fill="#1C1510"/>
+  <!-- left band (lit face) -->
+  <polygon points="14,12 25,12 37.5,52 26.5,52" fill="#C9A14A"/>
+  <!-- right band (shaded face, passes behind) -->
+  <polygon points="39,12 50,12 37.5,52 26.5,52" fill="#9A7930"/>
+  <!-- fold facet where the bands overlap -->
+  <polygon points="32,34.4 37.5,52 26.5,52" fill="#6B5316"/>
+</svg>
