@@ -35,7 +35,7 @@ describe('HP', () => {
     expect(container.querySelector('[aria-label="HP"]')).toBeNull();
   });
 
-  it('renders 6 hearts for a Bard (slotCounts.hp=6), all full', () => {
+  it('renders 6 hearts for a Bard (slotCounts.hp=6), all full at no damage', () => {
     renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
     expect(hearts()).toHaveLength(6);
     expect(hearts().every((h) => h.dataset.state === 'full')).toBe(true);
@@ -47,62 +47,65 @@ describe('HP', () => {
     expect(hearts()).toHaveLength(7);
   });
 
-  it('clicking the first full heart empties it (damage); no other heart changes', () => {
-    renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
-    fireEvent.click(hearts()[0]);
-    expect(hearts()[0].dataset.state).toBe('empty');
-    for (let i = 1; i < 6; i++) {
-      expect(hearts()[i].dataset.state).toBe('full');
-    }
-  });
-
-  it('clicking the topmost damaged heart heals it (level step-down), leaving lower damage intact', () => {
+  it('shows remaining health as full hearts on the left, damage empties from the right', () => {
+    // 2 damage of 6 → 4 health: hearts 0–3 full, 4–5 empty.
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       stats: { hope: 2, hp: [0, 1], stress: [], armorSlots: [] },
     });
-    // Two damaged hearts (indices 0,1). Clicking the current top (index 1) steps the
-    // damage count down to 1 → heart 1 heals, heart 0 stays damaged.
-    fireEvent.click(hearts()[1]);
-    expect(hearts()[0].dataset.state).toBe('empty');
-    expect(hearts()[1].dataset.state).toBe('full');
+    const all = hearts();
+    for (let i = 0; i < 4; i++) expect(all[i].dataset.state).toBe('full');
+    for (let i = 4; i < 6; i++) expect(all[i].dataset.state).toBe('empty');
   });
 
-  it('clicking a healthy heart applies damage cumulatively up to that heart', () => {
+  it('depletes from the right: clicking the rightmost full heart takes one damage', () => {
+    renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
+    fireEvent.click(hearts()[5]);
+    for (let i = 0; i < 5; i++) expect(hearts()[i].dataset.state).toBe('full');
+    expect(hearts()[5].dataset.state).toBe('empty');
+  });
+
+  it('clicking a heart sets health to it, emptying every heart to its right', () => {
+    renderHP({ slotCounts: { hp: 6, stress: 6, armorSlots: 3 } });
+    // Full health; clicking the 3rd heart (index 2) sets health to 3.
+    fireEvent.click(hearts()[2]);
+    for (let i = 0; i < 3; i++) expect(hearts()[i].dataset.state).toBe('full');
+    for (let i = 3; i < 6; i++) expect(hearts()[i].dataset.state).toBe('empty');
+  });
+
+  it('clicking a depleted heart heals back up to it', () => {
+    // 4 damage of 6 → 2 health: hearts 0,1 full; 2–5 empty.
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
-      stats: { hope: 2, hp: [], stress: [], armorSlots: [] },
+      stats: { hope: 2, hp: [0, 1, 2, 3], stress: [], armorSlots: [] },
     });
-    // No damage yet; clicking the 3rd heart (index 2) damages hearts 1–3.
-    fireEvent.click(hearts()[2]);
-    for (let i = 0; i < 3; i++) {
-      expect(hearts()[i].dataset.state).toBe('empty');
-    }
-    for (let i = 3; i < 6; i++) {
-      expect(hearts()[i].dataset.state).toBe('full');
-    }
+    fireEvent.click(hearts()[4]); // heal up to the 5th heart → 5 health
+    for (let i = 0; i < 5; i++) expect(hearts()[i].dataset.state).toBe('full');
+    expect(hearts()[5].dataset.state).toBe('empty');
   });
 
-  it('renders Major/Severe markers at the configured threshold positions (Gambeson L1)', () => {
+  it('mirrors damage thresholds to the depleting (right) end — Major before Severe', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 2, severe: 3 },
     });
     const all = hearts();
+    // Major (2nd point of damage) sits 2 from the right = index 4;
+    // Severe (3rd) sits 3 from the right = index 3.
+    expect(all[4].dataset.threshold).toBe('major');
+    expect(all[3].dataset.threshold).toBe('severe');
     expect(all[0].dataset.threshold).toBeUndefined();
-    expect(all[1].dataset.threshold).toBe('major');
-    expect(all[2].dataset.threshold).toBe('severe');
-    expect(all[3].dataset.threshold).toBeUndefined();
+    expect(all[5].dataset.threshold).toBeUndefined();
   });
 
-  it('renders Major at heart 1 and Severe at heart 2 for an unarmored L1 character', () => {
+  it('mirrors Major/Severe to the two rightmost hearts for an unarmored L1 (major 1, severe 2)', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 1, severe: 2 },
     });
     const all = hearts();
-    expect(all[0].dataset.threshold).toBe('major');
-    expect(all[1].dataset.threshold).toBe('severe');
+    expect(all[5].dataset.threshold).toBe('major');
+    expect(all[4].dataset.threshold).toBe('severe');
   });
 
   it('renders no threshold markers when thresholds are not set on the character', () => {
@@ -110,13 +113,15 @@ describe('HP', () => {
     expect(hearts().every((h) => h.dataset.threshold === undefined)).toBe(true);
   });
 
-  it('clicking a heart at a threshold position toggles the heart — visual marker only, no special handling', () => {
+  it('threshold markers are cosmetic — clicking still follows the level fill', () => {
     renderHP({
       slotCounts: { hp: 6, stress: 6, armorSlots: 3 },
       thresholds: { major: 2, severe: 3 },
     });
-    fireEvent.click(hearts()[1]);
-    expect(hearts()[1].dataset.state).toBe('empty');
-    expect(hearts()[1].dataset.threshold).toBe('major');
+    // Major marker sits on index 4; clicking index 3 sets health to 4, emptying
+    // index 4 while it keeps its marker.
+    fireEvent.click(hearts()[3]);
+    expect(hearts()[4].dataset.state).toBe('empty');
+    expect(hearts()[4].dataset.threshold).toBe('major');
   });
 });
