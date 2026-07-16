@@ -5,6 +5,11 @@
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-xl);
   text-align: center;
+  /* Framed banner behind the name + secondary line, matching the HUD panels. */
+  background: var(--color-hud-surface-strong);
+  border: var(--border-width) solid var(--color-hud-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5);
 }
 
 .identity-label__name {
@@ -14,10 +19,7 @@
   line-height: 1;
   letter-spacing: 0.04em;
   color: var(--color-gold);
-  /* Legible over any webcam feed without a hard box. */
-  text-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.9),
-    0 0 22px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .identity-label__detail {
@@ -27,5 +29,4 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-parchment);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
