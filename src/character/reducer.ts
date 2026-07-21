@@ -5,9 +5,6 @@ export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }
   | { type: 'CLEAR_CHARACTER' }
   | { type: 'HOPE_SET'; value: number; max: number }
-  | { type: 'FEAR_SET'; value: number; max: number }
-  | { type: 'FEAR_INCREMENT'; max: number }
-  | { type: 'FEAR_DECREMENT' }
   | { type: 'HP_SET'; count: number }
   | { type: 'STRESS_SET'; count: number }
   | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
@@ -28,24 +25,6 @@ export function characterReducer(
       return {
         ...state,
         stats: { ...state.stats, hope: clamp(action.value, 0, action.max) },
-      };
-    case 'FEAR_SET':
-      if (!state) return state;
-      return {
-        ...state,
-        stats: { ...state.stats, fear: clamp(action.value, 0, action.max) },
-      };
-    case 'FEAR_INCREMENT':
-      if (!state) return state;
-      return {
-        ...state,
-        stats: { ...state.stats, fear: Math.min((state.stats.fear ?? 0) + 1, action.max) },
-      };
-    case 'FEAR_DECREMENT':
-      if (!state) return state;
-      return {
-        ...state,
-        stats: { ...state.stats, fear: Math.max((state.stats.fear ?? 0) - 1, 0) },
       };
     case 'HP_SET':
       if (!state) return state;

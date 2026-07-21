@@ -69,9 +69,16 @@ Demiplane for stat tracking.
 
 The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
 browser source at `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` (or
-keep a second scene collection whose source uses that URL). GM mode shows
-**only the Fear track** — no player tracks, no identity. (Older
-`?mode=gm` links still work, so existing OBS setups don't need updating.)
+keep a second scene collection whose source uses that URL). You can also just
+open the bare `/app/` URL and pick **GM** from the screen picker.
+
+GM mode shows the **Fear track and the duality dice** — no player tracks, no
+identity — and requires **no character setup**, so it renders on a fresh
+machine or a fresh browser profile.
+
+(Older `?mode=gm` links still work. A source pointed at the bare `/app/` URL
+now lands on the picker rather than the player HUD — set it to
+`#/daggerheart/player` to skip the picker.)
 
 ---
 
@@ -130,6 +137,7 @@ budget and what counts as a real fallback.
 
 | Where            | URL                                                         |
 | ---------------- | ----------------------------------------------------------- |
+| Screen picker    | `https://alxjrvs.github.io/vellum/app/`                     |
 | Player HUD       | `https://alxjrvs.github.io/vellum/app/#/daggerheart/player` |
 | GM / Fear view   | `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`     |
 | Marketing / docs | `https://alxjrvs.github.io/vellum/`                         |

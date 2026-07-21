@@ -11,6 +11,11 @@ export interface CharacterIdentity {
 
 export interface CharacterStats {
   readonly hope: number;
+  /**
+   * @deprecated Fear is GM state and now lives under its own `vellum:fear`
+   * storage key (see `src/gm/fearStorage.ts`). Retained so existing records
+   * still parse and can seed the new store once; nothing writes it.
+   */
   readonly fear?: number;
   readonly hp: readonly number[];
   readonly stress: readonly number[];

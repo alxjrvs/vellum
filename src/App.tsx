@@ -6,12 +6,23 @@ import { DiceRoller } from './components/DiceRoller';
 import { GmHud } from './components/GmHud';
 import { Ticker } from './components/Ticker';
 import { SetupWizard } from './components/SetupWizard';
+import { SceneSelector } from './components/SceneSelector';
 import { useViewMode } from './viewMode/useViewMode';
 
 export function App() {
   const { character } = useCharacter();
   const viewMode = useViewMode();
   const [editing, setEditing] = useState(false);
+
+  // The bare route addresses no scene: offer the game + role picker rather
+  // than silently assuming the player HUD.
+  if (viewMode === null) {
+    return (
+      <main className="setup-shell">
+        <SceneSelector />
+      </main>
+    );
+  }
 
   if (viewMode === 'gm') {
     return (

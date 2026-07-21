@@ -1,21 +1,23 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { Fear } from './Fear';
-import { CharacterProvider } from '../../character/CharacterProvider';
 import { SystemProvider } from '../../systems/SystemProvider';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
-import { writeCharacterToStorage } from '../../character/storage';
-import { makeCharacter } from '../../character/fixtures';
+import { writeFearToStorage } from '../../gm/fearStorage';
 
-function renderFear(fear: number) {
-  writeCharacterToStorage(
-    makeCharacter({ stats: { hope: 0, fear, hp: [], stress: [], armorSlots: [] } })
-  );
+afterEach(() => {
+  localStorage.clear();
+});
+
+/**
+ * Fear needs no character — only the system config for its max. Seeding goes
+ * through the GM's own store.
+ */
+function renderFear(fear?: number) {
+  if (fear !== undefined) writeFearToStorage(fear);
   return render(
     <SystemProvider system={daggerheartSystem}>
-      <CharacterProvider>
-        <Fear />
-      </CharacterProvider>
+      <Fear />
     </SystemProvider>
   );
 }
@@ -41,16 +43,12 @@ function currentValue() {
 }
 
 describe('Fear', () => {
-  it('renders nothing when no character is loaded', () => {
-    const { container } = render(
-      <SystemProvider system={daggerheartSystem}>
-        <CharacterProvider>
-          <Fear />
-        </CharacterProvider>
-      </SystemProvider>
-    );
-    expect(container.querySelector('[aria-label="Fear pool"]')).toBeNull();
-    expect(container.querySelector('[aria-label="Fear"]')).toBeNull();
+  it('renders at 0 with no character and no stored fear', () => {
+    // The GM scene must work on a cold start — a GM never fills in a sheet.
+    renderFear();
+    expect(screen.getByLabelText('Fear pool')).toBeInTheDocument();
+    expect(filledPips()).toHaveLength(0);
+    expect(currentValue()).toHaveTextContent('0');
   });
 
   it('renders fear value as a 12-pip dial sized from system config', () => {
@@ -100,5 +98,19 @@ describe('Fear', () => {
     expect(filledPips()).toHaveLength(12);
     expect(increaseButton()).toBeDisabled();
     expect(currentValue()).toHaveTextContent('12');
+  });
+
+  it('persists a change so a reload restores it', () => {
+    renderFear(3);
+    fireEvent.click(increaseButton());
+    screen.getByLabelText('Current Fear');
+
+    // Re-mount without re-seeding: the value comes back from storage.
+    render(
+      <SystemProvider system={daggerheartSystem}>
+        <Fear />
+      </SystemProvider>
+    );
+    expect(screen.getAllByLabelText('Current Fear')[1]).toHaveTextContent('4');
   });
 });
