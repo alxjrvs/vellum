@@ -11,9 +11,14 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
 ## The whole thing, six steps
 
 1. **Open the app** → **https://alxjrvs.github.io/vellum/app/**
-   It runs in your normal browser tab. (GM? Open
-   `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` for the Fear-only
-   view.)
+   It runs in your normal browser tab and opens on a **picker**: choose your
+   game (Daggerheart) and the screen you're running — **Player** or **GM**.
+   Each lands on its own address, which is what you paste into OBS:
+   - Player → `https://alxjrvs.github.io/vellum/app/#/daggerheart/player`
+   - GM → `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`
+
+   **GMs can stop after this step and go to step 4** — the GM screen needs no
+   character setup.
 
 2. **Configure your character.** Fill the **Character details** form with the
    numbers from your Daggerheart sheet (name/class + HP / Stress / Armor / Hope
@@ -78,5 +83,3 @@ open the browser network tab — nothing is POSTed.)
 - Game day — during-play controls, dice, and fast recovery: `docs/runbook.md`.
 - The OBS scene collection and per-OS install scripts: `obs/README.md`.
 - Before you rely on it live, run (or read) `docs/validation-protocol.md`.
-  </content>
-  </invoke>

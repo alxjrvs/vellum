@@ -130,6 +130,9 @@ describe('CharacterSetup share link', () => {
 
     expect(writeText).toHaveBeenCalledOnce();
     expect(writeText.mock.calls[0][0]).toContain('?c=');
+    // Must address the player scene: pasted into a non-interactive OBS browser
+    // source, a hash-less link would strand the user on the scene selector.
+    expect(writeText.mock.calls[0][0]).toContain('#/daggerheart/player');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /share link copied/i })).toBeInTheDocument()
     );

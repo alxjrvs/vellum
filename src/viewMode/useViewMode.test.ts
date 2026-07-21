@@ -15,10 +15,10 @@ describe('sceneHash', () => {
 });
 
 describe('useViewMode', () => {
-  it('defaults to player when the URL addresses no scene', () => {
+  it('returns null when the URL addresses no scene, so the selector renders', () => {
     window.history.replaceState({}, '', '/');
     const { result } = renderHook(() => useViewMode());
-    expect(result.current).toBe('player');
+    expect(result.current).toBeNull();
   });
 
   it.each(SCENES)('reads the canonical hash `#/daggerheart/%s`', (scene) => {
@@ -45,10 +45,10 @@ describe('useViewMode', () => {
     expect(result.current).toBe('player');
   });
 
-  it('ignores an unknown scene segment and falls back to player', () => {
+  it('ignores an unknown scene segment and falls back to the selector', () => {
     window.history.replaceState({}, '', '/#/daggerheart/table');
     const { result } = renderHook(() => useViewMode());
-    expect(result.current).toBe('player');
+    expect(result.current).toBeNull();
   });
 
   it('re-renders when the hash changes', () => {

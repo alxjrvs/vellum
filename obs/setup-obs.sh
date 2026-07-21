@@ -14,7 +14,7 @@ set -euo pipefail
 
 # --- config -----------------------------------------------------------------
 # The hosted Vellum HUD. Change this one line to point at a different deploy.
-VELLUM_URL="https://alxjrvs.github.io/vellum/app/"
+VELLUM_URL="https://alxjrvs.github.io/vellum/app/#/daggerheart/player"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATE="$REPO_ROOT/obs/vellum.scene.json"

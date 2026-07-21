@@ -15,7 +15,7 @@ Set-StrictMode -Version Latest
 
 # --- config -----------------------------------------------------------------
 # The hosted Vellum HUD. Change this one line to point at a different deploy.
-$VellumUrl = 'https://alxjrvs.github.io/vellum/app/'
+$VellumUrl = 'https://alxjrvs.github.io/vellum/app/#/daggerheart/player'
 
 $RepoRoot  = Split-Path -Parent $PSScriptRoot
 $Template  = Join-Path $PSScriptRoot 'vellum.scene.json'

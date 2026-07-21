@@ -13,7 +13,9 @@ system is config + components, not a rewrite.
 
 No download, no build, no terminal:
 
-1. Open **https://alxjrvs.github.io/vellum/app/** in a browser tab.
+1. Open **https://alxjrvs.github.io/vellum/app/** in a browser tab and pick your
+   game and role. (Running the game? Choose **GM** — it needs no character setup
+   and you can stop after step 3.)
 2. Fill in your character; click **Copy share link**.
 3. In OBS, add a Browser Source with that link (or import the Vellum scene),
    put your webcam **below** the HUD, and **Start Virtual Camera**.

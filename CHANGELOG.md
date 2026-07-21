@@ -15,6 +15,42 @@ a stronger promise: every bump ships a migration, so a mid-campaign character
 never hard-fails. `1.0.0` is earned, not scheduled — it means the extension API
 is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRATEGY.md).
 
+## [Unreleased]
+
+### Added
+
+- **Screen picker on the bare `/app/` route.** Opening the app with no scene in
+  the URL now shows a game + role selector (Daggerheart → Player / GM) that
+  links to each scene's canonical hash, so the GM screen is reachable by
+  navigation instead of by hand-typing a URL.
+
+### Fixed
+
+- **The GM screen no longer renders blank on a cold start.** Fear was stored
+  inside the character record, so a GM — who never fills in a character sheet —
+  got an empty scene with no way to reach setup. Fear now lives in its own
+  `vellum:fear` store and renders with zero configuration. Existing pools seed
+  once from the old `character.stats.fear` value.
+- **Share links address the player scene.** A `?c=` link carries no scene, so
+  with the new picker it would have landed on the selector — unrecoverable in a
+  non-interactive OBS browser source. Generated links now append
+  `#/daggerheart/player`, and consuming a hash-less `?c=` sets that hash, so
+  links copied before this release keep working.
+- The GM Fear track clamps a stored value that exceeds the system max instead of
+  over-filling the track.
+- `stats.fear` is no longer copied forward when a character is saved, so the
+  deprecated field can't freeze a stale value into exports and share links.
+
+### Changed
+
+- The shipped OBS scene collection and install scripts point at
+  `#/daggerheart/player` rather than the bare `/app/` URL (which is now the
+  picker). Browser sources still on the bare URL should be repointed; legacy
+  `?mode=` links are unaffected.
+- **Breaking (internal):** the `FEAR_SET` / `FEAR_INCREMENT` / `FEAR_DECREMENT`
+  character actions are removed. `CharacterStats.fear` is deprecated and
+  read-only, retained so existing records still parse.
+
 ## [0.2.0] — Paste-and-Play onramp
 
 The 0.2.0 release turns Vellum from a run-from-source tool into a

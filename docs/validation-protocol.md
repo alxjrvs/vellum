@@ -66,6 +66,8 @@ Walk the paste-and-play path (the tester should be led by the in-app wizard, not
 this list — this is the observer's scoring sheet):
 
 - [ ] Opened `https://alxjrvs.github.io/vellum/app/` in a normal browser tab.
+- [ ] The **screen picker** appeared; the tester chose their game and role
+      (Player / GM) without hesitating over which one they were.
 - [ ] The setup wizard appeared on first load and was **dismissible** — it never
       blanked the HUD or camera.
 - [ ] Configured the character in the form; clicked **Show overlay**.

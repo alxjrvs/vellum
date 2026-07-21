@@ -69,9 +69,16 @@ Demiplane for stat tracking.
 
 The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
 browser source at `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` (or
-keep a second scene collection whose source uses that URL). GM mode shows
-**only the Fear track** — no player tracks, no identity. (Older
-`?mode=gm` links still work, so existing OBS setups don't need updating.)
+keep a second scene collection whose source uses that URL). You can also just
+open the bare `/app/` URL and pick **GM** from the screen picker.
+
+GM mode shows the **Fear track and the duality dice** — no player tracks, no
+identity — and requires **no character setup**, so it renders on a fresh
+machine or a fresh browser profile.
+
+(Older `?mode=gm` links still work. A source pointed at the bare `/app/` URL
+now lands on the picker rather than the player HUD — set it to
+`#/daggerheart/player` to skip the picker.)
 
 ---
 
@@ -113,7 +120,8 @@ Vellum reports the dice, it doesn't auto-adjust your Hope/Fear tracks.
 
 | Symptom                           | Fix                                                                                                                                                                     |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `https://alxjrvs.github.io/vellum/app/` (or your share link).                      |
+| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `…/app/#/daggerheart/player` (or your share link).                                 |
+| OBS shows the screen picker       | The source is on the bare `…/app/` URL. Edit its Properties and append `#/daggerheart/player` (or `#/daggerheart/gm`).                                                  |
 | Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, re-open your share link, or click **Edit details** and re-enter your maxes (you'll re-mark current state). |
 | Character didn't load in OBS      | OBS's browser source has its own isolated storage — set it up via the **share link** URL, not by configuring a separate tab. See `docs/QUICKSTART.md` step 3.           |
 | Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                                                         |
@@ -130,6 +138,7 @@ budget and what counts as a real fallback.
 
 | Where            | URL                                                         |
 | ---------------- | ----------------------------------------------------------- |
+| Screen picker    | `https://alxjrvs.github.io/vellum/app/`                     |
 | Player HUD       | `https://alxjrvs.github.io/vellum/app/#/daggerheart/player` |
 | GM / Fear view   | `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`     |
 | Marketing / docs | `https://alxjrvs.github.io/vellum/`                         |

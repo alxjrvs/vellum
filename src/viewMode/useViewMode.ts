@@ -42,11 +42,15 @@ function sceneFromLegacyQuery(search: string): ViewMode | null {
   return mode !== null && isScene(mode) ? mode : null;
 }
 
-function currentScene(): ViewMode {
-  if (typeof window === 'undefined') return 'player';
-  return (
-    sceneFromHash(window.location.hash) ?? sceneFromLegacyQuery(window.location.search) ?? 'player'
-  );
+/**
+ * The active scene, or `null` when the URL addresses none — the bare `/app/`
+ * route and any unrecognized scene segment. `null` is a real state, not a
+ * fallback: it renders the game + role selector so the app is navigable
+ * without hand-typing a hash.
+ */
+function currentScene(): ViewMode | null {
+  if (typeof window === 'undefined') return null;
+  return sceneFromHash(window.location.hash) ?? sceneFromLegacyQuery(window.location.search);
 }
 
 function subscribe(onChange: () => void): () => void {
@@ -60,8 +64,8 @@ function subscribe(onChange: () => void): () => void {
 
 /**
  * Resolve the active scene from the URL, re-rendering when it changes. Scene
- * precedence: canonical hash → legacy `?mode=` query → `player` default.
+ * precedence: canonical hash → legacy `?mode=` query → `null` (the selector).
  */
-export function useViewMode(): ViewMode {
-  return useSyncExternalStore(subscribe, currentScene, () => 'player');
+export function useViewMode(): ViewMode | null {
+  return useSyncExternalStore(subscribe, currentScene, () => null);
 }
