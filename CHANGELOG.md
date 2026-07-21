@@ -31,6 +31,15 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
   got an empty scene with no way to reach setup. Fear now lives in its own
   `vellum:fear` store and renders with zero configuration. Existing pools seed
   once from the old `character.stats.fear` value.
+- **Share links address the player scene.** A `?c=` link carries no scene, so
+  with the new picker it would have landed on the selector — unrecoverable in a
+  non-interactive OBS browser source. Generated links now append
+  `#/daggerheart/player`, and consuming a hash-less `?c=` sets that hash, so
+  links copied before this release keep working.
+- The GM Fear track clamps a stored value that exceeds the system max instead of
+  over-filling the track.
+- `stats.fear` is no longer copied forward when a character is saved, so the
+  deprecated field can't freeze a stale value into exports and share links.
 
 ### Changed
 

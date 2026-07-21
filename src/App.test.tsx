@@ -4,6 +4,7 @@ import { App } from './App';
 import { CharacterProvider } from './character/CharacterProvider';
 import { STORAGE_KEY } from './character/storage';
 import { makeCharacter } from './character/fixtures';
+import { encodeCharacterToShareParam } from './character/shareCode';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { ThemeProvider } from './themes/ThemeProvider';
@@ -97,6 +98,22 @@ describe('App', () => {
       expect(screen.queryByLabelText('Conditions panel')).toBeNull();
       expect(screen.queryByLabelText('Character identity')).toBeNull();
     });
+  });
+
+  it('renders the Player HUD for a hash-less ?c= share link', () => {
+    // Regression: share links generated before scene hashes existed carry no
+    // hash, and would otherwise land on the selector — unrecoverable in a
+    // non-interactive OBS browser source.
+    const character = makeCharacter({
+      identity: { name: 'Wren', class: 'Ranger', ancestry: 'Human' },
+    });
+    window.history.replaceState({}, '', `/?c=${encodeCharacterToShareParam(character)}`);
+
+    renderApp();
+
+    expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Choose a screen')).toBeNull();
+    expect(window.location.hash).toBe('#/daggerheart/player');
   });
 
   it('renders the GM Fear track with no character configured at all', () => {

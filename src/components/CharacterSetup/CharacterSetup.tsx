@@ -3,6 +3,7 @@ import { useId, useState, type ComponentProps } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { useSystem } from '../../systems/useSystem';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
+import { sceneHash } from '../../viewMode/useViewMode';
 import { CHARACTER_SCHEMA_VERSION, type CharacterState } from '../../character/types';
 
 interface CharacterSetupProps {
@@ -62,7 +63,10 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
 
   const handleCopyShareLink = () => {
     if (!character || hasUnsavedEdits) return;
-    const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}`;
+    // Address the player scene explicitly: pasted straight into an OBS browser
+    // source, a hash-less link would land on the scene selector, which nobody
+    // can click past in a non-interactive source.
+    const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}${sceneHash('player')}`;
     void navigator.clipboard.writeText(url).then(
       () => setShareCopied(true),
       () => setShareCopied(false)
@@ -107,7 +111,9 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
         hp: clamp(character?.stats.hp, form.hp),
         stress: clamp(character?.stats.stress, form.stress),
         armorSlots: clamp(character?.stats.armorSlots, form.armorSlots),
-        ...(character?.stats.fear !== undefined ? { fear: character.stats.fear } : {}),
+        // `stats.fear` is deliberately dropped, not carried forward: Fear is GM
+        // state living in its own store, and re-persisting the legacy field
+        // would freeze a stale copy into every export and share link.
       },
       slotCounts: { hp: form.hp, stress: form.stress, armorSlots: form.armorSlots },
       ...(major !== undefined && severe !== undefined ? { thresholds: { major, severe } } : {}),

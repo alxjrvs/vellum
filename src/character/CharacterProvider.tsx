@@ -3,6 +3,7 @@ import { CharacterContext } from './CharacterContext';
 import { characterReducer } from './reducer';
 import { decodeShareParam } from './shareCode';
 import { readCharacterFromStorage, writeCharacterToStorage } from './storage';
+import { sceneHash } from '../viewMode/useViewMode';
 import type { CharacterState } from './types';
 
 const SHARE_PARAM = 'c';
@@ -12,6 +13,13 @@ const SHARE_PARAM = 'c';
  * valid character: it's the setup *transport*, so we consume it (clearing it
  * from the URL via `history.replaceState`) and let the persist effect promote it
  * into localStorage — the live in-session store. Otherwise fall back to storage.
+ *
+ * Consuming the param also *addresses a scene* when the link carries none: a
+ * share link is a character, which is inherently a player artifact, so it lands
+ * on the player HUD rather than the scene selector. This runs in the reducer's
+ * lazy initializer — before `App` reads the scene — so the hash is in place by
+ * the time `useViewMode` takes its first snapshot. Links generated before the
+ * scene hash existed keep working because of this.
  */
 function readInitialCharacter(): CharacterState | null {
   if (typeof window !== 'undefined') {
@@ -22,7 +30,8 @@ function readInitialCharacter(): CharacterState | null {
       if (result.ok) {
         params.delete(SHARE_PARAM);
         const query = params.toString();
-        const url = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
+        const hash = window.location.hash || sceneHash('player');
+        const url = `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
         window.history.replaceState(window.history.state, '', url);
         return result.character;
       }

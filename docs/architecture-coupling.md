@@ -26,7 +26,7 @@ There is **no registry and no system-selection mechanism** anywhere — the acti
 
 - `src/character/types.ts:12-18` `CharacterStats` = named DH fields: `hope`, `fear?`, `hp[]`, `stress[]`, `armorSlots[]`. Not generic tracks.
 - `:20-24` `CharacterSlotCounts` repeats hp/stress/armorSlots; `:27` `conditions.core` bakes the three DH conditions into the type; `:41` `system: SystemId`.
-- `src/character/reducer.ts:4-15` — action set is entirely DH-specific: `HOPE_SET`, `FEAR_SET`, `FEAR_INCREMENT/DECREMENT`, `HP_SET`, `STRESS_SET`, `ARMOR_TOGGLE_SLOT`, `CONDITION_TOGGLE`, `FEATURE_CONDITION_TOGGLE`. Each case reaches into `state.stats.<namedfield>`. → needs generic `TRACK_SET{trackId,…}` actions.
+- `src/character/reducer.ts:4-12` — action set is entirely DH-specific: `HOPE_SET`, `HP_SET`, `STRESS_SET`, `ARMOR_TOGGLE_SLOT`, `CONDITION_TOGGLE`, `FEATURE_CONDITION_TOGGLE`. Each case reaches into `state.stats.<namedfield>`. → needs generic `TRACK_SET{trackId,…}` actions. (Fear is no longer here: it moved to the GM-scoped `src/gm/fearStorage.ts` store, since a GM has no character.)
 - `src/character/parseCharacter.ts:58-102` — validates each named field literally and loops `CORE_CONDITION_IDS` (`:81`). → must become schema-driven off the SystemConfig.
 - `src/character/storage.ts`, `exportCharacter.ts` — **already fully generic** (opaque JSON round-trip; export only reads `identity.name`). No change.
 - `src/character/fixtures.ts:6` + `CharacterProvider.tsx` — provider generic; fixture hardcodes `system:'daggerheart'` + DH identity.

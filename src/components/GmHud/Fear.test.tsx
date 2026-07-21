@@ -100,6 +100,14 @@ describe('Fear', () => {
     expect(currentValue()).toHaveTextContent('12');
   });
 
+  it('clamps a stored value that exceeds the system max', () => {
+    writeFearToStorage(20);
+    renderFear();
+    expect(filledPips()).toHaveLength(daggerheartSystem.fear.max);
+    expect(currentValue()).toHaveTextContent('12');
+    expect(increaseButton()).toBeDisabled();
+  });
+
   it('persists a change so a reload restores it', () => {
     renderFear(3);
     fireEvent.click(increaseButton());

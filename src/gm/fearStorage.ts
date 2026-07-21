@@ -23,9 +23,11 @@ export function writeFearToStorage(
 }
 
 /**
- * One-time migration: before Fear had its own key it was persisted as
+ * Migration seed: before Fear had its own key it was persisted as
  * `character.stats.fear`. Seed from there so an existing GM's pool survives the
- * move. Nothing writes `stats.fear` any more, so this only ever reads.
+ * move. Nothing writes `stats.fear` any more, so this only ever reads — but it
+ * applies on *any* read while `vellum:fear` is absent, not strictly once, so
+ * clearing that key re-seeds from the legacy value rather than resetting to 0.
  */
 function seedFromLegacyCharacter(storage: Pick<Storage, 'getItem'>): number {
   const legacy = readCharacterFromStorage(storage)?.stats.fear;

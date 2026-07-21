@@ -120,7 +120,8 @@ Vellum reports the dice, it doesn't auto-adjust your Hope/Fear tracks.
 
 | Symptom                           | Fix                                                                                                                                                                     |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `https://alxjrvs.github.io/vellum/app/` (or your share link).                      |
+| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `…/app/#/daggerheart/player` (or your share link).                                 |
+| OBS shows the screen picker       | The source is on the bare `…/app/` URL. Edit its Properties and append `#/daggerheart/player` (or `#/daggerheart/gm`).                                                  |
 | Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, re-open your share link, or click **Edit details** and re-enter your maxes (you'll re-mark current state). |
 | Character didn't load in OBS      | OBS's browser source has its own isolated storage — set it up via the **share link** URL, not by configuring a separate tab. See `docs/QUICKSTART.md` step 3.           |
 | Discord shows no OBS camera       | Confirm **Start Virtual Camera** is running in OBS, then re-pick "OBS Virtual Camera" in Discord Voice & Video.                                                         |

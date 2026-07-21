@@ -11,7 +11,10 @@ interface FearControls {
  * to `[0, max]` on write so callers can pass raw deltas.
  */
 export function useFear(max: number): FearControls {
-  const [fear, setFearState] = useState(readFearFromStorage);
+  // Clamp on read too, not just on write: a stored value can exceed `max` via a
+  // hand-edited key or a legacy `stats.fear` from a larger track, which would
+  // otherwise render more filled pips than the track has and leave "+" enabled.
+  const [fear, setFearState] = useState(() => Math.min(readFearFromStorage(), max));
 
   const setFear = useCallback(
     (value: number) => {
