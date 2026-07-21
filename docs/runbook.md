@@ -72,9 +72,16 @@ browser source at `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` (or
 keep a second scene collection whose source uses that URL). You can also just
 open the bare `/app/` URL and pick **GM** from the screen picker.
 
-GM mode shows the **Fear track and the duality dice** — no player tracks, no
-identity — and requires **no character setup**, so it renders on a fresh
-machine or a fresh browser profile.
+In a browser tab the GM screen opens on its **setup page** — a short how-to
+covering the Fear track, the during-play controls, and the OBS steps — with a
+**Launch GM screen** button at the bottom. Launching is remembered, so a reload
+goes straight to the live screen; **Setup** on the live screen brings the how-to
+back. The **OBS browser source skips setup entirely** and always renders the
+live screen, so nothing can strand a setup page on your camera mid-session.
+
+The live GM screen shows the **Fear track and the duality dice** — no player
+tracks, no identity — and requires **no character setup**, so it works on a
+fresh machine or a fresh browser profile.
 
 (Older `?mode=gm` links still work. A source pointed at the bare `/app/` URL
 now lands on the picker rather than the player HUD — set it to

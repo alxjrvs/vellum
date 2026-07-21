@@ -18,7 +18,9 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
    - GM → `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`
 
    **GMs can stop after this step and go to step 4** — the GM screen needs no
-   character setup.
+   character setup. It opens on a short how-to; read it and click **Launch GM
+   screen** (remembered, so you only do it once). Your OBS source skips that
+   page and goes straight to the live screen.
 
 2. **Configure your character.** Fill the **Character details** form with the
    numbers from your Daggerheart sheet (name/class + HP / Stress / Armor / Hope

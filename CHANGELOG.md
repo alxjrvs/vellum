@@ -23,6 +23,14 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
   the URL now shows a game + role selector (Daggerheart → Player / GM) that
   links to each scene's canonical hash, so the GM screen is reachable by
   navigation instead of by hand-typing a URL.
+- **Setup → launch is now the lifecycle for every scene.** `SceneShell` owns
+  `setup → launch → live` (with an _edit_ path back); a scene supplies only its
+  two views and a readiness rule, so a new scene inherits the flow instead of
+  re-implementing it.
+- **The GM screen has a setup page.** A GM configures nothing, so its setup step
+  is the **how-to**: what the screen shows, how to drive the Fear track during
+  play, and how to get it into OBS — plus a **Copy GM screen link** action and a
+  **Launch GM screen** button. **Setup** on the live screen reopens it.
 
 ### Fixed
 
@@ -50,6 +58,17 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 - **Breaking (internal):** the `FEAR_SET` / `FEAR_INCREMENT` / `FEAR_DECREMENT`
   character actions are removed. `CharacterStats.fear` is deprecated and
   read-only, retained so existing records still parse.
+- Launch state is persisted per scene (`vellum:launched:<scene>`), so a reload
+  never re-gates a live screen. An existing character counts as an
+  already-launched player scene, so upgrading users are not sent back to setup.
+- **The OBS browser source skips the setup step** and always renders the live
+  scene — that source is non-interactive, so gating the HUD behind a click would
+  burn an undismissable setup page into a live camera. Readiness is still
+  enforced, so a player with no character stays on setup even inside OBS.
+- The GM scene no longer renders the player-oriented `SetupWizard`. Its OBS
+  self-test asks you to click an HP pip, which the GM screen has none of, and in
+  a non-interactive OBS source it would float over a live camera undismissably.
+  `GmSetup` is the GM's how-to.
 
 ## [0.2.0] — Paste-and-Play onramp
 
