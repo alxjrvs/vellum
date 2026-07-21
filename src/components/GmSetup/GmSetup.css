@@ -1,0 +1,70 @@
+.gm-setup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: 48rem;
+  margin: 0 auto;
+  font-family: var(--font-family-body);
+  color: var(--color-ink);
+}
+
+.gm-setup__title {
+  font-size: var(--font-size-title);
+}
+
+.gm-setup__lede {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-base);
+}
+
+.gm-setup__heading {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-heading);
+}
+
+.gm-setup__list,
+.gm-setup__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.gm-setup__copy {
+  margin-top: var(--spacing-xs);
+}
+
+.gm-setup__copy-button,
+.gm-setup__launch {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-card-surface);
+  color: var(--color-ink);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.gm-setup__launch {
+  align-self: flex-start;
+  margin-top: var(--spacing-lg);
+  border-color: var(--color-gold);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading);
+  color: var(--color-gold);
+}
+
+.gm-setup__copy-button:hover,
+.gm-setup__launch:hover {
+  background: var(--color-hud-surface-strong);
+}
+
+.gm-setup__note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+}

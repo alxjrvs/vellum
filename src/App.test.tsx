@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { App } from './App';
 import { CharacterProvider } from './character/CharacterProvider';
 import { STORAGE_KEY } from './character/storage';
 import { makeCharacter } from './character/fixtures';
 import { encodeCharacterToShareParam } from './character/shareCode';
+import { launchStorageKey } from './scenes/launchStorage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { ThemeProvider } from './themes/ThemeProvider';
@@ -85,6 +87,7 @@ describe('App', () => {
         stats: { hope: 0, fear: 5, hp: [], stress: [], armorSlots: [] },
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
+      localStorage.setItem(launchStorageKey('gm'), 'true');
       window.history.replaceState({}, '', url);
 
       renderApp();
@@ -116,9 +119,91 @@ describe('App', () => {
     expect(window.location.hash).toBe('#/daggerheart/player');
   });
 
+  describe('GM scene setup → launch', () => {
+    it('opens on the GM how-to rather than the live screen', () => {
+      window.history.replaceState({}, '', '/#/daggerheart/gm');
+
+      renderApp();
+
+      expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
+      expect(screen.queryByLabelText('GM HUD')).toBeNull();
+    });
+
+    it('launches to the live screen and persists the launch', () => {
+      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      renderApp();
+
+      fireEvent.click(screen.getByRole('button', { name: /launch gm screen/i }));
+
+      expect(screen.getByLabelText('GM HUD')).toBeInTheDocument();
+      expect(screen.queryByLabelText('GM screen setup')).toBeNull();
+      expect(localStorage.getItem(launchStorageKey('gm'))).toBe('true');
+    });
+
+    it('returns to setup via the Setup button without un-launching', () => {
+      localStorage.setItem(launchStorageKey('gm'), 'true');
+      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      renderApp();
+
+      fireEvent.click(screen.getByRole('button', { name: /^setup$/i }));
+
+      expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
+      expect(localStorage.getItem(launchStorageKey('gm'))).toBe('true');
+    });
+
+    it('does not leak the launch across scenes on a fresh mount', () => {
+      localStorage.setItem(launchStorageKey('gm'), 'true');
+      window.history.replaceState({}, '', '/#/daggerheart/player');
+
+      renderApp();
+
+      // No character, so the player scene is still in setup regardless of GM.
+      expect(screen.getByRole('heading', { name: /character details/i })).toBeInTheDocument();
+    });
+
+    it('does not leak launch state when switching scenes in place', () => {
+      // Both branches render a SceneShell in the same position, so without a
+      // per-scene key React reuses the instance and the launched player scene
+      // would carry its launch into GM — skipping the how-to for a URL that
+      // shows it again on the next reload.
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
+      window.history.replaceState({}, '', '/#/daggerheart/player');
+      renderApp();
+      expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
+
+      act(() => {
+        window.history.replaceState({}, '', '/#/daggerheart/gm');
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+      });
+
+      expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
+      expect(screen.queryByLabelText('GM HUD')).toBeNull();
+    });
+
+    it('does not leak the editing state back to a launched player scene', () => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
+      localStorage.setItem(launchStorageKey('gm'), 'true');
+      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      renderApp();
+
+      fireEvent.click(screen.getByRole('button', { name: /^setup$/i }));
+      expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
+
+      act(() => {
+        window.history.replaceState({}, '', '/#/daggerheart/player');
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+      });
+
+      // The player scene is launched and has a character — editing must not bleed.
+      expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: /character details/i })).toBeNull();
+    });
+  });
+
   it('renders the GM Fear track with no character configured at all', () => {
     // Regression: the GM scene used to short-circuit to a blank page because
     // Fear was stored inside the character record a GM never creates.
+    localStorage.setItem(launchStorageKey('gm'), 'true');
     window.history.replaceState({}, '', '/#/daggerheart/gm');
 
     renderApp();
