@@ -7,6 +7,12 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* The stage is a fixed, viewport-centred frame, so the document itself never
+     needs to scroll — and a scrollbar inside a browser source would be burned
+     into the camera feed. */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   background: transparent;
   color: var(--color-ink);
   font-family: var(--font-family-body);

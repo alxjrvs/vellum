@@ -1,8 +1,17 @@
+/*
+ * The design canvas is a fixed 1920x1080 frame pinned to the centre of the
+ * viewport and scaled to fit it — its width, height and transform are set
+ * inline by Stage.tsx, which owns the live scale.
+ *
+ * `position: fixed` takes it out of flow so the letterboxed remainder stays
+ * transparent for OBS alpha compositing, and `transform-origin: center` keeps
+ * the scale centred about the translate that centres it.
+ */
 .vellum-stage {
-  position: relative;
-  width: 1920px;
-  height: 1080px;
-  margin: 0 auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
   background: transparent;
   overflow: hidden;
 }
