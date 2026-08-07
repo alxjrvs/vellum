@@ -76,8 +76,9 @@ In a browser tab the GM screen opens on its **setup page** — a short how-to
 covering the Fear track, the during-play controls, and the OBS steps — with a
 **Launch GM screen** button at the bottom. Launching is remembered, so a reload
 goes straight to the live screen; **Setup** on the live screen brings the how-to
-back. The **OBS browser source skips setup entirely** and always renders the
-live screen, so nothing can strand a setup page on your camera mid-session.
+back. The **OBS browser source skips the launch step** and comes up live, so
+nothing can strand a setup page on your camera mid-session — but **Setup** still
+works there if you click it, and **Launch GM screen** takes you back.
 
 The live GM screen shows the **Fear track and the duality dice** — no player
 tracks, no identity — and requires **no character setup**, so it works on a

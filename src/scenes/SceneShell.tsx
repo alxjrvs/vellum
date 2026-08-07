@@ -37,6 +37,13 @@ interface SceneShellProps {
  * non-interactive by default, so making a launched-elsewhere scene wait for a
  * click there would strand a setup page on a live camera.
  *
+ * Only the launch gate, though — an explicit *edit* still opens setup inside
+ * OBS. Skipping that too made "Edit details" (and the GM's "Setup") dead
+ * buttons in the one place the browser source is being interacted with, which
+ * is precisely the case where the operator does want setup. Nothing gets
+ * stranded: setup only appears after a deliberate click, and every setup view
+ * has its own way back to live.
+ *
  * Readiness still applies inside OBS, so this is not an absolute guarantee: a
  * player scene with no character has nothing to render and stays on setup even
  * in OBS. That carve-out is deliberate — the alternative is a blank HUD — and
@@ -58,7 +65,9 @@ export function SceneShell({
     setEditing(false);
   };
 
-  const showLive = canLaunch && (isInsideObs() || (launched && !editing));
+  // `editing` is checked outside the OBS branch so that an explicit edit wins
+  // everywhere; OBS only bypasses `launched`.
+  const showLive = canLaunch && !editing && (isInsideObs() || launched);
 
   return showLive
     ? renderLive({ edit: () => setEditing(true) })
