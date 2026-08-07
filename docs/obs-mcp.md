@@ -46,6 +46,22 @@ itself is unchanged, still local-only, and still makes no network calls.
 
 3. **Approve the server** when your agent next starts in this repo.
 
+## If the server won't start
+
+- **It fails immediately with a 1Password error.** The item does not exist or
+  the reference is wrong — check `op://claude-agent/obs-websocket/credential`
+  resolves for you, and see the next section if that vault isn't yours.
+- **It starts but never completes the MCP handshake.** `op run` conceals secrets
+  in the subprocess's stdout/stderr by default, and an MCP stdio server speaks
+  JSON-RPC over exactly those streams. Newline-delimited JSON should pass
+  through untouched — and wrapping MCP servers in `op run` is 1Password's own
+  published recommendation — but that combination is not something their docs
+  address explicitly. If the handshake hangs, add `--no-masking` to the `op run`
+  arguments to rule it out. Note that this trades the safety net: with masking
+  off, anything the server prints is printed verbatim.
+- **It fails offline.** `npx` fetches the pinned package on first use and caches
+  it; the first launch needs network.
+
 ## If you don't have that 1Password vault
 
 The `op://claude-agent/obs-websocket/credential` reference in `.mcp.json` is
