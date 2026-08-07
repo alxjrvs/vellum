@@ -34,6 +34,12 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Fixed
 
+- **"Edit details" and the GM's "Setup" work inside the OBS browser source
+  again.** The scene shell skipped the setup view whenever it detected OBS, so
+  an edit click set state that could never take effect — a dead button in the
+  one place you are actually clicking the source. OBS now bypasses only the
+  _launch_ gate; an explicit edit opens setup everywhere. In a normal browser
+  tab the button was unaffected, which is why this slipped through.
 - **The HUD fits any browser-source size instead of being clipped.** Every
   screen is laid out on a fixed 1920×1080 canvas, but that canvas was rendered
   at a hard 1920×1080 with `overflow: hidden` — so an OBS browser source of any
@@ -72,10 +78,11 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 - Launch state is persisted per scene (`vellum:launched:<scene>`), so a reload
   never re-gates a live screen. An existing character counts as an
   already-launched player scene, so upgrading users are not sent back to setup.
-- **The OBS browser source skips the setup step** and always renders the live
-  scene — that source is non-interactive, so gating the HUD behind a click would
-  burn an undismissable setup page into a live camera. Readiness is still
-  enforced, so a player with no character stays on setup even inside OBS.
+- **The OBS browser source skips the launch step** and comes up live — that
+  source is non-interactive, so gating the HUD behind a click would burn an
+  undismissable setup page into a live camera. An explicit **Edit details** /
+  **Setup** click still opens setup there. Readiness is still enforced, so a
+  player with no character stays on setup even inside OBS.
 - The GM scene no longer renders the player-oriented `SetupWizard`. Its OBS
   self-test asks you to click an HP pip, which the GM screen has none of, and in
   a non-interactive OBS source it would float over a live camera undismissably.

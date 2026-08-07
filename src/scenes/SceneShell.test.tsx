@@ -100,5 +100,26 @@ describe('SceneShell', () => {
       renderShell({ canLaunch: false });
       expect(screen.getByText('setup view')).toBeInTheDocument();
     });
+
+    it('honours an explicit edit — only the launch gate is skipped', () => {
+      // Regression: OBS short-circuited the whole gate, so "Edit details" (and
+      // the GM's "Setup") set state that could never take effect.
+      window.obsstudio = { pluginVersion: '2.18.2' };
+      renderShell();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
+
+      expect(screen.getByText('setup view')).toBeInTheDocument();
+    });
+
+    it('launching from that edit returns to the live scene', () => {
+      window.obsstudio = { pluginVersion: '2.18.2' };
+      renderShell();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Launch' }));
+
+      expect(screen.getByText('live view')).toBeInTheDocument();
+    });
   });
 });
