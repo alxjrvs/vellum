@@ -13,8 +13,12 @@
   flex-direction: column;
   gap: var(--spacing-md);
   width: 380px;
-  max-width: calc(100vw - 2 * var(--spacing-lg));
-  max-height: 84vh;
+  /* Bounded against the stage, not the viewport: the stage is a transformed
+     ancestor, so it is this panel's containing block, and `vw`/`vh` here would
+     measure the un-scaled browser source instead of the canvas the panel is
+     actually laid out in. */
+  max-width: calc(100% - 2 * var(--spacing-lg));
+  max-height: 84%;
   overflow-y: auto;
   padding: var(--spacing-md) var(--spacing-lg);
   background: var(--color-card-surface);

@@ -36,7 +36,8 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
      the `Vellum HUD` source's **Properties** and paste your share link as the
      URL.
    - **Or add a Browser Source by hand:** **Sources → + → Browser**, paste your
-     share link as the URL, set 1920×1080.
+     share link as the URL, set 1920×1080. Other sizes work — the HUD scales to
+     fit the source — but 1920×1080 renders it 1:1 and sharpest.
 
 5. **Add your webcam below the HUD.** **Sources → + → Video Capture Device** →
    pick your camera → drag it **below** `Vellum HUD` so the HUD composites on

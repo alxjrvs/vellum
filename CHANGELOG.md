@@ -34,6 +34,17 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Fixed
 
+- **The HUD fits any browser-source size instead of being clipped.** Every
+  screen is laid out on a fixed 1920×1080 canvas, but that canvas was rendered
+  at a hard 1920×1080 with `overflow: hidden` — so an OBS browser source of any
+  other size (OBS's own default is 800×600) showed only the _left slice_ of a
+  1920-wide layout, with the right edge of the UI cut off and everything
+  off-centre. The canvas now scales by `min(vw/1920, vh/1080)` to fit the
+  source, centred, letterboxing the remainder transparently — it also scales
+  _up_, so a 2560×1440 source fills its frame. 1920×1080 still renders 1:1.
+- **The setup panel is no longer clipped in a small browser source.** Its bounds
+  were expressed in `vw`/`vh`, which measure the un-scaled source rather than
+  the canvas the panel is laid out in; they are now percentages of the stage.
 - **The GM screen no longer renders blank on a cold start.** Fear was stored
   inside the character record, so a GM — who never fills in a character sheet —
   got an empty scene with no way to reach setup. Fear now lives in its own
