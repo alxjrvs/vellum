@@ -49,6 +49,7 @@ ships an offline zip.)
 - `obs/README.md` — get the Vellum scene into OBS (Import, or per-OS scripts).
 - `docs/validation-protocol.md` — the human macOS/Windows/Linux go/no-go check.
 - `docs/RELEASE-STRATEGY.md` — distribution, positioning, and release surface.
+- `docs/obs-mcp.md` — optional, development-only: let an AI agent drive OBS.
 - `docs/PRD.md` — product requirements (Ideate phase output).
 - `docs/architecture.md` — Arc42 architecture document (sections 1–12 + Appendices A–D).
 
