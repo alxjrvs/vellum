@@ -37,7 +37,7 @@ itself is unchanged, still local-only, and still makes no network calls.
    rather than holding a literal, so `.mcp.json` stays committable:
 
    ```
-   op item create --category "API Credential" --vault claude-agent \
+   op item create --category "API Credential" --vault Vellum \
      --title obs-websocket credential="$(pbpaste)"
    ```
 
@@ -49,7 +49,7 @@ itself is unchanged, still local-only, and still makes no network calls.
 ## If the server won't start
 
 - **It fails immediately with a 1Password error.** The item does not exist or
-  the reference is wrong — check `op://claude-agent/obs-websocket/credential`
+  the reference is wrong — check `op://Vellum/obs-websocket/credential`
   resolves for you, and see the next section if that vault isn't yours.
 - **It starts but never completes the MCP handshake.** `op run` conceals secrets
   in the subprocess's stdout/stderr by default, and an MCP stdio server speaks
@@ -64,7 +64,7 @@ itself is unchanged, still local-only, and still makes no network calls.
 
 ## If you don't have that 1Password vault
 
-The `op://claude-agent/obs-websocket/credential` reference in `.mcp.json` is
+The `op://Vellum/obs-websocket/credential` reference in `.mcp.json` is
 maintainer-specific and will not resolve for you. Two ways round it:
 
 - **Point it at your own secret.** Edit the `env` value to your own `op://`
