@@ -5,7 +5,7 @@
       "command": "op",
       "args": ["run", "--", "npx", "-y", "obs-mcp@1.1.0"],
       "env": {
-        "OBS_WEBSOCKET_PASSWORD": "op://claude-agent/obs-websocket/credential"
+        "OBS_WEBSOCKET_PASSWORD": "op://Vellum/obs-websocket/credential"
       }
     }
   }
