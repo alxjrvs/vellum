@@ -13,7 +13,7 @@
 
 .scene-selector__lede {
   margin: 0;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
 }
@@ -42,34 +42,34 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-lg);
-  border: var(--border-width) solid var(--color-card-border);
+  border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-md);
-  background: var(--color-card-surface);
-  color: var(--color-ink);
+  background: var(--color-plate);
+  color: var(--color-text);
   text-decoration: none;
 }
 
 .scene-selector__role:hover,
 .scene-selector__role:focus-visible {
-  border-color: var(--color-gold);
-  background: var(--color-hud-surface-strong);
+  border-color: var(--color-signal);
+  background: var(--color-plate);
 }
 
 .scene-selector__role-title {
   font-family: var(--font-family-display);
   font-size: var(--font-size-heading);
-  color: var(--color-gold);
+  color: var(--color-signal);
 }
 
 .scene-selector__role-blurb {
   font-family: var(--font-family-body);
   font-size: var(--font-size-label);
-  color: var(--color-ink-muted);
+  color: var(--color-label);
 }
 
 .scene-selector__note {
   margin: 0;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-family: var(--font-family-body);
   font-size: var(--font-size-label);
 }

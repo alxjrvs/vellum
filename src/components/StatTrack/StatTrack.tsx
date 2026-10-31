@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import type { TrackDisplay } from '../../themes/types';
 import './StatTrack.css';
 
 export interface StatTrackThresholds {
@@ -6,7 +7,10 @@ export interface StatTrackThresholds {
   severe?: number;
 }
 
-/** Visual glyph for each position on the track. */
+/**
+ * What each position on the track means — drives its `data-state` and aria
+ * wording. How it is drawn is the separate, per-frame `display` choice.
+ */
 export type StatTrackShape = 'pip' | 'box' | 'heart';
 
 /**
@@ -22,8 +26,10 @@ export interface StatTrackProps {
   currentValue: number;
   label: string;
   shape?: StatTrackShape;
+  /** Drawn as one continuous bar or as separate chits; the frame decides. */
+  display?: TrackDisplay;
   interaction?: StatTrackInteraction;
-  /** CSS color reference (e.g. `var(--color-accent)`) used to fill this track. */
+  /** CSS color reference (e.g. `var(--color-stress)`) used to fill this track. */
   tone?: string;
   thresholds?: StatTrackThresholds;
   /** `level` interaction: set the track to `value` (fills positions 1…value). */
@@ -33,9 +39,6 @@ export interface StatTrackProps {
   /** `toggle` interaction: flip position `index`. */
   onToggleSlot?: (index: number) => void;
 }
-
-const HEART_PATH =
-  'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
 
 const SHAPE_CLASS: Record<StatTrackShape, string> = {
   pip: 'stat-track__pip',
@@ -50,28 +53,25 @@ const SHAPE_NOUN: Record<StatTrackShape, string> = {
 };
 
 export function StatTrack(props: StatTrackProps) {
-  const { label, tone, shape = 'pip', interaction = 'level' } = props;
+  const { label, tone, shape = 'pip', display = 'chits', interaction = 'level' } = props;
   const style = tone ? ({ '--track-fill': tone } as CSSProperties) : undefined;
   return (
     <section
       className="stat-track"
       aria-label={label}
       data-shape={shape}
+      data-display={display}
       data-interaction={interaction}
       style={style}
     >
-      <header className="stat-track__label">
-        <span className="stat-track__name">{label}</span>
-        <span className="stat-track__count">{trackReadout(props)}</span>
-      </header>
+      <span className="stat-track__name">{label}</span>
+      <span className="stat-track__count">
+        {props.currentValue}
+        <span className="stat-track__total">/{props.trackLength}</span>
+      </span>
       <TrackRow {...props} shape={shape} interaction={interaction} />
     </section>
   );
-}
-
-function trackReadout(props: StatTrackProps): string {
-  // Every track's currentValue is what's filled — HP hearts pass remaining health.
-  return `${props.currentValue}/${props.trackLength}`;
 }
 
 function thresholdTier(index: number, thresholds: StatTrackThresholds | undefined) {
@@ -128,13 +128,7 @@ function TrackRow(props: StatTrackProps) {
               tier ? ` (${tier} threshold)` : ''
             }`}
             onClick={handleClick}
-          >
-            {shape === 'heart' && (
-              <svg className="stat-track__heart-glyph" viewBox="0 0 24 24" aria-hidden="true">
-                <path d={HEART_PATH} />
-              </svg>
-            )}
-          </button>
+          />
         );
       })}
     </div>

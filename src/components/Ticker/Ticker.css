@@ -5,14 +5,14 @@
   width: 100%;
   min-height: calc(var(--font-size-heading) + var(--spacing-md));
   padding: var(--spacing-xs) var(--spacing-lg);
-  background: var(--color-hud-surface-strong);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-md);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
-  color: var(--color-parchment);
+  background: var(--color-plate);
+  border-left: var(--edge-width) solid var(--color-signal);
+  color: var(--color-text);
   font-family: var(--font-family-display);
   font-size: var(--font-size-heading);
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   overflow: hidden;
   cursor: pointer;
 }
@@ -21,15 +21,14 @@
 .ticker[data-empty='true'] {
   background: transparent;
   border-color: transparent;
-  box-shadow: none;
 }
 
 .ticker__placeholder {
   font-size: var(--font-size-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-parchment);
-  opacity: 0.4;
+  /* Setup affordance only: muted so an empty ticker stays off-camera in feel. */
+  color: var(--color-muted);
 }
 
 .ticker__viewport {
@@ -67,15 +66,15 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--color-parchment);
+  color: var(--color-text);
   font-family: var(--font-family-display);
   font-size: var(--font-size-heading);
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-align: center;
   cursor: text;
 }
 
 .ticker__input::placeholder {
-  color: var(--color-parchment);
-  opacity: 0.4;
+  color: var(--color-label);
 }

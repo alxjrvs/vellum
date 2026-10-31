@@ -52,13 +52,14 @@ jobs:
         run: bun run build
 
       - name: Assemble combined Pages artifact
-        # Site at the root; the built app served at /app/ (latest) and the
-        # version-pinned /app/v${VERSION}/ mirror (roadmap M-A). VERSION is
+        # Site at the root (-L dereferences site/vellum.tokens.css, a symlink to
+        # the shared chassis tokens in src/themes/); the built app served at
+        # /app/ (latest) and the version-pinned /app/v${VERSION}/ mirror (roadmap M-A). VERSION is
         # derived from package.json so a release bump needs no workflow edit.
         run: |
           VERSION=$(jq -r .version package.json)
           mkdir -p "_pages/app/v${VERSION}"
-          cp -R site/. _pages/
+          cp -RL site/. _pages/
           cp -R dist/. _pages/app/
           cp -R dist/. "_pages/app/v${VERSION}/"
 

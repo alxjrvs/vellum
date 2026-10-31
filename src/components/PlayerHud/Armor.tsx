@@ -1,7 +1,9 @@
 import { useCharacter } from '../../character/useCharacter';
 import { StatTrack } from '../StatTrack';
+import { useTrackDisplay } from '../../themes/useTrackDisplay';
 
 export function Armor() {
+  const display = useTrackDisplay('armor');
   const { character, dispatch } = useCharacter();
   if (!character) return null;
   if (character.slotCounts.armorSlots === 0) return null;
@@ -10,7 +12,8 @@ export function Armor() {
       label="Armor"
       shape="box"
       interaction="toggle"
-      tone="var(--color-steel)"
+      tone="var(--color-armor)"
+      display={display}
       trackLength={character.slotCounts.armorSlots}
       currentValue={character.stats.armorSlots.length}
       markedSlots={character.stats.armorSlots}

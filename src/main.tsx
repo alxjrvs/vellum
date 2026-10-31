@@ -7,6 +7,15 @@ import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { ThemeProvider } from './themes/ThemeProvider';
 import { daggerheartTheme } from './themes/daggerheart.theme';
+// Self-hosted faces (bundled, so OBS needs no network) — weights the chassis uses.
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/barlow-condensed/latin-800-italic.css';
+import '@fontsource/barlow-condensed/latin-900-italic.css';
+import '@fontsource/barlow/latin-400.css';
+import '@fontsource/barlow/latin-600.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import './themes/vellum.tokens.css';
 import './index.css';
 
 const rootElement = document.getElementById('root');

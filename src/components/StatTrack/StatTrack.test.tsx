@@ -279,7 +279,7 @@ describe('StatTrack — heart shape (level interaction)', () => {
     expect(hearts.filter((h) => h.dataset.state === 'empty')).toHaveLength(4);
     expect(hearts[0].dataset.state).toBe('full');
     expect(hearts[5].dataset.state).toBe('empty');
-    expect(hearts.every((h) => h.querySelector('svg.stat-track__heart-glyph'))).toBe(true);
+    expect(hearts.every((h) => h.classList.contains('stat-track__heart'))).toBe(true);
   });
 
   it('reads out currentValue (remaining health) over the track length', () => {
@@ -354,5 +354,29 @@ describe('StatTrack — generic re-use across stats', () => {
     const pips = pipsOf('Momentum');
     expect(pips).toHaveLength(5);
     expect(pips.filter((p) => p.dataset.state === 'filled')).toHaveLength(3);
+  });
+});
+
+describe('StatTrack — display (per-frame bar vs chits)', () => {
+  it('defaults to chits', () => {
+    render(<StatTrack label="Hope" trackLength={6} currentValue={2} />);
+    expect(screen.getByRole('region', { name: 'Hope' })).toHaveAttribute('data-display', 'chits');
+  });
+
+  it('draws as a bar when the frame asks, keeping every position clickable', () => {
+    const onSetValue = vi.fn();
+    render(
+      <StatTrack
+        label="Stress"
+        shape="box"
+        display="bar"
+        trackLength={6}
+        currentValue={2}
+        onSetValue={onSetValue}
+      />
+    );
+    expect(screen.getByRole('region', { name: 'Stress' })).toHaveAttribute('data-display', 'bar');
+    fireEvent.click(screen.getByRole('button', { name: /Stress slot 4/ }));
+    expect(onSetValue).toHaveBeenCalledWith(4);
   });
 });

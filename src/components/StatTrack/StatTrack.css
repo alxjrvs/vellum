@@ -1,159 +1,132 @@
+/*
+ * One stat on one plate: label · value · track. Reads outside-in — on the
+ * left of the screen the label sits at the left edge; inside a right-side
+ * region ([data-side='right']) the whole row mirrors so the label sits on the
+ * right edge. The colored edge is always on the outer side.
+ */
 .stat-track {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-hud-surface);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-md);
-  box-shadow:
-    0 6px 22px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.35);
-  font-family: var(--font-family-body);
-  color: var(--color-parchment);
-}
-
-/* The HP track leads the vitals stack — mark its heart panel in health red. */
-.stat-track[data-shape='heart'] {
-  border-color: var(--color-health);
-}
-
-.stat-track__label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-md);
+  background: var(--color-plate);
+  border-left: var(--edge-width) solid var(--color-player);
   font-family: var(--font-family-display);
+  color: var(--color-text);
+}
+
+[data-side='right'] .stat-track {
+  flex-direction: row-reverse;
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  border-left: none;
+  border-right: var(--edge-width) solid var(--color-player);
 }
 
 .stat-track__name {
+  min-width: 3.4em;
   font-size: var(--font-size-label);
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-label);
+}
+
+[data-side='right'] .stat-track__name {
+  text-align: right;
 }
 
 .stat-track__count {
-  font-size: var(--font-size-base);
+  min-width: 2.2em;
+  font-size: var(--font-size-value);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: var(--color-parchment);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  color: var(--color-text);
 }
 
+[data-side='right'] .stat-track__count {
+  text-align: right;
+}
+
+.stat-track__total {
+  font-size: 0.6em;
+  color: var(--color-label);
+}
+
+/* The track ----------------------------------------------------------- */
 .stat-track__row {
   display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
   align-items: center;
+  transform: skewX(var(--slant));
+}
+
+[data-side='right'] .stat-track__row {
+  flex-direction: row-reverse;
+  transform: skewX(var(--slant-mirror));
 }
 
 .stat-track__pip,
-.stat-track__slot {
-  width: var(--pip-size);
-  height: var(--pip-size);
-  padding: 0;
-  margin: 0;
-  border: var(--border-width) solid var(--color-hud-border);
-  background: rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  transition:
-    transform 0.08s ease,
-    box-shadow 0.12s ease;
-}
-
-.stat-track__pip:hover,
-.stat-track__slot:hover {
-  transform: translateY(-1px);
-}
-
-.stat-track__pip {
-  border-radius: 50%;
-}
-
-.stat-track__pip[data-state='filled'] {
-  background: var(--track-fill, var(--color-gold));
-  border-color: var(--track-fill, var(--color-gold));
-  box-shadow: 0 0 10px 1px var(--track-fill, var(--color-gold));
-}
-
-.stat-track__slot {
-  border-radius: var(--radius-sm);
-}
-
-.stat-track__slot[data-state='marked'] {
-  background: var(--track-fill, var(--color-accent));
-  border-color: var(--track-fill, var(--color-accent));
-  box-shadow: 0 0 10px 1px var(--track-fill, var(--color-accent));
-}
-
-/* HP hearts ---------------------------------------------------------- */
+.stat-track__slot,
 .stat-track__heart {
-  width: var(--heart-size);
-  height: var(--heart-size);
+  position: relative;
+  height: var(--track-height);
   padding: 0;
   margin: 0;
   border: none;
-  background: transparent;
+  background: var(--color-rule);
   cursor: pointer;
-  line-height: 0;
-  transition: transform 0.08s ease;
+  transition: background 0.12s ease;
 }
 
-.stat-track__heart:hover {
-  transform: scale(1.08);
+.stat-track__pip:focus-visible,
+.stat-track__slot:focus-visible,
+.stat-track__heart:focus-visible {
+  outline: var(--border-width) solid var(--color-text);
+  outline-offset: 2px;
+  z-index: 1;
 }
 
-.stat-track__heart-glyph {
-  width: 100%;
-  height: 100%;
-  stroke: var(--color-hud-border);
-  stroke-width: 1.5;
-  transition:
-    fill 0.12s ease,
-    filter 0.12s ease;
+.stat-track__pip[data-state='filled'],
+.stat-track__slot[data-state='marked'],
+.stat-track__heart[data-state='full'] {
+  background: var(--track-fill, var(--color-signal));
 }
 
-.stat-track__heart[data-state='full'] .stat-track__heart-glyph {
-  fill: var(--color-health);
-  stroke: var(--color-parchment);
-  filter: drop-shadow(0 0 6px rgba(228, 68, 58, 0.7));
+/* Chits: separate slanted tiles. */
+[data-display='chits'] .stat-track__row {
+  gap: var(--spacing-xs);
 }
 
-.stat-track__heart[data-state='empty'] .stat-track__heart-glyph {
-  fill: rgba(0, 0, 0, 0.4);
-  stroke: var(--color-hud-border);
+[data-display='chits'] .stat-track__row > button {
+  width: var(--chit-width);
 }
 
-/* Threshold markers (HP major / severe) ------------------------------ */
-.stat-track__slot[data-threshold],
-.stat-track__heart[data-threshold] {
-  position: relative;
+/* Bar: one continuous slanted bar split into hairline segments, so every
+   position stays clickable. */
+[data-display='bar'] .stat-track__row {
+  gap: 2px;
+  width: var(--bar-width);
 }
 
-.stat-track__slot[data-threshold]::after,
-.stat-track__heart[data-threshold]::after {
+[data-display='bar'] .stat-track__row > button {
+  flex: 1;
+}
+
+/* Threshold ticks (HP major / severe): a notch after that position. */
+[data-threshold]::after {
+  content: '';
   position: absolute;
-  bottom: calc(-1 * var(--spacing-md));
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-label);
-  letter-spacing: 0.06em;
-  color: var(--color-gold);
+  top: calc(-1 * var(--spacing-xs));
+  bottom: calc(-1 * var(--spacing-xs));
+  right: calc(-1 * var(--spacing-xs) / 2 - 1px);
+  width: 2px;
+  background: var(--color-label);
   pointer-events: none;
 }
 
-.stat-track__slot[data-threshold='major']::after,
-.stat-track__heart[data-threshold='major']::after {
-  content: 'M';
-}
-
-.stat-track__slot[data-threshold='severe']::after,
-.stat-track__heart[data-threshold='severe']::after {
-  content: 'S';
-}
-
-.stat-track__slot[data-threshold='major-severe']::after,
-.stat-track__heart[data-threshold='major-severe']::after {
-  content: 'M/S';
+[data-side='right'] [data-threshold]::after {
+  right: auto;
+  left: calc(-1 * var(--spacing-xs) / 2 - 1px);
 }

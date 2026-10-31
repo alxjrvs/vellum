@@ -21,10 +21,10 @@
   max-height: 84%;
   overflow-y: auto;
   padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-card-surface);
-  border: var(--border-width) solid var(--color-card-border);
+  background: var(--color-plate);
+  border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-md);
-  color: var(--color-ink);
+  color: var(--color-text);
   font-family: var(--font-family-body);
   cursor: auto;
 }
@@ -38,7 +38,7 @@
 
 .setup-wizard__title {
   font-family: var(--font-family-display);
-  color: var(--color-accent);
+  color: var(--color-signal);
 }
 
 .setup-wizard__close {
@@ -46,14 +46,14 @@
   border: var(--border-width) solid transparent;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-family: var(--font-family-display);
   font-size: var(--font-size-heading);
   line-height: 1;
 }
 
 .setup-wizard__close:hover {
-  color: var(--color-danger);
+  color: var(--color-hit);
 }
 
 .setup-wizard__flow {
@@ -64,7 +64,7 @@
 
 .setup-wizard__lead {
   margin: 0;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-size: var(--font-size-label);
 }
 
@@ -88,18 +88,18 @@
 .setup-wizard__done {
   align-self: flex-start;
   padding: var(--spacing-sm) var(--spacing-lg);
-  border: var(--border-width) solid var(--color-card-border);
+  border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-sm);
-  background: var(--color-parchment);
-  color: var(--color-ink);
+  background: var(--color-plate-raised);
+  color: var(--color-text);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
 }
 
 .setup-wizard__copy-button:hover:not(:disabled),
 .setup-wizard__done:hover {
-  background: var(--color-accent);
-  color: var(--color-parchment);
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
 }
 
 .setup-wizard__copy-button:disabled {
@@ -108,15 +108,15 @@
 }
 
 .setup-wizard__copy-hint {
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-size: var(--font-size-label);
 }
 
 .setup-wizard__done {
-  background: var(--color-accent);
-  color: var(--color-parchment);
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
   font-family: var(--font-family-display);
-  letter-spacing: var(--spacing-xs);
+  letter-spacing: 0.05em;
 }
 
 .setup-wizard__selftest {
@@ -124,22 +124,22 @@
   flex-direction: column;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
-  border: var(--border-width) solid var(--color-card-border);
+  border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-sm);
-  background: var(--color-parchment);
+  background: var(--color-plate-raised);
 }
 
 .setup-wizard__selftest-q {
   margin: 0;
   font-family: var(--font-family-display);
-  color: var(--color-ink);
+  color: var(--color-text);
 }
 
 .setup-wizard__trust {
   margin: 0;
   padding-top: var(--spacing-sm);
-  border-top: var(--border-width) solid var(--color-card-border);
-  color: var(--color-ink-muted);
+  border-top: var(--border-width) solid var(--color-rule);
+  color: var(--color-label);
   font-size: var(--font-size-label);
 }
 
@@ -151,17 +151,20 @@
   transform: translateY(-50%);
   z-index: 100;
   padding: var(--spacing-xs) var(--spacing-md);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-hud-surface);
-  color: var(--color-parchment);
+  border: none;
+  border-right: var(--edge-width) solid var(--color-rule);
+  background: var(--color-plate);
+  color: var(--color-label);
   font-family: var(--font-family-display);
   font-size: var(--font-size-label);
-  letter-spacing: 0.06em;
-  opacity: 0.6;
-  transition: opacity 0.12s ease;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: border-color 0.12s ease;
 }
 
-.setup-help:hover {
-  opacity: 1;
+.setup-help:hover,
+.setup-help:focus-visible {
+  border-right-color: var(--color-signal);
+  color: var(--color-text);
 }
