@@ -6,6 +6,8 @@ import { STORAGE_KEY } from '../../character/storage';
 import { useCharacter } from '../../character/useCharacter';
 import { makeCharacter } from '../../character/fixtures';
 import { SystemProvider } from '../../systems/SystemProvider';
+import { FrameProvider } from '../../frames/FrameProvider';
+import { FRAME_STORAGE_KEY } from '../../frames/frameStorage';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
 
 function Probe() {
@@ -135,6 +137,24 @@ describe('CharacterSetup share link', () => {
     expect(writeText.mock.calls[0][0]).toContain('#/daggerheart/player');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /share link copied/i })).toBeInTheDocument()
+    );
+  });
+
+  it('pins the frame picked here into the link, so OBS wears it too', () => {
+    seedMara();
+    localStorage.setItem(FRAME_STORAGE_KEY, 'daggerheart-ledger');
+    render(
+      <SystemProvider system={daggerheartSystem}>
+        <FrameProvider>
+          <CharacterProvider>
+            <CharacterSetup onDone={vi.fn()} />
+          </CharacterProvider>
+        </FrameProvider>
+      </SystemProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: /copy share link/i }));
+    expect(writeText.mock.calls[0][0]).toMatch(
+      /\?c=[^#]*&frame=daggerheart-ledger#\/daggerheart\/player$/
     );
   });
 

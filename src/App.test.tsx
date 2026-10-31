@@ -9,17 +9,16 @@ import { encodeCharacterToShareParam } from './character/shareCode';
 import { launchStorageKey } from './scenes/launchStorage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
-import { ThemeProvider } from './themes/ThemeProvider';
-import { daggerheartTheme } from './themes/daggerheart.theme';
+import { FrameProvider } from './frames/FrameProvider';
 
 function renderApp() {
   return render(
     <SystemProvider system={daggerheartSystem}>
-      <ThemeProvider theme={daggerheartTheme}>
+      <FrameProvider>
         <CharacterProvider>
           <App />
         </CharacterProvider>
-      </ThemeProvider>
+      </FrameProvider>
     </SystemProvider>
   );
 }

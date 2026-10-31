@@ -5,6 +5,7 @@
  * this list reads from there instead.
  */
 import { daggerheartTheme } from '../../../../src/themes/daggerheart.theme';
+import { daggerheartLedger } from '../../../../src/frames/official/daggerheart-ledger';
 import type { TrackStyle } from '../components/HudTile.astro';
 
 export type Tier = 'official' | 'community';
@@ -50,5 +51,16 @@ export const libraryFrames: LibraryFrame[] = [
       'Warm plates, a parchment nameplate and a gilt player edge. HP, Hope and Armor as chits, Stress as a bar.',
     colors: toTokenNames(daggerheartTheme.colors),
     tracks: daggerheartTheme.tracks,
+  },
+  {
+    id: daggerheartLedger.id,
+    name: daggerheartLedger.label,
+    game: 'Daggerheart',
+    tier: 'official',
+    author: 'Vellum',
+    description:
+      'Cold steel plates and a cyan player edge, with every stat drawn as a bar. Easy to read on a busy Discord grid.',
+    colors: toTokenNames(daggerheartLedger.colors),
+    tracks: daggerheartLedger.tracks,
   },
 ];

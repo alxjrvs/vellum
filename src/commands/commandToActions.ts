@@ -23,6 +23,10 @@ export function commandToActions(
       return state.featureConditions.includes(command.name)
         ? [{ type: 'FEATURE_CONDITION_TOGGLE', name: command.name }]
         : [];
+    case 'frame.set':
+    case 'frame.cycle':
+      // How the HUD looks is the frame's business (FrameProvider), not the character's.
+      return [];
     case 'track.adjust':
     case 'track.set': {
       if (command.track === 'fear') return [];

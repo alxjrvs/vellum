@@ -1,6 +1,7 @@
 import './GmSetup.css';
 import { useState } from 'react';
 import { useSystem } from '../../systems/useSystem';
+import { useFrameQuery } from '../../frames/useFrameQuery';
 import { sceneHash } from '../../viewMode/useViewMode';
 
 interface GmSetupProps {
@@ -15,10 +16,11 @@ interface GmSetupProps {
  */
 export function GmSetup({ onLaunch }: GmSetupProps) {
   const system = useSystem();
+  const frameQuery = useFrameQuery();
   const [copied, setCopied] = useState(false);
 
   const copyScreenLink = () => {
-    const url = `${window.location.origin}${window.location.pathname}${sceneHash('gm')}`;
+    const url = `${window.location.origin}${window.location.pathname}${frameQuery ? `?${frameQuery}` : ''}${sceneHash('gm')}`;
     void navigator.clipboard.writeText(url).then(
       () => setCopied(true),
       () => setCopied(false)

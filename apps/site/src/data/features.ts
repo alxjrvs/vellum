@@ -60,7 +60,7 @@ export const features: Feature[] = [
     title: 'Pick a frame per game',
     blurb:
       'Choose an official or community frame for each game. Your choice rides in the same link, so OBS picks it up.',
-    status: 'next',
+    status: 'live',
     href: '/frames/',
   },
   {
@@ -68,7 +68,7 @@ export const features: Feature[] = [
     title: 'The Frame Library',
     blurb:
       'Official frames from us, community frames by pull request. Every frame ships inside the app, so picking one contacts no server.',
-    status: 'next',
+    status: 'live',
     href: '/library/',
   },
   {
@@ -76,7 +76,7 @@ export const features: Feature[] = [
     title: 'Hotkeys',
     blurb:
       'Load one script in OBS and bind keys to +1 Hope, mark HP, toggle a condition. Your hands stay on the game.',
-    status: 'next',
+    status: 'live',
     href: '/control/',
   },
   {
@@ -84,7 +84,7 @@ export const features: Feature[] = [
     title: 'Stream Deck, day one',
     blurb:
       "Point Stream Deck's built-in Hotkey action at the Vellum hotkeys. No plugin, no extra setup.",
-    status: 'next',
+    status: 'live',
     href: '/control/',
   },
   {

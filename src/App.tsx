@@ -6,6 +6,7 @@ import { GmHud } from './components/GmHud';
 import { GmSetup } from './components/GmSetup';
 import { Ticker } from './components/Ticker';
 import { SetupWizard } from './components/SetupWizard';
+import { FramePicker } from './components/FramePicker';
 import { SceneSelector } from './components/SceneSelector';
 import { SceneShell } from './scenes/SceneShell';
 import { useViewMode } from './viewMode/useViewMode';
@@ -44,6 +45,7 @@ export function App() {
         renderSetup={({ launch }) => (
           <main className="setup-shell">
             <GmSetup onLaunch={launch} />
+            <FramePicker />
           </main>
         )}
         renderLive={({ edit }) => (
@@ -76,6 +78,7 @@ export function App() {
       renderSetup={({ launch }) => (
         <main className="setup-shell">
           <CharacterSetup onDone={launch} />
+          <FramePicker />
           <SetupWizard />
         </main>
       )}

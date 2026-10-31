@@ -8,8 +8,8 @@ import { Aside } from '@astrojs/starlight/components';
 A **frame** is the look of your HUD: its colors, where each widget sits, and whether each stat draws as a bar or as chits. Your character's numbers come from your game, not the frame, so switching frames never changes your sheet.
 
 <Aside type="note" title="Today">
-  Daggerheart uses its official frame automatically. The frame picker and the Frame Library arrive
-  in the next release.
+  Daggerheart has two official frames, Daggerheart and Ledger. Pick one on the setup screen. The
+  Community shelf is open for pull requests, and the My frames shelf arrives with the frame creator.
 </Aside>
 
 ## Where frames come from
@@ -22,9 +22,9 @@ The picker has three shelves for each game:
 
 ## Your pick travels in your link
 
-When you choose a frame, it becomes part of your share link. Paste the new link into your OBS browser source and OBS uses that frame. Library frames ship inside the app, so loading one never contacts a server.
+When you choose a frame, it becomes part of your share link (`&frame=` followed by its id). Paste the new link into your OBS browser source and OBS uses that frame. Library frames ship inside the app, so loading one never contacts a server. A [hotkey](/docs/control/) can also step to the next frame mid-session.
 
-Custom frames that aren't in the Library are packed into the link too, which makes it longer but keeps it working with no server.
+Once the frame creator ships, custom frames that aren't in the Library will be packed into the link too. That makes the link longer but keeps it working with no server.
 
 ## Bars or chits
 

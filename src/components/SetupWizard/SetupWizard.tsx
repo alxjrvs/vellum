@@ -2,6 +2,7 @@ import './SetupWizard.css';
 import { useState } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
+import { useFrameQuery } from '../../frames/useFrameQuery';
 import { sceneHash } from '../../viewMode/useViewMode';
 import { isInsideObs } from './obs';
 import { readOnboardedFromStorage, writeOnboardedToStorage } from './storage';
@@ -19,13 +20,14 @@ export function SetupWizard() {
   const [open, setOpen] = useState(() => !readOnboardedFromStorage());
   const [copied, setCopied] = useState(false);
   const insideObs = isInsideObs();
+  const frameQuery = useFrameQuery();
 
   // The share link carries the character in the URL, so build it from the live
   // location at runtime rather than any hardcoded host.
   // The trailing scene hash matters: pasted into an OBS browser source, a
   // hash-less link would land on the scene selector with no way to click past it.
   const shareUrl = character
-    ? `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}${sceneHash('player')}`
+    ? `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}${frameQuery ? `&${frameQuery}` : ''}${sceneHash('player')}`
     : null;
 
   const dismiss = () => {
