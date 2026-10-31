@@ -72,20 +72,22 @@ OBS's extension points, and why this one:
 | Custom browser dock     | Keeps its own storage, separate from browser sources, so it can't carry the character into the HUD.     |
 | obs-websocket           | Needs the user to enable it and set a password; the Stream Deck plugin uses a loopback socket instead.  |
 
-## Scene addresses
+## Frame addresses
 
-The bare `/app/` URL is a picker (game + role); each screen has its own
-address:
+There is one app. Every frame has its own address, and the frame decides the
+screen: a player frame shows a character's HUD, a GM frame shows Fear.
 
-| Screen | URL                                             |
-| ------ | ----------------------------------------------- |
-| Player | `https://vellumhud.com/app/daggerheart/player/` |
-| GM     | `https://vellumhud.com/app/daggerheart/gm/`     |
+| Frame                | URL                                                    |
+| -------------------- | ------------------------------------------------------ |
+| Daggerheart – Player | `https://vellumhud.com/app/frames/daggerheart-player/` |
+| Daggerheart – GM     | `https://vellumhud.com/app/frames/daggerheart-gm/`     |
+| Ledger               | `https://vellumhud.com/app/frames/daggerheart-ledger/` |
 
-With no link pasted, the script uses the player URL. To pin a frame, add
-`?frame=<id>`, for example
-`https://vellumhud.com/app/daggerheart/player/?frame=daggerheart-ledger`.
-Old `#/` links still redirect.
+With no link pasted, the script uses the Daggerheart – Player address. Your own
+frames get an address too (`/app/frames/custom-…/`); a copied link carries the
+frame itself. Old addresses (`/app/daggerheart/player/`,
+`/app/daggerheart/gm/`, `#/` links, `?mode=gm`) still load and move to the
+matching frame.
 
 ## Manual setup
 

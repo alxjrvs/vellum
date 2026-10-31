@@ -2,8 +2,7 @@ import './SetupWizard.css';
 import { useState } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
-import { useSourceQuery } from '../../sourceLink/useSourceQuery';
-import { sceneUrl } from '../../viewMode/useViewMode';
+import { useSourceLink } from '../../sourceLink/useSourceLink';
 import { isInsideObs, OBS_SCRIPT_URL } from './obs';
 import { readOnboardedFromStorage, writeOnboardedToStorage } from './storage';
 
@@ -20,18 +19,14 @@ export function SetupWizard() {
   const [open, setOpen] = useState(() => !readOnboardedFromStorage());
   const [copied, setCopied] = useState(false);
   const insideObs = isInsideObs();
-  const sourceQuery = useSourceQuery();
 
-  // The share link carries the character in the URL, so build it from the live
-  // location at runtime rather than any hardcoded host.
-  // The scene path matters: pasted into an OBS browser source, a link to the
-  // bare app would land on the scene selector with no way to click past it.
-  const shareUrl = character
-    ? sceneUrl(
-        'player',
-        `c=${encodeCharacterToShareParam(character)}${sourceQuery ? `&${sourceQuery}` : ''}`
-      )
-    : null;
+  // The share link carries the character in the URL, and names the frame in
+  // its path, so an OBS source that has never been set up opens onto this HUD.
+  const characterLink = useSourceLink(
+    'player',
+    character ? `c=${encodeCharacterToShareParam(character)}` : ''
+  );
+  const shareUrl = character ? characterLink : null;
 
   const dismiss = () => {
     writeOnboardedToStorage(true);

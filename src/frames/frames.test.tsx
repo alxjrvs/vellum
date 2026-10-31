@@ -9,6 +9,7 @@ import { validateFrame } from '../themes/frameRules';
 import { FrameProvider } from './FrameProvider';
 import { FRAME_STORAGE_KEY } from './frameStorage';
 import { FRAME_LIBRARY } from './library';
+import { BUNDLED_FRAME_IDS } from '../routes/paths';
 import { useFrame } from './useFrame';
 
 function ActiveFrame() {
@@ -42,6 +43,19 @@ describe('frame library', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it('has a page in the build for every bundled frame', () => {
+    expect(BUNDLED_FRAME_IDS).toEqual(FRAME_LIBRARY.map((f) => f.id));
+  });
+
+  it('ships a player and a GM frame', () => {
+    expect(FRAME_LIBRARY.map((f) => [f.id, f.kind])).toEqual(
+      expect.arrayContaining([
+        ['daggerheart-player', 'player'],
+        ['daggerheart-gm', 'gm'],
+      ])
+    );
+  });
+
   it.each(FRAME_LIBRARY.map((f) => [f.id, f] as const))('%s passes the frame rules', (_, f) => {
     expect(validateFrame(f)).toEqual([]);
   });
@@ -50,7 +64,7 @@ describe('frame library', () => {
 describe('FrameProvider', () => {
   it("defaults to the system's first official frame", () => {
     renderFrames();
-    expect(active()).toBe('daggerheart');
+    expect(active()).toBe('daggerheart-player');
   });
 
   it('applies the frame to the page as CSS variables', () => {
@@ -75,7 +89,7 @@ describe('FrameProvider', () => {
 
   it('lets ?frame= in the URL win over the stored choice', () => {
     localStorage.setItem(FRAME_STORAGE_KEY, 'daggerheart');
-    window.history.replaceState({}, '', '/daggerheart/player/?frame=daggerheart-ledger');
+    window.history.replaceState({}, '', '/?frame=daggerheart-ledger');
     renderFrames();
     expect(active()).toBe('daggerheart-ledger');
   });
@@ -83,20 +97,28 @@ describe('FrameProvider', () => {
   it('ignores an unknown frame id', () => {
     window.history.replaceState({}, '', '/?frame=nope');
     renderFrames();
-    expect(active()).toBe('daggerheart');
+    expect(active()).toBe('daggerheart-player');
     act(() => publishCommand({ type: 'frame.set', frame: 'nope' }));
-    expect(active()).toBe('daggerheart');
+    expect(active()).toBe('daggerheart-player');
   });
 
   it('switches frames on frame.set and frame.cycle commands', () => {
     renderFrames();
     act(() => publishCommand({ type: 'frame.set', frame: 'daggerheart-ledger' }));
     expect(active()).toBe('daggerheart-ledger');
+    // Cycling skips the GM frame: it restyles the screen, never swaps it.
     act(() => publishCommand({ type: 'frame.cycle', delta: 1 }));
-    expect(active()).toBe('daggerheart');
+    expect(active()).toBe('daggerheart-player');
     act(() => publishCommand({ type: 'frame.cycle', delta: -1 }));
     expect(active()).toBe('daggerheart-ledger');
     expect(localStorage.getItem(FRAME_STORAGE_KEY)).toBe('daggerheart-ledger');
+  });
+
+  it('puts the worn frame in the address', () => {
+    renderFrames();
+    expect(window.location.pathname).toBe('/frames/daggerheart-player/');
+    fireEvent.click(screen.getByRole('radio', { name: /GM/ }));
+    expect(window.location.pathname).toBe('/frames/daggerheart-gm/');
   });
 
   it('keeps every frame action in place, disabling the ones only your own frames have', () => {

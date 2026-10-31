@@ -5,7 +5,7 @@ import StatusChit from '../components/StatusChit.astro';
 import { features } from '../data/features';
 import { libraryFrames } from '../data/library';
 
-const daggerheart = libraryFrames.find((f) => f.id === 'daggerheart')!;
+const daggerheart = libraryFrames.find((f) => f.id === 'daggerheart-player')!;
 
 const rundown = features.filter((f) =>
   ['camera-hud', 'frame-picker', 'library', 'hotkeys', 'face-anchors', 'frame-creator'].includes(
@@ -202,8 +202,8 @@ const rundown = features.filter((f) =>
         <li>
           <h3>Open Vellum</h3>
           <p>
-            <a href="/app/">Open the app</a> in your browser. Pick your game and whether you're a player
-            or the GM.
+            <a href="/app/">Open the app</a> in your browser. Players start on the Daggerheart – Player
+            frame; GMs pick Daggerheart – GM.
           </p>
         </li>
         <li>

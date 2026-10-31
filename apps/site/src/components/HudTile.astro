@@ -19,6 +19,8 @@ interface Props {
   anchors?: boolean;
   caption?: string;
   compact?: boolean;
+  /** A GM frame shows the Fear pool in place of a character. */
+  kind?: 'player' | 'gm';
 }
 
 const {
@@ -30,17 +32,23 @@ const {
   anchors = false,
   caption,
   compact = false,
+  kind = 'player',
 } = Astro.props;
+const gm = kind === 'gm';
 
 const style = Object.entries(colors)
   .map(([k, v]) => `--color-${k}: ${v}`)
   .join('; ');
 
-const rows = [
-  { key: 'hp', label: 'HP', value: 4, max: 6, fill: 'var(--color-hit)' },
-  { key: 'hope', label: 'Hope', value: 4, max: 6, fill: 'var(--color-signal)' },
-  { key: 'stress', label: 'Stress', value: 3, max: 6, fill: 'var(--color-stress)' },
-].map((r) => ({ ...r, display: tracks[r.key] ?? (r.key === 'stress' ? 'bar' : 'chits') }));
+const rows = (
+  gm
+    ? [{ key: 'fear', label: 'Fear', value: 5, max: 12, fill: 'var(--color-fear)' }]
+    : [
+        { key: 'hp', label: 'HP', value: 4, max: 6, fill: 'var(--color-hit)' },
+        { key: 'hope', label: 'Hope', value: 4, max: 6, fill: 'var(--color-signal)' },
+        { key: 'stress', label: 'Stress', value: 3, max: 6, fill: 'var(--color-stress)' },
+      ]
+).map((r) => ({ ...r, display: tracks[r.key] ?? (r.key === 'stress' ? 'bar' : 'chits') }));
 ---
 
 <figure class:list={['tile', { compact, anchors }]} style={style}>
@@ -80,13 +88,20 @@ const rows = [
     }
   </div>
   {
-    condition && (
+    !gm && condition && (
       <div class="conds">
         <span class="chip">{condition}</span>
       </div>
     )
   }
-  <div class="name"><b>{name}</b><span>{sub}</span></div>
+  {
+    !gm && (
+      <div class="name">
+        <b>{name}</b>
+        <span>{sub}</span>
+      </div>
+    )
+  }
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 

@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { FrameKind, ThemeConfig } from './types';
 
 /** The HUD widgets a frame can place. The ticker and Setup button stay put. */
 export const HUD_WIDGETS = ['vitals', 'status', 'dice', 'name'] as const;
@@ -10,6 +10,17 @@ export const HUD_WIDGET_LABELS: Record<HudWidget, string> = {
   dice: 'Dice',
   name: 'Nameplate',
 };
+
+/** The widgets each kind of frame shows. A GM frame's stats are the Fear pool. */
+export const FRAME_WIDGETS: Record<FrameKind, readonly HudWidget[]> = {
+  player: HUD_WIDGETS,
+  gm: ['vitals', 'dice'],
+};
+
+/** A widget's name in the frame editor, for a frame of this kind. */
+export function widgetLabels(kind: FrameKind): Record<HudWidget, string> {
+  return kind === 'gm' ? { ...HUD_WIDGET_LABELS, vitals: 'Fear' } : HUD_WIDGET_LABELS;
+}
 
 /** The stage every frame is laid out on, in CSS px. */
 export const STAGE_WIDTH = 1920;

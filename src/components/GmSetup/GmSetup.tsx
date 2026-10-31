@@ -1,8 +1,7 @@
 import './GmSetup.css';
 import { useState } from 'react';
 import { useSystem } from '../../systems/useSystem';
-import { useSourceQuery } from '../../sourceLink/useSourceQuery';
-import { sceneUrl } from '../../viewMode/useViewMode';
+import { useSourceLink } from '../../sourceLink/useSourceLink';
 import { OBS_SCRIPT_URL } from '../SetupWizard/obs';
 
 interface GmSetupProps {
@@ -10,19 +9,18 @@ interface GmSetupProps {
 }
 
 /**
- * The GM scene's setup step. A GM has nothing to configure — no character, no
+ * Setup for a GM frame. A GM has nothing to configure — no character, no
  * slot counts — so this is the how-to half of the setup → launch pattern:
  * what the screen shows, how to drive it during play, and how to get it into
  * OBS. Launching persists, so a reload goes straight to the live view.
  */
 export function GmSetup({ onLaunch }: GmSetupProps) {
   const system = useSystem();
-  const sourceQuery = useSourceQuery();
+  const screenLink = useSourceLink('gm');
   const [copied, setCopied] = useState(false);
 
   const copyScreenLink = () => {
-    const url = sceneUrl('gm', sourceQuery);
-    void navigator.clipboard.writeText(url).then(
+    void navigator.clipboard.writeText(screenLink).then(
       () => setCopied(true),
       () => setCopied(false)
     );

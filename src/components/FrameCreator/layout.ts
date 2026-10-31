@@ -69,18 +69,21 @@ export function toPoint(rect: StageRect): HudPoint {
 }
 
 /** Every pair of widgets, or widget and reserved area, whose boxes overlap. */
-export function findOverlaps(rects: WidgetRects): string[] {
+export function findOverlaps(
+  rects: WidgetRects,
+  labels: Record<HudWidget, string> = HUD_WIDGET_LABELS
+): string[] {
   const entries = Object.entries(rects) as [HudWidget, StageRect][];
   const problems: string[] = [];
   entries.forEach(([a, ra], i) => {
     for (const [b, rb] of entries.slice(i + 1)) {
       if (rectsOverlap(ra, rb)) {
-        problems.push(`${HUD_WIDGET_LABELS[a]} and ${HUD_WIDGET_LABELS[b]} overlap`);
+        problems.push(`${labels[a]} and ${labels[b]} overlap`);
       }
     }
     for (const area of RESERVED_AREAS) {
       if (rectsOverlap(ra, area)) {
-        problems.push(`${HUD_WIDGET_LABELS[a]} covers the ${area.label.toLowerCase()}`);
+        problems.push(`${labels[a]} covers the ${area.label.toLowerCase()}`);
       }
     }
   });

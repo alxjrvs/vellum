@@ -11,36 +11,26 @@ import { CameraHud } from './components/CameraHud';
 import { HudRegion } from './components/HudRegion';
 import { CameraSetup } from './components/CameraSetup';
 import { SetupChecks } from './components/SetupChecks';
-import { SceneSelector } from './components/SceneSelector';
 import { SetupBar } from './components/SetupBar';
 import { SceneShell } from './scenes/SceneShell';
-import { useViewMode } from './viewMode/useViewMode';
+import { useFrame } from './frames/useFrame';
 import { FrameDeckReport, PlayerDeckReport } from './deck/DeckReport';
 
 export function App() {
   const { character } = useCharacter();
-  const viewMode = useViewMode();
+  // There is one app: the frame being worn decides the screen. A GM frame
+  // shows the Fear pool; a player frame shows a character's HUD.
+  const { kind } = useFrame().frame;
 
-  // The bare route addresses no scene: offer the game + role picker rather
-  // than silently assuming the player HUD.
-  if (viewMode === null) {
-    return (
-      <main className="setup-shell setup-shell--single vellum-chassis">
-        <SetupBar title="Choose a screen" />
-        <SceneSelector />
-      </main>
-    );
-  }
-
-  if (viewMode === 'gm') {
+  if (kind === 'gm') {
     return (
       <SceneShell
-        // Keyed by scene: both branches return a SceneShell in the same
-        // position, so without this React reuses the instance across a hash
-        // change and the launched/editing state bleeds between scenes.
+        // Keyed by kind: both branches return a SceneShell in the same
+        // position, so without this React reuses the instance when the frame
+        // changes kind and the launched/editing state bleeds between screens.
         key="gm"
         scene="gm"
-        // A GM configures nothing, so the scene is always ready to launch — but
+        // A GM configures nothing, so the screen is always ready to launch — but
         // it still starts on its how-to rather than assuming you've read it.
         canLaunch
         defaultLaunched={false}
@@ -51,7 +41,7 @@ export function App() {
         // GM's how-to.
         renderSetup={({ launch }) => (
           <main className="setup-shell vellum-chassis">
-            <SetupBar title="GM setup" />
+            <SetupBar title="Setup" />
             <GmSetup onLaunch={launch} />
             <FramePicker />
             <SetupChecks />
@@ -78,7 +68,7 @@ export function App() {
 
   return (
     <SceneShell
-      // See the GM branch: keyed so scene state never survives a scene switch.
+      // See the GM branch: keyed so screen state never survives a kind switch.
       key="player"
       scene="player"
       // The player HUD can't render without a character, so saving one is what
@@ -88,7 +78,7 @@ export function App() {
       defaultLaunched={character !== null}
       renderSetup={({ launch }) => (
         <main className="setup-shell vellum-chassis">
-          <SetupBar title="Player setup" />
+          <SetupBar title="Setup" />
           <CharacterSetup onDone={launch} />
           <FramePicker />
           <SetupChecks />

@@ -137,13 +137,13 @@ describe('OBS script setup', () => {
     ]);
   });
 
-  it('uses the player screen when no link is pasted', () => {
+  it('uses the Daggerheart – Player frame when no link is pasted', () => {
     const url = run(`
       fake.load()
       fake.press("set_up")
       return obslua.obs_data_get_string(fake.state.sources["Vellum HUD"].settings, "url")
     `);
-    expect(url).toBe('https://vellumhud.com/app/daggerheart/player/');
+    expect(url).toBe('https://vellumhud.com/app/frames/daggerheart-player/');
   });
 
   it('updates the same scene on a second run, hiding the webcam when Vellum draws it', () => {

@@ -9,8 +9,9 @@
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./_pages",
-    // Hash routing (#/daggerheart/gm) means every app URL is a real file, so
-    // no SPA fallback; unknown paths get the site's 404 page.
+    // Every bundled app URL is a real file, so no SPA fallback; frame paths
+    // for My frames are rewritten in deploy/_redirects. Unknown paths get the
+    // site's 404 page.
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash",
   },

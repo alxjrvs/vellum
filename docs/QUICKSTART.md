@@ -11,13 +11,13 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
 ## The whole thing, six steps
 
 1. **Open the app** → **https://vellumhud.com/app/**
-   It runs in your normal browser tab and opens on a **picker**: choose your
-   game (Daggerheart) and the screen you're running — **Player** or **GM**.
-   Each lands on its own address, which is what you paste into OBS:
-   - Player → `https://vellumhud.com/app/daggerheart/player/`
-   - GM → `https://vellumhud.com/app/daggerheart/gm/`
+   It runs in your normal browser tab and opens on the **Daggerheart – Player**
+   frame. GMs pick **Daggerheart – GM** in the frame picker. Every frame has its
+   own address, which is what you paste into OBS:
+   - Player → `https://vellumhud.com/app/frames/daggerheart-player/`
+   - GM → `https://vellumhud.com/app/frames/daggerheart-gm/`
 
-   **GMs can stop after this step and go to step 4** — the GM screen needs no
+   **GMs can stop after this step and go to step 4** — the GM frame needs no
    character setup. It opens on a short how-to; read it and click **Launch GM
    screen** (remembered, so you only do it once). Your OBS source skips that
    page and goes straight to the live screen.

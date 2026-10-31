@@ -10,7 +10,7 @@ import {
   type FromWorker,
   type ToWorker,
 } from '@vellum/tracking';
-import { appRoot } from '../viewMode/useViewMode';
+import { appRoot } from '../routes/frameRoute';
 
 export type TrackingStatus = 'off' | 'loading' | 'tracking' | 'error';
 

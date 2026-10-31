@@ -1,0 +1,10 @@
+# Cloudflare static-asset redirects (https://developers.cloudflare.com/workers/static-assets/redirects/).
+#
+# Every frame has its own address, /app/frames/<id>/. The build writes a page
+# for each bundled frame, but My frames are made in the browser, so any other
+# id is served the build's fallback frame page (a 200 rewrite: the address bar
+# keeps the frame's id, and the app reads it from there).
+/app/frames/:id /app/frames/:id/ 301
+/app/frames/:id/ /app/frames/_/ 200
+/app/:version/frames/:id /app/:version/frames/:id/ 301
+/app/:version/frames/:id/ /app/:version/frames/_/ 200

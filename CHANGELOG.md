@@ -19,6 +19,17 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Changed
 
+- **One app, no Player/GM split.** "Daggerheart – Player" and "Daggerheart –
+  GM" are now two official frames in the frame picker, alongside Ledger; the
+  frame you wear decides the screen. The role picker at `/app/` is gone: it
+  opens your last frame. Every frame has its own address,
+  `/app/frames/<id>/`, and copied links point there. Old
+  `/app/daggerheart/player/`, `/app/daggerheart/gm/`, `#/` and `?mode=gm`
+  links still load and move to a matching frame. **Breaking (ThemeConfig):**
+  frames gain a required `kind` (`'player' | 'gm'`); imported frames without
+  one are player frames. The official Daggerheart frame's id is now
+  `daggerheart-player` (the old `daggerheart` id still resolves).
+
 - **Drag-and-drop frame editor.** The frame creator opens full screen with a
   large live stage: drag widgets anywhere (or nudge them with the arrow keys),
   and they snap to a grid and stop at other widgets, the ticker and the Setup

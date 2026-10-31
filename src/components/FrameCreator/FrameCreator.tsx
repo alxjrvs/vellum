@@ -3,7 +3,7 @@ import { CUSTOM_ID_PREFIX } from '../../frames/customFrames';
 import { useFrame } from '../../frames/useFrame';
 import { useSystem } from '../../systems/useSystem';
 import { validateFrame } from '../../themes/frameRules';
-import { regionsFor, type HudPoint, type HudWidget } from '../../themes/regions';
+import { regionsFor, widgetLabels, type HudPoint, type HudWidget } from '../../themes/regions';
 import type { ThemeColors, ThemeConfig, ThemeTracks, TrackDisplay } from '../../themes/types';
 import { FramePreview } from './FramePreview';
 import { findOverlaps, type WidgetRects } from './layout';
@@ -27,6 +27,12 @@ const COLOR_LABELS: Record<keyof ThemeColors, string> = {
   nameplateInk: 'Nameplate text',
   player: 'Player edge',
 };
+
+/** The tracks each kind of frame draws: a player's stats, or the GM's Fear. */
+function tracksFor(frame: ThemeConfig): (keyof ThemeTracks)[] {
+  const all = Object.keys(frame.tracks) as (keyof ThemeTracks)[];
+  return all.filter((track) => (frame.kind === 'gm') === (track === 'fear'));
+}
 
 function newId(label: string): string {
   const slug = label
@@ -67,7 +73,7 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
   const problems = [
     ...(draft.label.trim() ? [] : ['Give your frame a name']),
     ...validateFrame(draft),
-    ...findOverlaps(rects),
+    ...findOverlaps(rects, widgetLabels(draft.kind)),
   ];
   const trackLabel = (track: keyof ThemeTracks) =>
     system.resources.find((r) => r.id === track)?.label ?? track;
@@ -111,7 +117,7 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
 
           <fieldset className="frame-creator__group">
             <legend>Bars or chits</legend>
-            {(Object.keys(draft.tracks) as (keyof ThemeTracks)[]).map((track) => (
+            {tracksFor(draft).map((track) => (
               <div
                 key={track}
                 className="frame-creator__row"

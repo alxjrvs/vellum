@@ -3,8 +3,7 @@ import { useId, useState, type ComponentProps } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { useSystem } from '../../systems/useSystem';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
-import { useSourceQuery } from '../../sourceLink/useSourceQuery';
-import { sceneUrl } from '../../viewMode/useViewMode';
+import { useSourceLink } from '../../sourceLink/useSourceLink';
 import { CHARACTER_SCHEMA_VERSION, type CharacterState } from '../../character/types';
 
 interface CharacterSetupProps {
@@ -52,7 +51,10 @@ function toInt(value: string): number | undefined {
 export function CharacterSetup({ onDone }: CharacterSetupProps) {
   const { character, dispatch } = useCharacter();
   const system = useSystem();
-  const sourceQuery = useSourceQuery();
+  const shareUrl = useSourceLink(
+    'player',
+    character ? `c=${encodeCharacterToShareParam(character)}` : ''
+  );
   const [form, setForm] = useState<FormState>(() => initialForm(character));
   const [error, setError] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState(false);
@@ -65,14 +67,9 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
 
   const handleCopyShareLink = () => {
     if (!character || hasUnsavedEdits) return;
-    // Address the player scene explicitly: pasted straight into an OBS browser
-    // source, a link to the bare app would land on the scene selector, which nobody
-    // can click past in a non-interactive source.
-    const url = sceneUrl(
-      'player',
-      `c=${encodeCharacterToShareParam(character)}${sourceQuery ? `&${sourceQuery}` : ''}`
-    );
-    void navigator.clipboard.writeText(url).then(
+    // The link names the frame in its path, so an OBS source that has never
+    // been set up opens straight onto this HUD.
+    void navigator.clipboard.writeText(shareUrl).then(
       () => setShareCopied(true),
       () => setShareCopied(false)
     );
