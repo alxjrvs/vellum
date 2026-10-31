@@ -20,8 +20,8 @@ export default defineConfig({
         {
           label: 'Get on camera',
           items: [
-            { label: 'Quick start', slug: 'docs' },
-            { label: 'OBS setup', slug: 'docs/obs' },
+            { label: 'Set up', slug: 'docs' },
+            { label: 'Set up by hand', slug: 'docs/obs' },
             { label: 'Troubleshooting', slug: 'docs/troubleshooting' },
           ],
         },
@@ -43,7 +43,10 @@ export default defineConfig({
         },
         {
           label: 'About',
-          items: [{ label: 'Privacy', slug: 'docs/privacy' }],
+          items: [
+            { label: 'The OBS script', slug: 'docs/obs-script' },
+            { label: 'Privacy', slug: 'docs/privacy' },
+          ],
         },
       ],
     }),

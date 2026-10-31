@@ -4,11 +4,8 @@ import { useCharacter } from '../../character/useCharacter';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
 import { useSourceQuery } from '../../sourceLink/useSourceQuery';
 import { sceneHash } from '../../viewMode/useViewMode';
-import { isInsideObs } from './obs';
+import { isInsideObs, OBS_SCRIPT_URL } from './obs';
 import { readOnboardedFromStorage, writeOnboardedToStorage } from './storage';
-
-/** The OBS script that builds the Vellum scene and adds the hotkeys. */
-const OBS_SCRIPT_URL = 'https://vellumhud.com/downloads/vellum.lua';
 
 /**
  * A non-intrusive, dismissible first-run setup panel. It floats over a corner
@@ -70,9 +67,6 @@ export function SetupWizard() {
 
       {insideObs ? (
         <div className="setup-wizard__flow">
-          <p className="setup-wizard__lead">
-            This page <em>is</em> the HUD source — only the un-scriptable parts are left:
-          </p>
           <ol className="setup-wizard__steps">
             <li>
               Used <strong>Set up Vellum</strong> in the Vellum script? Your webcam and the Virtual
@@ -95,14 +89,9 @@ export function SetupWizard() {
         </div>
       ) : (
         <div className="setup-wizard__flow">
-          <p className="setup-wizard__lead">
-            This tab is your control panel. Configure a character, copy its link, and paste it into
-            OBS.
-          </p>
           <ol className="setup-wizard__steps">
-            <li>Configure your character in the details form.</li>
             <li>
-              Copy your share link:
+              Fill in your character, then copy your link.
               <div className="setup-wizard__copy">
                 <button
                   type="button"
@@ -113,9 +102,7 @@ export function SetupWizard() {
                   {copied ? 'Share link copied' : 'Copy share link'}
                 </button>
                 {!shareUrl && (
-                  <span className="setup-wizard__copy-hint">
-                    Save a character first to enable this.
-                  </span>
+                  <span className="setup-wizard__copy-hint">Save a character first.</span>
                 )}
               </div>
             </li>
@@ -124,7 +111,7 @@ export function SetupWizard() {
               Scripts.
             </li>
             <li>
-              Paste your link into <strong>Your Vellum link</strong>, pick your webcam, and press{' '}
+              Paste the link into <strong>Your Vellum link</strong>, pick your webcam, and press{' '}
               <strong>Set up Vellum</strong>.
             </li>
             <li>
@@ -138,7 +125,7 @@ export function SetupWizard() {
         </div>
       )}
 
-      <p className="setup-wizard__trust">Runs entirely in your browser — nothing is uploaded.</p>
+      <p className="setup-wizard__trust">Runs in your browser. Nothing is uploaded.</p>
     </aside>
   );
 }

@@ -3,8 +3,8 @@
 `vellum.lua` is the whole OBS side of Vellum, in one script that OBS runs
 itself on Windows, macOS and Linux (OBS 28 or newer; Lua ships with OBS, so
 there is nothing else to install). The deploy publishes it at
-`https://vellumhud.com/downloads/vellum.lua`. The user guide is
-`apps/site/src/content/docs/docs/obs.mdx` (vellumhud.com/docs/obs/).
+`https://vellumhud.com/downloads/vellum.lua`. The user guide is `apps/site/src/content/docs/docs/index.mdx`
+(vellumhud.com/docs/), with details in `docs/obs-script.mdx`.
 
 ## What it does
 
