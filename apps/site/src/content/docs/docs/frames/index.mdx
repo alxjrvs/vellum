@@ -1,0 +1,31 @@
+---
+title: Pick a frame
+description: Frames change how your HUD looks. Pick one per game from the Frame Library or your own.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A **frame** is the look of your HUD: its colors, where each widget sits, and whether each stat draws as a bar or as chits. Your character's numbers come from your game, not the frame, so switching frames never changes your sheet.
+
+<Aside type="note" title="Today">
+  Daggerheart uses its official frame automatically. The frame picker and the Frame Library arrive
+  in the next release.
+</Aside>
+
+## Where frames come from
+
+The picker has three shelves for each game:
+
+- **Official:** made by the Vellum project.
+- **Community:** made by players and merged into the [Frame Library](/library/). Labelled unofficial.
+- **My frames:** frames you made or imported. They live only on your machine.
+
+## Your pick travels in your link
+
+When you choose a frame, it becomes part of your share link. Paste the new link into your OBS browser source and OBS uses that frame. Library frames ship inside the app, so loading one never contacts a server.
+
+Custom frames that aren't in the Library are packed into the link too, which makes it longer but keeps it working with no server.
+
+## Bars or chits
+
+Each frame decides, stat by stat, whether a track draws as one continuous **bar** or as separate **chits**. The same HP can be a bar in one frame and chits in another. If you want a different style, pick a frame that uses it, or [make your own](/docs/frames/make/).

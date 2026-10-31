@@ -1,0 +1,28 @@
+---
+title: Make a frame
+description: Build your own frame on the real HUD, bind widgets to stats, and check it at Discord tile size.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Planned">
+  The frame creator is planned after the picker and Library ship. Until then, frames are made by
+  editing a frame file and running the repository's tests. This page describes both.
+</Aside>
+
+## With the frame creator
+
+The creator is the same HUD renderer OBS uses, on a canvas, so what you see is exactly what goes on camera.
+
+1. **Start from a frame.** Copy an official or community frame, or start from Broadcast.
+2. **Place widgets.** Drag tracks, condition chips and the nameplate onto the 1920 × 1080 stage. They snap to the frame edges, the safe area and an 8 px grid.
+3. **Bind each widget** to a stat from a dropdown, such as HP or Hope, and choose **bar** or **chits**.
+4. **Style it.** Change colors and sizes. The creator warns you as soon as something breaks [the two rules](/docs/frames/rules/).
+5. **Check the tile.** Toggle the 640 × 360 preview to see your frame at Discord tile size.
+6. **Save or export.** Saved frames stay in your browser. Export writes a file you can share or [submit to the Library](/docs/frames/submit/).
+
+## By hand, today
+
+Today a frame is a `ThemeConfig` in `src/themes/`. Copy `daggerheart.theme.ts`, change the color values and the `tracks` map (`'bar'` or `'chits'` per stat), and run `bun run test`. The frame rules test fails if a label drops below 40 px or 7:1 contrast.
+
+Frames are moving to versioned JSON files, so the same frame works in the creator, the Library and by hand.

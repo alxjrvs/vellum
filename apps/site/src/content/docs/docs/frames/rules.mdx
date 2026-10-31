@@ -1,0 +1,28 @@
+---
+title: The two rules
+description: Every Vellum frame keeps labels readable and reads outside-in. Here's exactly what that means.
+---
+
+A frame can change colors, positions, sizes, and bars or chits. It can't break these two rules. Vellum checks the measurable parts automatically.
+
+## 1. Labels are always readable
+
+People see your HUD as a small tile in a call, often 640 × 360 or smaller.
+
+- **Size:** at least 2.1% of the frame's width. That's **40 px** on the 1920 canvas, about 13 px on a 640 × 360 tile. Values are bigger still (64 px).
+- **Contrast:** **7:1 or better** against the plate behind the label.
+- **Backing:** a label always sits on a solid plate, never straight on video.
+- **Dimming:** inactive things dim by color, never by transparency.
+
+## 2. Everything reads outside-in
+
+Each widget reads from the nearest frame edge toward your face, so the HUD frames you instead of crowding you.
+
+- **Left side:** label, value, track.
+- **Right side, mirrored:** track, value, label.
+- **Accent edges and slants** sit on the outer edge too.
+- Widgets at top center and bottom center read left to right as normal.
+
+## Why these two
+
+Labels that can't be read on a small tile are decoration. And a HUD that reads inward toward the face keeps every player's tile looking like a broadcast lower-third instead of a spreadsheet. The full design system is in [`docs/branding/BRANDING.md`](https://github.com/alxjrvs/vellum/blob/main/docs/branding/BRANDING.md).

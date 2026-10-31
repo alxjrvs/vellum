@@ -1,0 +1,39 @@
+---
+title: Hotkeys and Stream Deck
+description: Change stats from the keyboard or a Stream Deck, through OBS, with nothing leaving your machine.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Coming in the next release">
+  Hotkeys and Stream Deck support are being built now. Until then, change values by clicking the HUD
+  in OBS's Interact window. This page describes how they'll work.
+</Aside>
+
+Every input to Vellum, whether a click, a hotkey or a Stream Deck key, becomes the same command, such as "add 1 to Hope". The HUD applies it, saves it and redraws. Commands are relative, so two quick presses always add up to two.
+
+## Hotkeys
+
+Hotkeys come from a small script you load into OBS once.
+
+1. In OBS, open **Tools → Scripts** and add `vellum-hotkeys.lua`.
+2. Open **Settings → Hotkeys** and find the entries that start with **Vellum:**, such as _Vellum: +1 Hope_.
+3. Bind a key to each one you want.
+
+OBS hotkeys work while OBS is in the background, so you can keep Discord in front.
+
+The app's setup panel can see whether the script is loaded and tells you if it isn't.
+
+## Stream Deck, with no plugin
+
+Stream Deck's built-in **Hotkey** action can press the keys you bound above.
+
+1. Drag a **Hotkey** action onto a key.
+2. Set it to the same key combination you bound to, say, _Vellum: +1 Hope_.
+3. Label the key.
+
+A good starting layout is six keys: Hope up, Hope down, mark HP, mark Stress, spend Armor, and toggle a condition.
+
+## Stream Deck plugin
+
+The Vellum Stream Deck plugin is planned. It will draw your live values on the keys and map Stream Deck + dials to stats. It will connect to OBS on your own computer through OBS's built-in WebSocket server; nothing will go over the internet.

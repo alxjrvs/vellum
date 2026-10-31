@@ -1,0 +1,49 @@
+---
+title: Quick start
+description: Get your character HUD onto your own Discord camera in a few minutes.
+---
+
+Vellum draws your character HUD, OBS lays it over your webcam, and OBS's Virtual Camera hands the finished picture to Discord as your camera. Each player sets this up once, on their own machine.
+
+**You need:** [OBS Studio](https://obsproject.com/) 28 or newer, the Discord desktop app, and a webcam.
+
+## 1. Open Vellum
+
+Open [the app](/app/). It starts on a picker: choose your game (Daggerheart) and your screen, **Player** or **GM**. Each screen has its own address:
+
+- Player: `https://vellumhud.com/app/#/daggerheart/player`
+- GM: `https://vellumhud.com/app/#/daggerheart/gm`
+
+The GM screen needs no character, so GMs can skip to step 3.
+
+## 2. Fill your sheet and copy your link
+
+Fill in **Character details** with the numbers from your sheet, then click **Copy share link**. The link carries your whole character in the address. This is how your sheet gets into OBS, which has its own separate browser storage.
+
+## 3. Put it in OBS
+
+The quickest route is the Vellum scene collection:
+
+1. Download [`vellum.scene.json`](https://github.com/alxjrvs/vellum/blob/main/obs/vellum.scene.json).
+2. In OBS, choose **Scene Collection → Import** and pick that file, then **Scene Collection → Vellum**.
+3. Open the **Vellum HUD** source's properties and paste your share link as the URL.
+
+Prefer to do it by hand? See [OBS setup](/docs/obs/).
+
+## 4. Go on camera
+
+1. In OBS, add **Sources → + → Video Capture Device**, pick your webcam, and drag it **below** Vellum HUD.
+2. Click **Start Virtual Camera**. Approve the one-time system prompt if your OS shows one.
+3. In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**.
+
+That's it: your face, with your stats on it. Change a value by clicking the HUD in OBS (right-click the source, **Interact**). Everything you change is saved and survives a reload.
+
+:::tip[Let the setup panel drive]
+The first time you open the app, a small setup panel walks you through these steps. Inside OBS it checks what it can and ends with a self-test: click one HP pip and confirm it moved on your camera.
+:::
+
+## Next
+
+- [Hotkeys and Stream Deck](/docs/control/) to change stats without the mouse.
+- [Pick a frame](/docs/frames/) to change how your HUD looks.
+- [Troubleshooting](/docs/troubleshooting/) if something doesn't show up.
