@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useReducer, type ReactNode } from 'react';
+import { useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
 import { CharacterContext } from './CharacterContext';
 import { characterReducer } from './reducer';
 import { decodeShareParam } from './shareCode';
 import { readCharacterFromStorage, writeCharacterToStorage } from './storage';
 import { sceneHash } from '../viewMode/useViewMode';
+import { subscribeCommands } from '../commands/commandBus';
+import { SystemContext } from '../systems/SystemContext';
 import type { CharacterState } from './types';
 
 const SHARE_PARAM = 'c';
@@ -46,6 +48,17 @@ interface CharacterProviderProps {
 
 export function CharacterProvider({ children }: CharacterProviderProps) {
   const [character, dispatch] = useReducer(characterReducer, null, readInitialCharacter);
+  // Read the system optionally: commands need its limits, but a provider
+  // rendered without a system (tests, isolated tools) simply takes no commands.
+  const hopeMax = useContext(SystemContext)?.hope.max;
+
+  // External inputs (OBS hotkeys, Stream Deck) arrive on the command bus.
+  useEffect(() => {
+    if (hopeMax === undefined) return;
+    return subscribeCommands((command) =>
+      dispatch({ type: 'APPLY_COMMAND', command, limits: { hopeMax } })
+    );
+  }, [hopeMax]);
 
   useEffect(() => {
     writeCharacterToStorage(character);

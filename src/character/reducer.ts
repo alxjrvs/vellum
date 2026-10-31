@@ -1,5 +1,7 @@
 import type { CharacterState } from './types';
 import type { CoreConditionId } from '../systems/types';
+import { commandToActions, type CommandLimits } from '../commands/commandToActions';
+import type { Command } from '../commands/types';
 
 export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }
@@ -9,7 +11,9 @@ export type CharacterAction =
   | { type: 'STRESS_SET'; count: number }
   | { type: 'ARMOR_TOGGLE_SLOT'; index: number }
   | { type: 'CONDITION_TOGGLE'; condition: CoreConditionId }
-  | { type: 'FEATURE_CONDITION_TOGGLE'; name: string };
+  | { type: 'FEATURE_CONDITION_TOGGLE'; name: string }
+  /** A command from any input (click, hotkey, Stream Deck), resolved against current state. */
+  | { type: 'APPLY_COMMAND'; command: Command; limits: CommandLimits };
 
 export function characterReducer(
   state: CharacterState | null,
@@ -18,6 +22,12 @@ export function characterReducer(
   switch (action.type) {
     case 'SET_CHARACTER':
       return action.character;
+    case 'APPLY_COMMAND':
+      if (!state) return state;
+      return commandToActions(action.command, state, action.limits).reduce<CharacterState | null>(
+        characterReducer,
+        state
+      );
     case 'CLEAR_CHARACTER':
       return null;
     case 'HOPE_SET':

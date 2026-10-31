@@ -18,10 +18,13 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 import './themes/vellum.tokens.css';
 import './index.css';
 import { applyOriginHandoff } from './migrate/originHandoff';
+import { listenForExternalCommands } from './commands/commandBus';
 
 // Before anything reads localStorage: import data carried over from the old
 // github.io origin, if this load came through its redirect stub.
 applyOriginHandoff();
+// OBS hotkeys and Stream Deck keys reach the HUD as `vellum:command` events.
+listenForExternalCommands();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Root element #root not found');
