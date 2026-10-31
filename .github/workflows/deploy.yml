@@ -45,6 +45,10 @@ jobs:
       - name: Build Vellum app
         run: bun run build
 
+      - name: Build marketing site
+        working-directory: apps/site
+        run: bun install --frozen-lockfile && bun run build
+
       - name: Assemble site + app + pinned versions
         run: scripts/assemble-site.sh
 
