@@ -1,18 +1,18 @@
 .frame-preview {
+  --preview-scale: 0.5;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
 }
 
 .frame-preview__tile {
   position: relative;
-  width: 640px;
-  height: 360px;
+  width: calc(1920px * var(--preview-scale));
+  height: calc(1080px * var(--preview-scale));
   overflow: hidden;
   border: var(--border-width) solid var(--color-rule);
   background: var(--color-night);
-  pointer-events: none;
 }
 
 .frame-preview__stage {
@@ -21,8 +21,84 @@
   left: 0;
   width: 1920px;
   height: 1080px;
-  transform: scale(calc(1 / 3));
+  transform: scale(var(--preview-scale));
   transform-origin: top left;
+}
+
+.frame-preview__hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The ticker and Setup button keep these areas; nothing may be placed there. */
+.frame-preview__reserved {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 4px dashed var(--color-rule);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 16px,
+    color-mix(in srgb, var(--color-rule) 35%, transparent) 16px 32px
+  );
+  color: var(--color-label);
+  font-family: var(--font-family-display);
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* One drag handle over each widget, drawn in stage px so it scales with it. */
+.frame-preview__handle {
+  position: absolute;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 4px dashed transparent;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+
+.frame-preview__handle:hover,
+.frame-preview__handle:focus-visible,
+.frame-preview__handle[aria-pressed='true'] {
+  border-color: var(--color-signal);
+  background: color-mix(in srgb, var(--color-signal) 12%, transparent);
+  outline: none;
+}
+
+.frame-preview__handle:active {
+  cursor: grabbing;
+}
+
+.frame-preview__handle-label {
+  position: absolute;
+  bottom: 100%;
+  left: -4px;
+  padding: 4px 16px;
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+  font-family: var(--font-family-display);
+  font-size: 40px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.frame-preview__handle[data-edge='top'] .frame-preview__handle-label {
+  top: -4px;
+  bottom: auto;
+}
+
+.frame-preview__handle:hover .frame-preview__handle-label,
+.frame-preview__handle:focus-visible .frame-preview__handle-label,
+.frame-preview__handle[aria-pressed='true'] .frame-preview__handle-label {
+  opacity: 1;
 }
 
 .frame-preview__caption {

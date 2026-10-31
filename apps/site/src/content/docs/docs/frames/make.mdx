@@ -5,19 +5,19 @@ description: Build your own frame on the real HUD, bind widgets to stats, and ch
 
 ## With the frame creator
 
-The creator lives under the frame picker on the app's setup screen. Its preview is the real HUD, so what you see is what goes on camera.
+The creator opens full screen from the frame picker on the app's setup screen. Its stage is the real HUD, so what you see is what goes on camera.
 
 1. **Start from a frame.** Pick any frame, then choose **Make a frame from this one**. Your copy goes on the **My frames** shelf.
-2. **Place widgets.** Put the stats, conditions, dice and nameplate in one of six spots: top, middle or bottom on the left, top or middle on the right, or bottom center. Widgets on the right mirror so their labels read outside-in.
+2. **Drag widgets into place.** Drag the stats, conditions, dice and nameplate anywhere on the stage, or select one and nudge it with the arrow keys (hold Shift for bigger steps). Widgets snap to a grid and stop when they meet another widget, so nothing overlaps; the ticker and Setup button areas are kept clear too. A widget past the middle of the stage mirrors so its labels read outside-in. **Reset layout** puts everything back.
 3. **Choose bar or chits** for each stat.
 4. **Set the colors.** The creator lists anything that breaks [the two rules](/docs/frames/rules/) as you go, and won't save until it's fixed.
-5. **Check the tile.** The preview is drawn at Discord's 640 × 360 tile size.
+5. **Check the stage.** The preview is the whole 1920 × 1080 camera frame, scaled down.
 6. **Save or export.** Saved frames stay in your browser. **Export file** writes a `.vellum-frame.json` you can share, import on another machine, or [submit to the Library](/docs/frames/submit/).
 
 When you copy your OBS link while wearing one of your frames, the frame travels inside the link, so OBS can wear it without a server.
 
-Free placement by dragging, and changing sizes, are planned.
+Changing widget sizes is planned.
 
 ## By hand
 
-A frame is a `ThemeConfig`. Export one from the creator, or copy `src/themes/daggerheart.theme.ts`, change the colors, the `tracks` map (`'bar'` or `'chits'` per stat) and the optional `regions` map (where each widget sits), then run `bun run test`. The frame rules test fails if a label drops below 40 px or 7:1 contrast, or if two widgets share a spot.
+A frame is a `ThemeConfig`. Export one from the creator, or copy `src/themes/daggerheart.theme.ts`, change the colors, the `tracks` map (`'bar'` or `'chits'` per stat) and the optional `regions` map (where each widget sits: a named spot such as `'top-left'`, or `{ x, y }` for the widget's center and top edge in stage pixels), then run `bun run test`. The frame rules test fails if a label drops below 40 px or 7:1 contrast, or if two widgets share a named spot. Hand-placed widgets are checked for overlap in the creator, so open your frame there before you submit it.

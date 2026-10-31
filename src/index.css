@@ -94,6 +94,12 @@ button {
   justify-content: center;
 }
 
+.hud__region[data-slot='free'] {
+  top: var(--region-y);
+  left: var(--region-x);
+  transform: translateX(-50%);
+}
+
 .hud__region--utility {
   bottom: var(--spacing-xl);
   right: var(--spacing-xl);

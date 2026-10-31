@@ -11,10 +11,14 @@ export const HUD_WIDGET_LABELS: Record<HudWidget, string> = {
   name: 'Nameplate',
 };
 
+/** The stage every frame is laid out on, in CSS px. */
+export const STAGE_WIDTH = 1920;
+export const STAGE_HEIGHT = 1080;
+
 /**
- * Where a widget can sit on the 1920x1080 stage. Slots on the right mirror
- * their widget so labels read outside-in. Top-center belongs to the ticker
- * and bottom-right to the Setup button.
+ * Named spots on the 1920x1080 stage, from before frames could place widgets
+ * freely. Frames that name a slot still load. Top-center belongs to the
+ * ticker and bottom-right to the Setup button.
  */
 export const HUD_SLOTS = [
   'top-left',
@@ -26,16 +30,19 @@ export const HUD_SLOTS = [
 ] as const;
 export type HudSlot = (typeof HUD_SLOTS)[number];
 
-export const HUD_SLOT_LABELS: Record<HudSlot, string> = {
-  'top-left': 'Top left',
-  'top-right': 'Top right',
-  'middle-left': 'Middle left',
-  'middle-right': 'Middle right',
-  'bottom-left': 'Bottom left',
-  'bottom-center': 'Bottom center',
-};
+/**
+ * A widget placed by hand in the frame editor: `x` is the horizontal center
+ * of the widget and `y` its top edge, in stage px. A widget whose center is
+ * right of the stage's middle mirrors so its labels read outside-in.
+ */
+export interface HudPoint {
+  readonly x: number;
+  readonly y: number;
+}
 
-export type HudRegions = Readonly<Record<HudWidget, HudSlot>>;
+export type HudPlacement = HudSlot | HudPoint;
+
+export type HudRegions = Readonly<Record<HudWidget, HudPlacement>>;
 
 /** The classic layout, used for any widget a frame doesn't place. */
 export const DEFAULT_REGIONS: HudRegions = {
@@ -49,6 +56,31 @@ export function regionsFor(theme: Pick<ThemeConfig, 'regions'> | null | undefine
   return { ...DEFAULT_REGIONS, ...theme?.regions };
 }
 
-export function isRightSlot(slot: HudSlot): boolean {
-  return slot.endsWith('right');
+export function isPoint(placement: HudPlacement): placement is HudPoint {
+  return typeof placement === 'object';
+}
+
+export function isRightPlacement(placement: HudPlacement): boolean {
+  return isPoint(placement) ? placement.x > STAGE_WIDTH / 2 : placement.endsWith('right');
+}
+
+/** A box on the stage, in stage px. */
+export interface StageRect {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+/**
+ * Stage areas no frame may cover: the ticker band across the top center and
+ * the Setup button in the bottom-right corner.
+ */
+export const RESERVED_AREAS: readonly (StageRect & { readonly label: string })[] = [
+  { label: 'Ticker', x: 680, y: 0, width: 560, height: 150 },
+  { label: 'Setup button', x: 1560, y: 960, width: 360, height: 120 },
+];
+
+export function rectsOverlap(a: StageRect, b: StageRect): boolean {
+  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 }

@@ -45,12 +45,19 @@ describe('parseFrame', () => {
     ],
     ['a CSS break-out', { layout: { ...daggerheartTheme.layout, edgeWidth: '1px; color: red' } }],
     ['an unknown slot', { regions: { dice: 'center' } }],
+    ['a point off the stage', { regions: { dice: { x: 2400, y: 10 } } }],
+    ['a point that is not a number', { regions: { dice: { x: '10', y: 10 } } }],
     ['an unknown widget', { regions: { ticker: 'top-left' } }],
     ['a missing track', { tracks: { hp: 'bar' } }],
     ['an empty name', { label: '  ' }],
     ['an unknown system', { system: 'pathfinder' }],
   ])('rejects %s', (_, patch) => {
     expect(parseFrame({ ...daggerheartTheme, ...patch })).toBeNull();
+  });
+
+  it('keeps a hand-placed widget, rounded to whole pixels', () => {
+    const parsed = parseFrame({ ...daggerheartTheme, regions: { dice: { x: 400.4, y: 700 } } });
+    expect(parsed?.regions).toEqual({ dice: { x: 400, y: 700 } });
   });
 
   it('round-trips through a link parameter', () => {
@@ -77,6 +84,26 @@ describe('frame layout', () => {
     expect(dice).toHaveAttribute('data-slot', 'middle-right');
     expect(dice).toHaveAttribute('data-side', 'right');
     expect(vitals).toHaveAttribute('data-slot', 'top-left');
+    expect(vitals).not.toHaveAttribute('data-side');
+  });
+
+  it('places a hand-placed widget by point and mirrors it right of center', () => {
+    const { container } = render(
+      <ThemeContext.Provider
+        value={{
+          ...daggerheartTheme,
+          regions: { dice: { x: 1500, y: 600 }, vitals: { x: 960, y: 0 } },
+        }}
+      >
+        <HudRegion widget="dice">x</HudRegion>
+        <HudRegion widget="vitals">y</HudRegion>
+      </ThemeContext.Provider>
+    );
+    const [dice, vitals] = container.querySelectorAll<HTMLElement>('.hud__region');
+    expect(dice).toHaveAttribute('data-slot', 'free');
+    expect(dice).toHaveAttribute('data-side', 'right');
+    expect(dice.style.getPropertyValue('--region-x')).toBe('1500px');
+    expect(dice.style.getPropertyValue('--region-y')).toBe('600px');
     expect(vitals).not.toHaveAttribute('data-side');
   });
 });
@@ -108,7 +135,7 @@ describe('My frames', () => {
   it('makes a frame from the active one, checks the rules, and saves it', () => {
     renderPicker();
     fireEvent.click(screen.getByRole('button', { name: 'Make a frame from this one' }));
-    const creator = screen.getByRole('region', { name: 'Frame creator' });
+    const creator = screen.getByRole('dialog', { name: 'Frame creator' });
     fireEvent.change(within(creator).getByRole('textbox', { name: 'Name' }), {
       target: { value: 'Gilded' },
     });
@@ -116,25 +143,14 @@ describe('My frames', () => {
       within(within(creator).getByRole('radiogroup', { name: 'HP' })).getByLabelText('Bar')
     );
 
-    // Two widgets in one slot can't be saved.
-    fireEvent.change(within(creator).getByRole('combobox', { name: 'Dice' }), {
-      target: { value: 'top-left' },
-    });
-    expect(within(creator).getByRole('alert')).toHaveTextContent('both sit at top-left');
-    expect(within(creator).getByRole('button', { name: 'Save frame' })).toBeDisabled();
-    fireEvent.change(within(creator).getByRole('combobox', { name: 'Dice' }), {
-      target: { value: 'middle-left' },
-    });
-
     fireEvent.click(within(creator).getByRole('button', { name: 'Save frame' }));
-    expect(screen.queryByRole('region', { name: 'Frame creator' })).toBeNull();
+    expect(screen.queryByRole('dialog', { name: 'Frame creator' })).toBeNull();
     const saved = readCustomFrames();
     expect(saved).toHaveLength(1);
     expect(saved[0]).toMatchObject({
       label: 'Gilded',
       origin: 'custom',
       tracks: { hp: 'bar' },
-      regions: { dice: 'middle-left' },
     });
     expect(screen.getByLabelText('active')).toHaveTextContent(saved[0].id);
     expect(screen.getByRole('radiogroup', { name: 'My frames' })).toHaveTextContent('Gilded');
