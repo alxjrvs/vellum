@@ -1,6 +1,6 @@
 # Vellum — Design System
 
-> **Your sheet. On air.**
+> **Your characters, at a glance.**
 
 Vellum is a local-only, system-aware camera overlay for tabletop RPGs. It renders a live character HUD — Hope, HP, Stress, Armor, conditions, identity — over a player's webcam, so a remote table's mechanical state lives on each player's video tile instead of in an off-camera tab. No backend, no accounts, no telemetry.
 
