@@ -1,20 +1,17 @@
-name: Deploy site to GitHub Pages
+name: Redirect GitHub Pages to vellumhud.com
 
-# Publishes the static marketing/landing site in `site/` to GitHub Pages,
-# alongside the built Vellum app. The app is served at /app/ (latest) and at
-# the version-pinned /app/v0.2.0/ (roadmap M-A). The site (docs/marketing)
-# remains at the Pages root; the app is a subtree, not a separate deployment.
+# Vellum now lives at vellumhud.com (deploy.yml). The old Pages site stays up
+# forever as a redirect stub so existing links and OBS browser sources keep
+# working: every path, including unknown ones via 404.html, runs
+# deploy/github-pages-redirect/redirect.html, which forwards to the same path
+# on vellumhud.com and hands app URLs their saved localStorage data in the URL
+# fragment (never sent to a server).
 
 on:
   push:
     branches: [main]
     paths:
-      - 'site/**'
-      - 'src/**'
-      - 'index.html'
-      - 'vite.config.ts'
-      - 'package.json'
-      - 'tsconfig*.json'
+      - 'deploy/github-pages-redirect/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -23,7 +20,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment; don't cancel an in-progress prod deploy.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -41,29 +37,20 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Build Vellum app
-        # Runs `tsc -b && vite build && obs:check`; outputs to `dist/`.
-        run: bun run build
-
-      - name: Assemble combined Pages artifact
-        # Site at the root (-L dereferences site/vellum.tokens.css, a symlink to
-        # the shared chassis tokens in src/themes/); the built app served at
-        # /app/ (latest) and the version-pinned /app/v${VERSION}/ mirror (roadmap M-A). VERSION is
-        # derived from package.json so a release bump needs no workflow edit.
+      - name: Assemble redirect stub
+        # The stub at every path the old site ever served, plus 404.html for
+        # everything else. Pinned app versions are listed explicitly because
+        # GitHub Pages serves 404.html with a 404 status, which OBS tolerates
+        # but some tools do not.
         run: |
-          VERSION=$(jq -r .version package.json)
-          mkdir -p "_pages/app/v${VERSION}"
-          cp -RL site/. _pages/
-          cp -R dist/. _pages/app/
-          cp -R dist/. "_pages/app/v${VERSION}/"
+          STUB=deploy/github-pages-redirect/redirect.html
+          for dir in . app app/v0.2.0; do
+            mkdir -p "_pages/$dir"
+            cp "$STUB" "_pages/$dir/index.html"
+          done
+          cp "$STUB" _pages/404.html
 
-      - name: Upload combined artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _pages

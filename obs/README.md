@@ -3,7 +3,7 @@
 Automates the Vellum-specific half of OBS setup: a scene collection with the
 **Vellum HUD** browser source pre-configured (1920×1080, transparent). The
 browser source points at the **hosted player URL**
-`https://alxjrvs.github.io/vellum/app/#/daggerheart/player`, so there is **no
+`https://vellumhud.com/app/#/daggerheart/player`, so there is **no
 build or `dist` to produce** — install the collection and it renders the live
 app. (See _Scene addresses_ below for the GM URL.) This doc is the
 OBS-install detail; for the full first-time onramp (configure your character →
@@ -86,17 +86,17 @@ points at the hosted app — no `dist`).
 The bare `/app/` URL is a **picker** (game + role); each screen has its own
 address, and those are what belong in a browser source:
 
-| Screen | URL                                                         |
-| ------ | ----------------------------------------------------------- |
-| Player | `https://alxjrvs.github.io/vellum/app/#/daggerheart/player` |
-| GM     | `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`     |
+| Screen | URL                                              |
+| ------ | ------------------------------------------------ |
+| Player | `https://vellumhud.com/app/#/daggerheart/player` |
+| GM     | `https://vellumhud.com/app/#/daggerheart/gm`     |
 
 The shipped scene collection points at the **player** URL.
 
 ## GM view
 
 For the GM's view, edit the `Vellum HUD` source (double-click → Properties)
-and set the URL to `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`, or
+and set the URL to `https://vellumhud.com/app/#/daggerheart/gm`, or
 keep a second collection whose browser source points at that URL. It shows the
 **Fear track and the duality dice** — no player tracks, no identity — and needs
 **no character setup**, so it works on a fresh machine.
