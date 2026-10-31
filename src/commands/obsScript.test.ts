@@ -111,7 +111,7 @@ describe('OBS script setup', () => {
 
   it('builds the scene with the webcam under the HUD and starts the Virtual Camera', () => {
     const result = run(`
-      fake.load({ link = "  https://vellumhud.com/app/?c=abc#/daggerheart/player  ", camera = "cam-2" })
+      fake.load({ link = "  https://vellumhud.com/app/daggerheart/player/?c=abc  ", camera = "cam-2" })
       fake.press("set_up")
       local hud = fake.state.sources["Vellum HUD"].settings
       local cam = fake.state.sources["Vellum Camera"].settings
@@ -128,7 +128,7 @@ describe('OBS script setup', () => {
     `);
     expect(result.split('\n')).toEqual([
       'Vellum Camera:true,Vellum HUD:true',
-      'https://vellumhud.com/app/?c=abc#/daggerheart/player',
+      'https://vellumhud.com/app/daggerheart/player/?c=abc',
       '1920x1080',
       'cam-2',
       '1280x720',
@@ -143,7 +143,7 @@ describe('OBS script setup', () => {
       fake.press("set_up")
       return obslua.obs_data_get_string(fake.state.sources["Vellum HUD"].settings, "url")
     `);
-    expect(url).toBe('https://vellumhud.com/app/#/daggerheart/player');
+    expect(url).toBe('https://vellumhud.com/app/daggerheart/player/');
   });
 
   it('updates the same scene on a second run, hiding the webcam when Vellum draws it', () => {
@@ -163,11 +163,11 @@ describe('OBS script setup', () => {
     const url = run(`
       fake.load()
       fake.press("set_up")
-      fake.settings.values.link = "https://vellumhud.com/app/?c=new#/daggerheart/gm"
+      fake.settings.values.link = "https://vellumhud.com/app/daggerheart/gm/?c=new"
       script_update(fake.settings)
       return obslua.obs_data_get_string(fake.state.sources["Vellum HUD"].settings, "url")
     `);
-    expect(url).toBe('https://vellumhud.com/app/?c=new#/daggerheart/gm');
+    expect(url).toBe('https://vellumhud.com/app/daggerheart/gm/?c=new');
   });
 
   it('leaves a same-named source of another kind alone and says why', () => {

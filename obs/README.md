@@ -77,14 +77,15 @@ OBS's extension points, and why this one:
 The bare `/app/` URL is a picker (game + role); each screen has its own
 address:
 
-| Screen | URL                                              |
-| ------ | ------------------------------------------------ |
-| Player | `https://vellumhud.com/app/#/daggerheart/player` |
-| GM     | `https://vellumhud.com/app/#/daggerheart/gm`     |
+| Screen | URL                                             |
+| ------ | ----------------------------------------------- |
+| Player | `https://vellumhud.com/app/daggerheart/player/` |
+| GM     | `https://vellumhud.com/app/daggerheart/gm/`     |
 
 With no link pasted, the script uses the player URL. To pin a frame, add
-`?frame=<id>` before the `#`, for example
-`https://vellumhud.com/app/?frame=daggerheart-ledger#/daggerheart/player`.
+`?frame=<id>`, for example
+`https://vellumhud.com/app/daggerheart/player/?frame=daggerheart-ledger`.
+Old `#/` links still redirect.
 
 ## Manual setup
 
