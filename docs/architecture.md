@@ -735,7 +735,7 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 
 ### ADR-004: OBS Integration Approach — Static Local Web App + Browser Source
 
-**Status:** Accepted
+**Status:** Accepted; hosting and camera ownership revised by ADR-009 and ADR-010
 
 **Context:** PRD A-1 names OBS browser source + OBS Virtual Camera as the delivery path hypothesis. Alternatives: Tauri/Electron native app, browser extension, OBS plugin, direct RTMP/WebRTC feed.
 
@@ -779,7 +779,7 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 
 ### ADR-005: Control-Surface Architecture — Click-on-HUD (with Split-Layout Upgrade Path)
 
-**Status:** Accepted
+**Status:** Superseded by ADR-011 (clicks remain one input among several)
 
 **Context:** PRD A-9 and R-10 flag the control-surface design as the highest-UX-risk architecture decision. Two candidate models: (A) Clicks-on-overlay — all stat manipulation by clicking directly on camera-composited HUD elements; (B) Split-view — HUD is a read-oriented render target; a separate always-visible control panel handles stat updates.
 
@@ -814,7 +814,7 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 
 ### ADR-006: Packaging and Distribution — Local Dev Server / Static Build (No Installer)
 
-**Status:** Accepted
+**Status:** Superseded by ADR-009
 
 **Context:** REQ-047 explicitly marks public-release packaging as Won't. The group is the owner and ~3–5 trusted individuals who can install developer tooling.
 
@@ -910,6 +910,62 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 - Negative: File API (import/export) tests use `vi.fn()` mocks for `URL.createObjectURL` and File objects
 
 **Links:** [Vitest](https://vitest.dev/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+### ADR-009: Hosting — Static Assets on Cloudflare, Still Strictly Local at Runtime
+
+**Status:** Accepted (2026-10-31)
+
+**Context:** The 0.2 line asked every player to run a dev server or serve `dist/`, then moved to GitHub Pages. The expansion goals move DNS and hosting to Cloudflare, and the owner confirmed the privacy pillar stays strict: no accounts, no relay, no cross-player sync.
+
+**Decision Outcome:** vellumhud.com is one Cloudflare Worker (`vellum-web`) serving static assets only: the Astro site at `/`, the app at `/app/`, frozen builds at `/app/vX.Y.Z/`, and downloads at `/downloads/`. There is no Worker script. The app's CSP (`deploy/_headers`) limits `connect-src` to `'self'` and the Stream Deck plugin's loopback socket, so the "nothing is uploaded" promise is checkable from response headers. GitHub Pages is a redirect stub that carries `vellum:*` localStorage across origins once.
+
+**Consequences:**
+- Positive: one paste-once URL per scene; no local server.
+- Positive: pinned versions survive upgrades because every deploy rebuilds tagged releases.
+- Negative: rooms, a phone remote and a GM party view are out of scope while the pillar is strict.
+
+---
+
+### ADR-010: The Page Owns the Camera; Face Tracking Runs In-Page
+
+**Status:** Accepted (2026-10-31); revises ADR-004
+
+**Context:** Face-anchored widgets need camera frames. OBS's own capture can't hand frames to a browser source, and a native helper would mean signing and installers.
+
+**Decision Outcome:** With the camera option on, the browser source opens the webcam itself (`getUserMedia`; OBS needs `--enable-media-stream`) and draws it as the backdrop, replacing the scene's Video Capture Device. MediaPipe's Face Detector runs in a module worker on the CPU delegate at 15 fps, one frame in flight, and its runtime and model are self-hosted under `/app/mediapipe-<version>/`. Only anchors (crown, chin) leave the worker; frames are discarded. Off by default.
+
+**Consequences:**
+- Positive: no native code; works inside OBS's Chromium.
+- Negative: one more launch flag; the OS may refuse a camera already held by another app (surfaced as "busy" in setup).
+- Unverified: CPU cost inside OBS on low-end machines.
+
+---
+
+### ADR-011: One Command Bus for Every Input
+
+**Status:** Accepted (2026-10-31); supersedes ADR-005
+
+**Context:** Players change stats by clicking the HUD, OBS hotkeys and a Stream Deck. Each path writing state directly would let them disagree.
+
+**Decision Outcome:** Every input becomes a typed, mostly relative command (`track.adjust`, `track.set`, `condition.toggle`, `feature.toggle`, `frame.set`, `frame.cycle`; `src/commands/types.ts`). External inputs arrive as a `vellum:command` window event (obs-browser's `javascript_event`, used by the OBS Lua script) or over the Stream Deck link, are validated by `parseCommand`, and are published on one bus that the character store, Fear pool and frame provider subscribe to.
+
+**Consequences:**
+- Positive: two quick presses always add up; a new input path is a parser, not a new state writer.
+- Positive: OBS hotkeys need no WebSocket, password or network.
+
+---
+
+### ADR-012: Stream Deck Live Keys over a Loopback Socket the Plugin Hosts
+
+**Status:** Accepted (2026-10-31)
+
+**Context:** Live keys need state flowing out of the page. obs-websocket can carry commands in (`emit_event`) but gives a browser source no way to report back without the page logging in to obs-websocket with the user's password.
+
+**Decision Outcome:** The plugin (`apps/streamdeck`) runs a WebSocket server on `127.0.0.1:28196` that only accepts the vellumhud.com origin (and local dev). The page connects only inside OBS (`window.obsstudio`) or with `?deck=1`, reports what it shows, and receives commands onto the bus. The wire format (`src/deck/protocol.ts`) is shared by both ends and validated on both.
+
+**Consequences:**
+- Positive: zero configuration beyond installing the plugin; nothing crosses the network.
+- Negative: a future OBS Chromium that enforces Local Network Access prompts could block the socket; OBS hotkeys remain the fallback.
 
 ---
 
