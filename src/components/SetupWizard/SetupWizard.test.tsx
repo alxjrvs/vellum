@@ -103,4 +103,22 @@ describe('SetupWizard', () => {
     expect(localStorage.getItem(ONBOARDED_STORAGE_KEY)).toBe('true');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('as a modal, starts closed and opens from a Setup instructions button', () => {
+    render(
+      <CharacterProvider>
+        <SetupWizard variant="modal" />
+      </CharacterProvider>
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Setup instructions' }));
+    const dialog = screen.getByRole('dialog', { name: /vellum setup/i });
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Setup instructions' })).toBeInTheDocument();
+  });
 });
