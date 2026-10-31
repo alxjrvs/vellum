@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.2.0",
   "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && bun run obs:check",
@@ -15,7 +18,9 @@
     "format:write": "prettier --write .",
     "typecheck": "tsc -b --noEmit",
     "check": "bun run lint && bun run format && bun run typecheck",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "site:build": "bun run --filter @vellum/site build",
+    "site:dev": "bun run --filter @vellum/site dev"
   },
   "dependencies": {
     "@fontsource/barlow": "5",
