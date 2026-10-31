@@ -71,6 +71,26 @@ jobs:
         # (scripts/check-obs-bundle.ts) runs for free at the end of it.
         run: bun run build
 
+  site:
+    name: Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        # apps/site is its own package until the repo moves to Bun workspaces.
+        run: bun install --frozen-lockfile
+        working-directory: apps/site
+
+      - name: Build
+        # Astro + Starlight static build to apps/site/dist (vellumhud.com).
+        run: bun run build
+        working-directory: apps/site
+
   ci-success:
     name: CI Success
     # The single aggregate gate: make this the required status check for
@@ -81,7 +101,7 @@ jobs:
     # dependency into a failed gate; without it this check is permanently
     # green and gates nothing.
     if: always()
-    needs: [check, test, build]
+    needs: [check, test, build, site]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any dependency failed

@@ -1,0 +1,187 @@
+---
+import Site from '../layouts/Site.astro';
+import HudTile from '../components/HudTile.astro';
+import StatusChit from '../components/StatusChit.astro';
+import { libraryFrames } from '../data/library';
+
+const broadcast = libraryFrames.find((f) => f.id === 'broadcast')!;
+const daggerheart = libraryFrames.find((f) => f.id === 'daggerheart')!;
+---
+
+<Site
+  title="Frames"
+  description="A frame is the look of your HUD: colors, layout, and bars or chits per stat. Pick one per game from the Frame Library, or build your own."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Frames</p>
+      <h1>One HUD.<br /><em>A frame per game.</em></h1>
+      <p class="lede">
+        A frame is everything about how your HUD looks: its colors, where each widget sits, and
+        whether each stat draws as a bar or as chits. The stats themselves come from your game.
+        Switch frames and your character stays exactly as it was.
+      </p>
+    </div>
+  </section>
+
+  <section aria-labelledby="same-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Same character, two frames</p>
+        <h2 id="same-h">The data stays. The look changes.</h2>
+        <p class="lede">
+          Both tiles show the same sheet. Broadcast is the Vellum default; Daggerheart warms the
+          plates and gilds the edge. Each frame picks bar or chits for every stat on its own.
+        </p>
+      </div>
+      <div class="grid-2">
+        <div class="stack">
+          <HudTile compact colors={broadcast.colors} tracks={broadcast.tracks} />
+          <p class="small"><strong>Broadcast</strong> · official · any game</p>
+        </div>
+        <div class="stack">
+          <HudTile
+            compact
+            colors={daggerheart.colors}
+            tracks={{ ...daggerheart.tracks, hp: 'bar' }}
+          />
+          <p class="small">
+            <strong>Daggerheart</strong> · official · shown here with HP switched to a bar
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="pick-h">
+    <div class="wrap split">
+      <div class="stack">
+        <div class="status-line"><StatusChit status="next" /></div>
+        <h2 id="pick-h">Pick a frame</h2>
+        <p class="lede">
+          The app shows three shelves for each game: <strong>Official</strong>,{" "}
+          <strong>Community</strong> (marked unofficial) and <strong>My frames</strong>. Your pick
+          rides in your share link, so OBS loads it with no extra setup.
+        </p>
+        <p class="small">
+          Library frames ship inside the app. Choosing one never contacts a server.
+        </p>
+      </div>
+      <div class="card lead">
+        <h3>In the app today</h3>
+        <p class="small">
+          Daggerheart uses its official frame automatically. The picker and the Library arrive
+          together.
+        </p>
+        <a class="more" href="/library/">See the Library</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="make-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="status-line"><StatusChit status="later" /></div>
+        <h2 id="make-h">Make your own</h2>
+        <p class="lede">
+          The frame creator is the real HUD on a canvas. Drag widgets from a palette, snap them to
+          the frame edges, bind each one to a stat from a dropdown, and choose how it draws.
+        </p>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>Start from a frame</h3>
+          <p>Copy an official or community frame, or start from Broadcast.</p>
+        </li>
+        <li>
+          <h3>Place widgets</h3>
+          <p>
+            Drag tracks, chips and the nameplate onto the 1920×1080 stage. They snap to edges, the
+            safe area and an 8px grid.
+          </p>
+        </li>
+        <li>
+          <h3>Bind and style</h3>
+          <p>Pick a stat for each widget, then bar or chits, colors and sizes.</p>
+        </li>
+        <li>
+          <h3>Check the tile</h3>
+          <p>
+            Preview at Discord's 640×360 tile size. The creator flags anything that breaks the two
+            rules.
+          </p>
+        </li>
+      </ol>
+      <p class="small" style="margin-top: 1.5rem">
+        Your frames stay on your machine. Export one as a file to share it, or{" "}
+        <a href="/docs/frames/submit/">submit it to the Library</a>.
+      </p>
+    </div>
+  </section>
+
+  <section id="rules" aria-labelledby="rules-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">For frame makers</p>
+        <h2 id="rules-h">Two rules every frame keeps.</h2>
+        <p class="lede">
+          A frame can change colors, positions, and bars or chits. It can't break these two rules,
+          and Vellum checks them.
+        </p>
+      </div>
+      <div class="grid-2">
+        <div class="card lead">
+          <h3>Labels are always readable</h3>
+          <p class="small">
+            At least 2.1% of the frame's width: 40px on the 1920 canvas, about 13px on a 640×360
+            Discord tile. At least 7:1 contrast, always on a solid plate, never straight on video.
+          </p>
+        </div>
+        <div class="card lead">
+          <h3>Everything reads outside-in</h3>
+          <p class="small">
+            Each widget reads from the nearest frame edge toward your face. Left side: label, value,
+            bar. Right side, mirrored: bar, value, label.
+          </p>
+          <div class="oi" aria-hidden="true">
+            <span>LABEL</span><span>4</span><span class="bar"></span><span class="mid">face</span
+            ><span class="bar"></span><span>4</span><span>LABEL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="data-h">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Under the hood</p>
+        <h2 id="data-h">Frames are data, never code.</h2>
+        <p>
+          A frame is a small, versioned JSON file. It names a game, overrides chassis colors, and
+          lists widgets by anchor, offset and size on the 1920×1080 stage. Widgets bind to stats by
+          id, like <code>hp</code> or <code>hope</code>, so a frame never reaches into the code.
+        </p>
+        <p class="small">
+          Face anchors are optional and always carry a fixed fallback, so every frame works with
+          tracking off.
+        </p>
+      </div>
+      <div class="codeblock">
+        <pre><code><span class="c">// a frame, abridged and illustrative</span>
+{"{"}
+  <span class="t">"game"</span>: <span class="s">"daggerheart"</span>,
+  <span class="t">"name"</span>: <span class="s">"Ember"</span>,
+  <span class="t">"colors"</span>: {"{"} <span class="t">"plate"</span>: <span class="s">"#1b140b"</span>, <span class="t">"player"</span>: <span class="s">"#c9a14a"</span> {"}"},
+  <span class="t">"widgets"</span>: [
+    {"{"} <span class="t">"type"</span>: <span class="s">"track"</span>, <span class="t">"stat"</span>: <span class="s">"hp"</span>,
+      <span class="t">"display"</span>: <span class="s">"chits"</span>, <span class="t">"anchor"</span>: <span class="s">"top-left"</span> {"}"},
+    {"{"} <span class="t">"type"</span>: <span class="s">"track"</span>, <span class="t">"stat"</span>: <span class="s">"hope"</span>,
+      <span class="t">"display"</span>: <span class="s">"bar"</span>, <span class="t">"anchor"</span>: <span class="s">"face-top"</span>,
+      <span class="t">"fallback"</span>: <span class="s">"top-center"</span> {"}"}
+  ]
+{"}"}</code></pre>
+      </div>
+    </div>
+  </section>
+</Site>

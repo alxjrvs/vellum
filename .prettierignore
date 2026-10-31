@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 .vite
+.astro
 docs/architecture.md
 docs/PRD.md
 .github/architecture-audit.md

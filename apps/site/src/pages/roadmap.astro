@@ -1,0 +1,59 @@
+---
+import Site from '../layouts/Site.astro';
+import StatusChit from '../components/StatusChit.astro';
+import { features, statusLabel, type Status } from '../data/features';
+
+const order: Status[] = ['live', 'next', 'later'];
+const intro: Record<Status, string> = {
+  live: 'In the app today.',
+  next: 'Being built now.',
+  later: 'Planned, not started.',
+};
+---
+
+<Site
+  title="Roadmap"
+  description="What Vellum does today, what's being built now, and what's planned."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Roadmap</p>
+      <h1>The <em>rundown.</em></h1>
+      <p class="lede">
+        Everything Vellum does or is going to do, in the order it lands. Nothing on this site claims
+        to ship before it does.
+      </p>
+    </div>
+  </section>
+
+  {
+    order.map((status) => (
+      <section aria-labelledby={`${status}-h`}>
+        <div class="wrap">
+          <div class="sec-head">
+            <div class="status-line">
+              <StatusChit status={status} />
+            </div>
+            <h2 id={`${status}-h`}>{statusLabel[status]}</h2>
+            <p class="lede">{intro[status]}</p>
+          </div>
+          <div class="grid-3">
+            {features
+              .filter((f) => f.status === status)
+              .map((f) => (
+                <div class:list={['card', { lead: status === 'live' }]}>
+                  <h3>{f.title}</h3>
+                  <p class="small">{f.blurb}</p>
+                  {f.href && (
+                    <a class="more" href={f.href}>
+                      More
+                    </a>
+                  )}
+                </div>
+              ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</Site>

@@ -1,0 +1,91 @@
+---
+/**
+ * Layout for the marketing pages. Docs use Starlight's own layout, re-skinned
+ * with the same tokens (styles/starlight.css), so the two halves of the site
+ * read as one broadcast package.
+ */
+import '../styles/global.css';
+import '../styles/site.css';
+import wordmark from '../assets/wordmark-dark.svg?raw';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Vellum puts your live character sheet on your own Discord camera. Pick a frame for your game, drive it with hotkeys or a Stream Deck, and keep everything on your machine.',
+} = Astro.props;
+
+const fullTitle = title ? `${title} · Vellum` : 'Vellum · Your sheet. On air.';
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/frames/', label: 'Frames' },
+  { href: '/library/', label: 'Library' },
+  { href: '/control/', label: 'Control' },
+  { href: '/tracking/', label: 'Tracking' },
+  { href: '/roadmap/', label: 'Roadmap' },
+  { href: '/docs/', label: 'Docs' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site">
+      <div class="wrap masthead">
+        <a class="wordmark" href="/" aria-label="Vellum home" set:html={wordmark} />
+        <nav class="site-nav" aria-label="Primary">
+          {
+            nav.map((item) => (
+              <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+          <a class="nav-cta" href="/app/">Open the app</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site">
+      <div class="wrap foot-grid">
+        <div>
+          <a class="wordmark foot-mark" href="/" aria-label="Vellum home" set:html={wordmark} />
+          <p class="small">Your sheet. On air.</p>
+        </div>
+        <nav class="foot-nav" aria-label="Footer">
+          <a href="/docs/">Quick start</a>
+          <a href="/library/">Frame Library</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/roadmap/">Roadmap</a>
+          <a href="https://github.com/alxjrvs/vellum">GitHub</a>
+        </nav>
+        <div class="foot-meta">
+          <p class="small">
+            Vellum is open source. It is not affiliated with Darrington Press. Daggerheart is a
+            trademark of its owner; Vellum's Daggerheart module encodes SRD-derived mechanics only,
+            with no rulebook text or art.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

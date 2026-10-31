@@ -1,0 +1,85 @@
+---
+import Site from '../layouts/Site.astro';
+---
+
+<Site
+  title="Privacy"
+  description="Vellum is strictly local: no account, no server, no telemetry, no relay. Here is exactly what runs where."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Privacy</p>
+      <h1>Nothing leaves<br /><em>your machine.</em></h1>
+      <p class="lede">
+        Vellum is a set of static files. Once they're loaded, everything happens on your computer.
+        This page says exactly what that means.
+      </p>
+    </div>
+  </section>
+
+  <section aria-labelledby="where-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="where-h">What lives where</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card lead">
+          <h3>Your character</h3>
+          <p class="small">
+            Stored in your browser's local storage, and in your share link. The link carries its
+            data in the address itself; it isn't stored on any server.
+          </p>
+        </div>
+        <div class="card lead">
+          <h3>Your frames</h3>
+          <p class="small">
+            Frames you make stay in local storage on your machine. Export one as a file if you want
+            to share it. Library frames are bundled into the app.
+          </p>
+        </div>
+        <div class="card lead">
+          <h3>Your camera</h3>
+          <p class="small">
+            With face tracking on, Vellum reads webcam frames to find your face and discards them.
+            No frame, image or face data is stored or sent.
+          </p>
+        </div>
+        <div class="card lead">
+          <h3>Your controls</h3>
+          <p class="small">
+            Hotkeys go through OBS. The Stream Deck plugin talks to OBS on localhost. Nothing
+            connects through the internet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="not-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="not-h">What Vellum doesn't have</h2>
+      </div>
+      <ul class="ticks">
+        <li>No accounts and no sign-in.</li>
+        <li>No analytics or telemetry in the app.</li>
+        <li>No relay or sync between players. Each player's Vellum stands alone.</li>
+        <li>No uploads. The Frame Library grows by pull request, not by upload.</li>
+        <li>No third-party scripts, fonts or models. Everything is served from vellumhud.com.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="check-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="check-h">Check it yourself</h2>
+        <p class="lede">
+          Open your browser's developer tools on the app and watch the Network tab while you play.
+          After the first load, nothing is sent. The app is open source on{" "}
+          <a href="https://github.com/alxjrvs/vellum">GitHub</a>, so you can read every line.
+        </p>
+      </div>
+    </div>
+  </section>
+</Site>

@@ -1,0 +1,48 @@
+---
+title: OBS setup
+description: Install the Vellum scene collection or add the browser source by hand, on macOS, Windows or Linux.
+---
+
+Vellum runs in OBS as a **browser source** on top of your webcam. OBS's **Virtual Camera** turns the result into a camera Discord can use.
+
+## Option A: import the scene collection
+
+Works on every OS.
+
+1. Download [`vellum.scene.json`](https://github.com/alxjrvs/vellum/blob/main/obs/vellum.scene.json).
+2. **Scene Collection → Import**, choose the file, then **Scene Collection → Vellum**.
+3. Double-click **Vellum HUD** and paste your share link as the URL.
+
+Import never touches your other scene collections.
+
+## Option B: install with a script
+
+Quit OBS first, because it rewrites scene files when it exits.
+
+- **macOS or Linux:** run `obs/setup-obs.sh` from the repository.
+- **Windows:** run `powershell -ExecutionPolicy Bypass -File obs\setup-obs.ps1`.
+
+Both write a collection named **Vellum** and nothing else.
+
+## Option C: add the browser source by hand
+
+1. **Sources → + → Browser**.
+2. Paste your share link as the URL.
+3. Set the size to **1920 × 1080**. Other sizes work, because the HUD scales to fit, but 1920 × 1080 is sharpest.
+
+## Add your webcam and start the Virtual Camera
+
+1. **Sources → + → Video Capture Device**, pick your camera, and drag it **below** Vellum HUD.
+2. **Start Virtual Camera.** The first time:
+   - **macOS:** approve the system extension in **System Settings → Privacy & Security**.
+   - **Windows:** the driver comes with OBS; there's normally no prompt.
+   - **Linux:** load the `v4l2loopback` kernel module so the camera device exists.
+3. In Discord, **Settings → Voice & Video → Camera → OBS Virtual Camera**.
+
+## Changing values during play
+
+Right-click the Vellum HUD source and choose **Interact**, then click pips on the HUD. [Hotkeys and Stream Deck](/docs/control/) are on the way, so you won't need the Interact window.
+
+## The GM screen
+
+Set the browser source URL to the GM address, `https://vellumhud.com/app/#/daggerheart/gm`. It shows the Fear track and the duality dice and needs no character.

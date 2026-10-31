@@ -1,0 +1,230 @@
+---
+import Site from '../layouts/Site.astro';
+import HudTile from '../components/HudTile.astro';
+import StatusChit from '../components/StatusChit.astro';
+import { features } from '../data/features';
+import { libraryFrames } from '../data/library';
+
+const daggerheart = libraryFrames.find((f) => f.id === 'daggerheart')!;
+
+const rundown = features.filter((f) =>
+  ['camera-hud', 'frame-picker', 'library', 'hotkeys', 'face-anchors', 'frame-creator'].includes(
+    f.id
+  )
+);
+---
+
+<Site>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">A camera HUD for tabletop RPGs</p>
+        <h1>Your sheet.<br /><em>On air.</em></h1>
+        <p class="lede">
+          Vellum puts your live character sheet on your own Discord camera. Hope, HP, Stress and
+          conditions ride your video tile, where the whole table is already looking.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="/docs/">Get on camera</a>
+          <a class="btn btn-secondary" href="/app/">Open the app</a>
+        </div>
+      </div>
+      <HudTile caption="OBS Virtual Camera · 1920×1080" />
+    </div>
+  </section>
+
+  <section aria-labelledby="chain-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="chain-h">You are the broadcast.</h2>
+        <p class="lede">
+          Each player runs their own Vellum. It draws your HUD, OBS lays it over your webcam, and
+          OBS's Virtual Camera hands the finished picture to Discord as your camera. Nobody else
+          installs anything, and no copy of Vellum talks to another.
+        </p>
+      </div>
+      <ol class="chain">
+        <li><b>Webcam</b><span>Your face</span></li>
+        <li class="you"><b>Vellum</b><span>Your stats, your frame</span></li>
+        <li><b>OBS</b><span>Composites the two</span></li>
+        <li><b>Virtual Camera</b><span>One camera device</span></li>
+        <li><b>Discord</b><span>Your own tile</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="rundown-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The rundown</p>
+        <h2 id="rundown-h">What's on, and what's next.</h2>
+        <p class="lede">
+          Live is in the app today. Next is being built now. Later is planned. The{" "}
+          <a href="/roadmap/">roadmap</a> has the full list.
+        </p>
+      </div>
+      <div class="grid-3">
+        {
+          rundown.map((f) => (
+            <div class:list={['card', { lead: f.status === 'live' }]}>
+              <div class="card-top">
+                <h3>{f.title}</h3>
+                <StatusChit status={f.status} />
+              </div>
+              <p class="small">{f.blurb}</p>
+              {f.href && (
+                <a class="more" href={f.href}>
+                  More
+                </a>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="frames-h">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Frames</p>
+        <h2 id="frames-h">One HUD, a frame per game.</h2>
+        <p class="lede">
+          A frame is the look: colors, where each widget sits, and whether a stat draws as a bar or
+          as chits. Pick one from the Library, or build your own.
+        </p>
+        <p class="small">
+          Frames are data, never code, and every frame keeps two rules: labels stay readable on a
+          tiny Discord tile, and everything reads from the edge of the frame toward your face.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-secondary" href="/frames/">About frames</a>
+          <a class="btn btn-secondary" href="/library/">Browse the Library</a>
+        </div>
+      </div>
+      <HudTile
+        compact
+        name="Kestrel Ash"
+        sub="Lvl 5 Seraph · Faerie"
+        condition="Hidden"
+        colors={daggerheart.colors}
+        tracks={daggerheart.tracks}
+      />
+    </div>
+  </section>
+
+  <section aria-labelledby="control-h">
+    <div class="wrap split flip">
+      <div class="stack">
+        <p class="eyebrow">Control</p>
+        <h2 id="control-h">Hands on the game, not the mouse.</h2>
+        <p class="lede">
+          Mark HP, spend Hope and flip conditions from a hotkey or a Stream Deck key. Every input
+          sends the same command, so a click, a key and a button all do exactly the same thing.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-secondary" href="/control/">Hotkeys and Stream Deck</a>
+        </div>
+      </div>
+      <div class="keys" aria-label="Example Stream Deck layout">
+        <div class="key" style="--key: var(--color-signal)"><b>+1</b><span>Hope</span></div>
+        <div class="key" style="--key: var(--color-signal)"><b>−1</b><span>Hope</span></div>
+        <div class="key" style="--key: var(--color-hit)"><b>+1</b><span>HP</span></div>
+        <div class="key" style="--key: var(--color-stress)"><b>+1</b><span>Stress</span></div>
+        <div class="key" style="--key: var(--color-armor)"><b>−1</b><span>Armor</span></div>
+        <div class="key" style="--key: var(--color-hit)"><b>Vuln</b><span>Toggle</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="track-h">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Light face tracking</p>
+        <h2 id="track-h">Widgets that find your face.</h2>
+        <p class="lede">
+          Turn it on and a frame can anchor widgets to you: Hope over your head, a nameplate under
+          your chin, a condition glow around your face. Turn it off and they fall back to fixed
+          spots.
+        </p>
+        <p class="small">
+          Tracking runs on your machine in a small model. Camera frames never leave it.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-secondary" href="/tracking/">How tracking works</a>
+        </div>
+      </div>
+      <HudTile compact anchors condition="" />
+    </div>
+  </section>
+
+  <section aria-labelledby="local-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Strictly local</p>
+        <h2 id="local-h">Nothing leaves your machine.</h2>
+        <p class="lede">
+          No account, no server, no telemetry, no relay. This is how Vellum is built, not a setting.
+        </p>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <h3>No account</h3>
+          <p class="small">There is nothing to sign up for.</p>
+        </div>
+        <div class="card">
+          <h3>No upload</h3>
+          <p class="small">Your sheet lives in your browser and in your own link.</p>
+        </div>
+        <div class="card">
+          <h3>No relay</h3>
+          <p class="small">Each player's Vellum stands alone. Hotkeys talk to OBS on localhost.</p>
+        </div>
+        <div class="card">
+          <h3>Camera stays home</h3>
+          <p class="small">Face tracking reads frames on your machine and keeps none.</p>
+        </div>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-secondary" href="/privacy/">Read the privacy page</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="qs-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Quick start</p>
+        <h2 id="qs-h">Four steps to the table.</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>Open Vellum</h3>
+          <p>
+            <a href="/app/">Open the app</a> in your browser. Pick your game and whether you're a player
+            or the GM.
+          </p>
+        </li>
+        <li>
+          <h3>Fill your sheet</h3>
+          <p>Enter your character, then copy your share link. Your whole sheet packs into it.</p>
+        </li>
+        <li>
+          <h3>Drop it into OBS</h3>
+          <p>
+            Import the Vellum scene collection and paste your link. Works on macOS, Windows and
+            Linux.
+          </p>
+        </li>
+        <li>
+          <h3>Go on camera</h3>
+          <p>Start OBS's Virtual Camera and pick it in Discord. Your face, with your stats on it.</p>
+        </li>
+      </ol>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/docs/">Full quick start</a>
+      </div>
+    </div>
+  </section>
+</Site>

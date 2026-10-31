@@ -1,0 +1,130 @@
+---
+import Site from '../layouts/Site.astro';
+import HudTile from '../components/HudTile.astro';
+import StatusChit from '../components/StatusChit.astro';
+import { libraryFrames } from '../data/library';
+
+const official = libraryFrames.filter((f) => f.tier === 'official');
+const community = libraryFrames.filter((f) => f.tier === 'community');
+---
+
+<Site
+  title="Frame Library"
+  description="Official Vellum frames and community frames, bundled into the app. Picking one never contacts a server."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Frame Library</p>
+      <h1>Frames for <em>every table.</em></h1>
+      <p class="lede">
+        Official frames come from the Vellum project. Community frames come from players, by pull
+        request. Every frame in the Library ships inside the app, so picking one never contacts a
+        server.
+      </p>
+      <div class="status-line">
+        <StatusChit status="next" />
+        <span class="small">The in-app picker arrives with the next release.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="official-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Official</p>
+        <h2 id="official-h">From the Vellum project</h2>
+      </div>
+      <div class="grid-2">
+        {
+          official.map((f) => (
+            <article class="card lead">
+              <HudTile compact colors={f.colors} tracks={f.tracks} />
+              <div class="card-top">
+                <h3>{f.name}</h3>
+                <span class="small">{f.game}</span>
+              </div>
+              <p class="small">{f.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="community-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Community · unofficial</p>
+        <h2 id="community-h">From players</h2>
+        <p class="lede">
+          Community frames are made by players and reviewed before they're merged. They're labelled
+          unofficial in the app.
+        </p>
+      </div>
+      {
+        community.length > 0 ? (
+          <div class="grid-2">
+            {community.map((f) => (
+              <article class="card">
+                <HudTile compact colors={f.colors} tracks={f.tracks} />
+                <div class="card-top">
+                  <h3>{f.name}</h3>
+                  <span class="small">
+                    {f.game} · by {f.author}
+                  </span>
+                </div>
+                <p class="small">{f.description}</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="card">
+            <h3>The shelf is open</h3>
+            <p class="small">
+              No community frames yet. Yours could be the first one in the app.
+            </p>
+            <a class="more" href="/docs/frames/submit/">
+              How to submit a frame
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <section aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">How the Library works</p>
+        <h2 id="how-h">A folder, not a feed.</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Two folders</h3>
+          <p class="small">
+            The Library is two folders in the Vellum repository: <code>official/</code> and{" "}
+            <code>community/</code>. Each frame is one JSON file.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Pull requests</h3>
+          <p class="small">
+            You submit a frame by opening a pull request. The schema check and the two rules run
+            automatically; a person reviews the rest.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Bundled</h3>
+          <p class="small">
+            Merged frames ship in the next build of the app. No uploads, no accounts, no gallery
+            server.
+          </p>
+        </div>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/docs/frames/submit/">Submit a frame</a>
+        <a class="btn btn-secondary" href="/frames/">About frames</a>
+      </div>
+    </div>
+  </section>
+</Site>

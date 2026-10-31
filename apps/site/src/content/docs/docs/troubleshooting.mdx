@@ -1,0 +1,28 @@
+---
+title: Troubleshooting
+description: Fixes for the common ways a Vellum HUD fails to appear on camera.
+---
+
+## The HUD shows a picker instead of my character
+
+The browser source is pointed at the bare `/app/` address. Paste your **share link** (or the player address) into the source's URL instead.
+
+## My character is blank in OBS
+
+OBS has its own browser storage, separate from your normal browser. Use **Copy share link** in the app and paste that link into the OBS source. The link carries your character with it.
+
+## The HUD is there but my face isn't
+
+Your webcam source must be **below** Vellum HUD in the OBS sources list. Drag it down.
+
+## Discord doesn't list OBS Virtual Camera
+
+Click **Start Virtual Camera** in OBS first, then restart Discord. On macOS, check that the OBS system extension is allowed in **System Settings → Privacy & Security**. On Linux, load `v4l2loopback`.
+
+## Face tracking says it can't open the camera
+
+OBS has to be started with `--enable-media-stream`. See [Face tracking](/docs/face-tracking/) for a per-OS shortcut. On Windows, only one app can use a camera at a time unless multi-app camera mode is on, so remove OBS's own webcam source when you use the Vellum camera scene.
+
+## Something broke mid-session
+
+Reload the browser source (right-click → **Refresh**). Your values are saved locally and come back.

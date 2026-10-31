@@ -1,0 +1,286 @@
+---
+/**
+ * A stand-in camera tile wearing the real HUD language: vitals plates on the
+ * left (label, value, track: outside-in), condition chips mirrored on the
+ * right, the nameplate at the bottom. A frame re-skins it by overriding
+ * chassis tokens, exactly as the app does. Sized in container units so it
+ * reads the same at any width.
+ */
+export type TrackStyle = 'bar' | 'chits';
+
+interface Props {
+  /** Token overrides without the --color- prefix, e.g. { plate: '#1b140b' }. */
+  colors?: Record<string, string>;
+  tracks?: Record<string, TrackStyle>;
+  name?: string;
+  sub?: string;
+  condition?: string;
+  /** Show face-tracking anchors: a marker following the face and a crown. */
+  anchors?: boolean;
+  caption?: string;
+  compact?: boolean;
+}
+
+const {
+  colors = {},
+  tracks = {},
+  name = 'Marlowe Venn',
+  sub = 'Lvl 3 Ranger · Human',
+  condition = 'Vulnerable',
+  anchors = false,
+  caption,
+  compact = false,
+} = Astro.props;
+
+const style = Object.entries(colors)
+  .map(([k, v]) => `--color-${k}: ${v}`)
+  .join('; ');
+
+const rows = [
+  { key: 'hp', label: 'HP', value: 4, max: 6, fill: 'var(--color-hit)' },
+  { key: 'hope', label: 'Hope', value: 4, max: 6, fill: 'var(--color-signal)' },
+  { key: 'stress', label: 'Stress', value: 3, max: 6, fill: 'var(--color-stress)' },
+].map((r) => ({ ...r, display: tracks[r.key] ?? (r.key === 'stress' ? 'bar' : 'chits') }));
+---
+
+<figure class:list={['tile', { compact, anchors }]} style={style}>
+  <div class="cam" aria-hidden="true"><span class="head"></span><span class="body"></span></div>
+  {
+    anchors && (
+      <div class="anchor" aria-hidden="true">
+        <span class="box" />
+        <span class="crown">Hope 4</span>
+      </div>
+    )
+  }
+  <div class="vitals">
+    {
+      rows.map((r) => (
+        <div class="row">
+          <span class="k">{r.label}</span>
+          <span class="n">
+            {r.value}
+            <small>/{r.max}</small>
+          </span>
+          {r.display === 'bar' ? (
+            <span
+              class="bar"
+              style={`--fill: ${r.fill}; --pct: ${(r.value / r.max) * 100}%`}
+              aria-hidden="true"
+            />
+          ) : (
+            <span class="chits" style={`--fill: ${r.fill}`} aria-hidden="true">
+              {Array.from({ length: r.max }, (_, i) => (
+                <i class:list={{ on: i < r.value }} />
+              ))}
+            </span>
+          )}
+        </div>
+      ))
+    }
+  </div>
+  {
+    condition && (
+      <div class="conds">
+        <span class="chip">{condition}</span>
+      </div>
+    )
+  }
+  <div class="name"><b>{name}</b><span>{sub}</span></div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    container-type: inline-size;
+    margin: 0;
+    background: radial-gradient(circle at 70% 20%, #47505a, #1b2026 70%);
+    font-family: var(--font-family-display);
+    color: var(--color-text);
+  }
+  .tile > * {
+    position: absolute;
+  }
+  .cam {
+    inset: 0;
+  }
+  .cam .head,
+  .cam .body {
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    border-radius: 50%;
+  }
+  .cam .head {
+    top: 22%;
+    width: 22%;
+    height: 38%;
+    background: #8a705d;
+  }
+  .cam .body {
+    top: 56%;
+    width: 56%;
+    height: 70%;
+    background: #5c4d43;
+  }
+  .anchors .cam {
+    animation: sway 6s ease-in-out infinite;
+  }
+  .anchor {
+    left: 50%;
+    top: 22%;
+    width: 22%;
+    height: 38%;
+    translate: -50% 0;
+    animation: sway 6s ease-in-out infinite;
+  }
+  .anchor .box {
+    position: absolute;
+    inset: 0;
+    border: 0.3cqi dashed var(--color-signal);
+  }
+  .anchor .crown {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 1.2cqi);
+    translate: -50% 0;
+    padding: 0.6cqi 1.6cqi;
+    background: var(--color-signal);
+    color: var(--color-signal-ink);
+    font-size: 2.6cqi;
+    font-weight: 800;
+    font-style: italic;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  @keyframes sway {
+    0%,
+    100% {
+      transform: translateX(-3cqi);
+    }
+    50% {
+      transform: translateX(3cqi);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anchors .cam,
+    .anchor {
+      animation: none;
+    }
+  }
+  .vitals {
+    top: 4cqi;
+    left: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqi;
+    padding: 1cqi 2.4cqi 1cqi 1.6cqi;
+    background: var(--color-plate);
+    border-left: 1.2cqi solid var(--color-player);
+  }
+  .k {
+    width: 9cqi;
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-label);
+  }
+  .n {
+    min-width: 7cqi;
+    font-size: 4.4cqi;
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1;
+  }
+  .n small {
+    font-size: 0.6em;
+    color: var(--color-label);
+  }
+  .chits {
+    display: flex;
+    gap: 0.6cqi;
+    transform: skewX(var(--slant));
+  }
+  .chits i {
+    width: 2.4cqi;
+    height: 2cqi;
+    background: var(--color-rule);
+  }
+  .chits i.on {
+    background: var(--fill);
+  }
+  .bar {
+    width: 18cqi;
+    height: 2cqi;
+    transform: skewX(var(--slant));
+    background: linear-gradient(90deg, var(--fill) var(--pct), var(--color-rule) var(--pct));
+  }
+  /* Right side mirrors: the chip's accent edge sits on the outer (right) edge. */
+  .conds {
+    top: 4cqi;
+    right: 0;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .chip {
+    padding: 0.8cqi 1.4cqi;
+    background: var(--color-plate);
+    border-right: 1.2cqi solid var(--color-hit);
+    font-size: 2.6cqi;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .name {
+    bottom: 4cqi;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 1.2cqi auto;
+    justify-items: start;
+  }
+  .name::before {
+    content: '';
+    grid-row: 1 / span 2;
+    justify-self: stretch;
+    background: var(--color-player);
+  }
+  .name b {
+    padding: 0.6cqi 2.4cqi 0.4cqi 1.4cqi;
+    background: var(--color-nameplate);
+    color: var(--color-nameplate-ink);
+    font-size: 5cqi;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .name span {
+    padding: 0.7cqi 1.4cqi;
+    background: var(--color-plate);
+    color: var(--color-label);
+    font-family: var(--font-family-body);
+    font-size: 2.4cqi;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  figcaption {
+    right: 1.6cqi;
+    bottom: 1.2cqi;
+    font: 500 1.8cqi/1 var(--font-family-mono);
+    color: var(--color-label);
+  }
+  .compact figcaption {
+    display: none;
+  }
+</style>

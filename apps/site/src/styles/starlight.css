@@ -1,0 +1,138 @@
+/*
+ * Starlight re-skinned with the Vellum chassis. Docs read as part of the
+ * same broadcast package as the marketing pages: Night ground, Plate
+ * panels, Signal for "yours", Barlow Condensed italic caps for headings.
+ * Dark only; the light selectors carry the same values on purpose.
+ */
+:root,
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --sl-font: var(--font-family-body);
+  --sl-font-mono: var(--font-family-mono);
+
+  --sl-color-accent-low: #3a2f0e;
+  --sl-color-accent: var(--color-signal);
+  --sl-color-accent-high: #ffe08f;
+  --sl-color-text-accent: var(--color-signal);
+  --sl-color-text-invert: var(--color-signal-ink);
+
+  --sl-color-white: var(--color-text);
+  --sl-color-gray-1: #e4e8ef;
+  --sl-color-gray-2: var(--color-label);
+  --sl-color-gray-3: var(--color-muted);
+  --sl-color-gray-4: #5b6577;
+  --sl-color-gray-5: var(--color-rule);
+  --sl-color-gray-6: var(--color-plate);
+  --sl-color-black: var(--color-night);
+
+  --sl-color-bg: var(--color-night);
+  --sl-color-bg-nav: var(--color-night);
+  --sl-color-bg-sidebar: var(--color-night);
+  --sl-color-bg-inline-code: var(--color-plate-raised);
+  --sl-color-hairline: var(--color-rule);
+  --sl-color-hairline-light: var(--color-rule);
+  --sl-color-hairline-shade: var(--color-night);
+
+  --sl-color-red: var(--color-hit);
+  --sl-color-orange: var(--color-stress);
+  --sl-color-purple: var(--color-fear);
+  --sl-color-green: var(--color-player);
+  --sl-color-blue: var(--color-armor);
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+}
+
+.site-title img {
+  height: 2rem;
+  width: auto;
+}
+
+/* Headings: the display face, heavy italic caps. */
+.sl-markdown-content :is(h2, h3),
+h1#_top {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1;
+}
+h1#_top {
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+}
+.sl-markdown-content h2 {
+  font-weight: 800;
+  font-size: 2rem;
+}
+.sl-markdown-content h3 {
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+/* Sidebar group labels read like HUD labels. */
+.sidebar-content .group-label .large {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-label);
+}
+.sidebar-content a[aria-current='page'] {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+  font-weight: 600;
+}
+
+/* Asides become plates with an outer edge, square cornered. */
+.starlight-aside {
+  background: var(--color-plate);
+  border: none;
+  border-left: 6px solid var(--sl-color-asides-border, var(--color-signal));
+}
+.starlight-aside--note {
+  --sl-color-asides-border: var(--color-armor);
+}
+.starlight-aside--tip {
+  --sl-color-asides-border: var(--color-player);
+}
+.starlight-aside--caution {
+  --sl-color-asides-border: var(--color-signal);
+}
+.starlight-aside--danger {
+  --sl-color-asides-border: var(--color-hit);
+}
+
+.sl-markdown-content code:not(:where(.not-content *, pre *)) {
+  border-radius: 0;
+}
+
+/* Status chit used in docs: Live / Next / Later. */
+.status {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  border-left: 4px solid var(--color-rule);
+  vertical-align: middle;
+}
+.status.live {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+  border-left-color: var(--color-signal-ink);
+}
+.status.next {
+  border-left-color: var(--color-signal);
+}
+
+.starlight-aside__title {
+  color: var(--sl-color-asides-border, var(--color-signal));
+}

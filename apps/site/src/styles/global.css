@@ -1,0 +1,16 @@
+/*
+ * Shared ground for every page on vellumhud.com, marketing and docs alike.
+ * The tokens are the app's own chassis file: one design system, one source
+ * (docs/branding/BRANDING.md). Fonts are self-hosted, so the site makes no
+ * third-party requests.
+ */
+@import '../../../../src/themes/vellum.tokens.css';
+@import '@fontsource/barlow/400.css';
+@import '@fontsource/barlow/500.css';
+@import '@fontsource/barlow/600.css';
+@import '@fontsource/barlow-condensed/600.css';
+@import '@fontsource/barlow-condensed/700.css';
+@import '@fontsource/barlow-condensed/800-italic.css';
+@import '@fontsource/barlow-condensed/900-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';

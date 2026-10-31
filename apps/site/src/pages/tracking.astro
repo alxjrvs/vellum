@@ -1,0 +1,112 @@
+---
+import Site from '../layouts/Site.astro';
+import HudTile from '../components/HudTile.astro';
+import StatusChit from '../components/StatusChit.astro';
+---
+
+<Site
+  title="Face tracking"
+  description="Light, local face tracking for your Vellum HUD: widgets anchored to your face, running on your machine, off by default."
+>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Light face tracking</p>
+        <h1>Widgets that<br /><em>find your face.</em></h1>
+        <p class="lede">
+          A frame can pin widgets to you instead of to a corner: Hope over your head, a nameplate
+          under your chin, a glow around your face when you're Vulnerable. Lean out of frame and
+          they slide back to their fixed spots.
+        </p>
+        <div class="status-line" style="margin-top: 1.25rem">
+          <StatusChit status="next" />
+          <span class="small">Off by default. Every frame works without it.</span>
+        </div>
+      </div>
+      <HudTile anchors condition="" caption="Face anchor · demo" />
+    </div>
+  </section>
+
+  <section aria-labelledby="light-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Light, on purpose</p>
+        <h2 id="light-h">It finds where your face is. That's all.</h2>
+        <p class="lede">
+          Vellum uses a small face detector: a box around your face and six points. It doesn't read
+          expressions, it doesn't recognise who you are, and it never changes your stats.
+        </p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Small</h3>
+          <p class="small">
+            The model is about 230 KB and runs a few milliseconds per frame on a normal CPU.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Smooth</h3>
+          <p class="small">
+            It checks your position about 15 times a second, and widgets glide between checks so
+            they don't jitter.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Idle when unused</h3>
+          <p class="small">
+            If no widget in your frame is anchored to your face, the detector doesn't run at all.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="local-h">
+    <div class="wrap split">
+      <div class="stack">
+        <p class="eyebrow">Strictly local</p>
+        <h2 id="local-h">Camera frames never leave your machine.</h2>
+        <p class="lede">
+          With tracking on, the Vellum page inside OBS opens your webcam itself, draws it, finds
+          your face and lays the HUD on top, all in one place. The model is served from vellumhud.com
+          with the app, never from a third party, and nothing is sent back.
+        </p>
+      </div>
+      <ol class="chain">
+        <li><b>Webcam</b><span>Opened by Vellum</span></li>
+        <li class="you"><b>Detector</b><span>On your CPU</span></li>
+        <li><b>HUD</b><span>Anchored to you</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="setup-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Setup</p>
+        <h2 id="setup-h">One extra step.</h2>
+        <p class="lede">
+          OBS has to be started with camera access for browser sources turned on. The app's setup
+          panel spots when it's missing and shows the exact fix for your system.
+        </p>
+      </div>
+      <ol class="steps three">
+        <li>
+          <h3>Start OBS with the camera flag</h3>
+          <p>Launch OBS with <code>--enable-media-stream</code>. The guide has a shortcut per OS.</p>
+        </li>
+        <li>
+          <h3>Use the camera scene</h3>
+          <p>Pick the "Vellum camera" scene, which lets Vellum draw your webcam itself.</p>
+        </li>
+        <li>
+          <h3>Choose a frame with anchors</h3>
+          <p>Frames that use face anchors say so in the picker.</p>
+        </li>
+      </ol>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/docs/face-tracking/">Face tracking guide</a>
+      </div>
+    </div>
+  </section>
+</Site>

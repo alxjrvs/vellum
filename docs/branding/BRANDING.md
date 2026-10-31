@@ -18,7 +18,7 @@ Three layers, one set of token names:
 | **HUD primitives** | Plate, track (bar or chits), nameplate, condition chip, slanted button. Shared shapes and rules. | `src/components/*`                             |
 | **Frames**         | A per-game skin: colors, sizes, and bar-vs-chits per stat. Never new token names.                | `src/themes/<game>.theme.ts` (a `ThemeConfig`) |
 
-The site links the chassis file directly (`site/vellum.tokens.css` is a symlink; the Pages workflow copies it with `cp -L`). The app imports it first, then `ThemeProvider` writes the active frame's tokens over it on `:root`. A frame re-skins the chassis; it cannot change the layout or break the two rules below.
+The site (`apps/site`, Astro + Starlight) imports the chassis file directly from `src/themes/vellum.tokens.css`, and re-skins Starlight's docs with the same tokens (`apps/site/src/styles/starlight.css`). The legacy `site/` links it through a symlink until it is retired. The app imports it first, then `ThemeProvider` writes the active frame's tokens over it on `:root`. A frame re-skins the chassis; it cannot change the layout or break the two rules below.
 
 ## 2. The two rules every frame keeps
 

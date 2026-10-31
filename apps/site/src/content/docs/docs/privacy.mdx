@@ -1,0 +1,20 @@
+---
+title: Privacy
+description: Vellum is strictly local. What lives where, and how to check it.
+---
+
+Vellum is a set of static files served from vellumhud.com. Once they're loaded, everything happens on your computer. There are no accounts, no analytics in the app, no uploads and no relay between players.
+
+| What                | Where it lives                                                                 |
+| ------------------- | ------------------------------------------------------------------------------ |
+| Your character      | Your browser's local storage, and your share link (data in the address itself) |
+| Your frames         | Local storage on your machine; export to a file to share                       |
+| Library frames      | Bundled into the app                                                           |
+| Your camera         | Read on your machine for face tracking, never stored or sent                   |
+| Hotkeys and buttons | OBS on your machine; the Stream Deck plugin talks to OBS on localhost          |
+
+Each player's Vellum stands alone. Nothing syncs between players.
+
+## Check it yourself
+
+Open your browser's developer tools on the app and watch the **Network** tab while you play. After the first load, nothing is sent. The code is open source on [GitHub](https://github.com/alxjrvs/vellum).
