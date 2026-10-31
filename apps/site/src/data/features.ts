@@ -107,8 +107,8 @@ export const features: Feature[] = [
     id: 'streamdeck-plugin',
     title: 'Stream Deck plugin',
     blurb:
-      'Keys that show your live Hope and HP, and dials on Stream Deck +, talking to OBS on your own machine.',
-    status: 'later',
+      'Keys that show your live Hope, HP and conditions, and dials on Stream Deck +. It talks only to the HUD in OBS on your own machine.',
+    status: 'live',
     href: '/control/',
   },
   {

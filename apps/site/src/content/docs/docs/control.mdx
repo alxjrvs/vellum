@@ -28,4 +28,21 @@ A good starting layout is six keys: Hope up, Hope down, mark HP, mark Stress, sp
 
 ## Stream Deck plugin
 
-The Vellum Stream Deck plugin is planned. It will draw your live values on the keys and map Stream Deck + dials to stats. It will connect to OBS on your own computer through OBS's built-in WebSocket server; nothing will go over the internet.
+The Vellum plugin puts your live values on the keys: a Hope key shows 3/6 and its chits, a condition key lights up while the condition is on. On Stream Deck +, a dial turns a stat up and down and shows it on the touch strip.
+
+1. Download [`vellum.streamDeckPlugin`](/downloads/vellum.streamDeckPlugin) and double-click it. The Stream Deck app installs it.
+2. Find the **Vellum** category in the actions list and drag actions onto keys:
+   - **Stat**: pick Hope, HP, Stress, Armor or Fear, and whether a press adds 1, takes 1 away, or only shows the value. Put it on a dial for Stream Deck +.
+   - **Condition**: toggles Hidden, Restrained or Vulnerable.
+   - **Frame**: steps to the next or previous [frame](/docs/frames/).
+3. Keep Vellum open in OBS. The keys fill in within a second or two.
+
+A key shows a dash while no HUD is listening, and pressing it shows a warning. The player HUD and the GM screen can both be open: the keys show whichever values each one reports, so a GM's Fear key works alongside a player's Hope key on the same deck.
+
+### How it connects
+
+The plugin listens on your computer's loopback address, `127.0.0.1`, which nothing outside your machine can reach. The Vellum page inside OBS connects to it, tells it what the HUD shows, and receives key presses. The plugin only answers pages from vellumhud.com, so another website open in your browser can't drive it. There's no OBS WebSocket to turn on and no password.
+
+The page only tries to connect when it runs inside OBS. To try the keys in an ordinary browser tab, add `?deck=1` before the `#` in the address.
+
+The plugin isn't signed or listed on the Elgato Marketplace yet, so the Stream Deck app may ask you to confirm the install.

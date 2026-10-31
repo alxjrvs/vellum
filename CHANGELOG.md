@@ -34,6 +34,13 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Added
 
+- **Stream Deck plugin with live keys** (`apps/streamdeck`, published at
+  `vellumhud.com/downloads/vellum.streamDeckPlugin`). Stat, Condition and Frame
+  actions; keys draw the HUD's live values and Stream Deck + dials turn stats.
+  The plugin listens on `127.0.0.1:28196` and only answers vellumhud.com (or a
+  local dev server); the page connects only inside OBS or with `?deck=1`. The
+  app's CSP `connect-src` adds exactly that loopback socket.
+
 - **`validateFrame`** (`src/themes/frameRules.ts`) checks a frame's label size
   and contrast; the official Daggerheart frame is tested against it.
 

@@ -48,6 +48,10 @@ jobs:
       - name: Build marketing site
         run: bun run site:build
 
+      - name: Build Stream Deck plugin
+        # Published at /downloads/vellum.streamDeckPlugin.
+        run: bun run deck:build
+
       - name: Assemble site + app + pinned versions
         run: scripts/assemble-site.sh
 

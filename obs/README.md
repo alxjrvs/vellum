@@ -134,6 +134,15 @@ websocket, password or network involved.
 It only targets browser sources whose URL is on `vellumhud.com` (or a local
 dev server), so other browser sources never see the events.
 
+### Stream Deck plugin (live keys)
+
+For keys that show your current values, install the Vellum plugin instead:
+download `https://vellumhud.com/downloads/vellum.streamDeckPlugin` and
+double-click it. It adds **Stat**, **Condition** and **Frame** actions (Stat
+also works on Stream Deck + dials). The plugin listens on `127.0.0.1:28196`;
+the Vellum page inside OBS connects to it on its own, so there is nothing to
+configure in OBS. Source: `apps/streamdeck`.
+
 ## GM view
 
 For the GM's view, edit the `Vellum HUD` source (double-click → Properties)

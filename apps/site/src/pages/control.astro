@@ -42,7 +42,8 @@ import StatusChit from '../components/StatusChit.astro';
         <div class="card">
           <div class="card-top"><h3>Stream Deck</h3><StatusChit status="live" /></div>
           <p class="small">
-            Point Stream Deck's built-in Hotkey action at the Vellum hotkeys. No plugin needed.
+            Point Stream Deck's built-in Hotkey action at the Vellum hotkeys, or install the plugin
+          for keys that show your values.
           </p>
         </div>
       </div>
@@ -92,16 +93,22 @@ import StatusChit from '../components/StatusChit.astro';
   <section aria-labelledby="plugin-h">
     <div class="wrap split flip">
       <div class="stack">
-        <div class="status-line"><StatusChit status="later" /></div>
+        <div class="status-line"><StatusChit status="live" /></div>
         <h2 id="plugin-h">Keys that show your stats.</h2>
         <p class="lede">
-          The Vellum Stream Deck plugin will draw your live Hope and HP on the keys themselves, and
-          turn dials on Stream Deck + into stat knobs.
+          The Vellum Stream Deck plugin draws your live Hope, HP, Stress, Armor and Fear on the keys
+          themselves, lights condition keys while they're on, and turns dials on Stream Deck + into
+          stat knobs.
         </p>
         <p class="small">
-          It talks to OBS on your own computer through OBS's built-in WebSocket server. Nothing goes
-          through the internet.
+          It listens on your own computer for the Vellum HUD in OBS. No OBS WebSocket, no password,
+          and nothing goes through the internet.
         </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="/downloads/vellum.streamDeckPlugin" download
+            >Download the plugin</a
+          >
+        </div>
       </div>
       <div class="card lead">
         <h3>How the input path works</h3>
