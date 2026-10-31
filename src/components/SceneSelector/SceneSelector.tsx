@@ -1,6 +1,6 @@
 import './SceneSelector.css';
 import { useSystem } from '../../systems/useSystem';
-import { SCENES, sceneHash, type ViewMode } from '../../viewMode/useViewMode';
+import { SCENES, scenePath, type ViewMode } from '../../viewMode/useViewMode';
 
 const SCENE_COPY: Record<ViewMode, { readonly title: string; readonly blurb: string }> = {
   player: {
@@ -29,7 +29,7 @@ export function SceneSelector() {
       <ul className="scene-selector__roles">
         {SCENES.map((scene) => (
           <li key={scene} className="scene-selector__role-item">
-            <a className="scene-selector__role" href={sceneHash(scene)}>
+            <a className="scene-selector__role" href={scenePath(scene)}>
               <span className="scene-selector__role-title">{SCENE_COPY[scene].title}</span>
               <span className="scene-selector__role-blurb">{SCENE_COPY[scene].blurb}</span>
             </a>

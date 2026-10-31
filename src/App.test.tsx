@@ -31,7 +31,7 @@ afterEach(() => {
   window.history.replaceState({}, '', '/');
 });
 
-const PLAYER_URL = '/#/daggerheart/player';
+const PLAYER_URL = '/daggerheart/player/';
 
 describe('App', () => {
   it('shows the game + role selector on the bare route', () => {
@@ -40,9 +40,9 @@ describe('App', () => {
     expect(screen.getByLabelText('Choose a screen')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /player/i })).toHaveAttribute(
       'href',
-      '#/daggerheart/player'
+      '/daggerheart/player/'
     );
-    expect(screen.getByRole('link', { name: /gm/i })).toHaveAttribute('href', '#/daggerheart/gm');
+    expect(screen.getByRole('link', { name: /gm/i })).toHaveAttribute('href', '/daggerheart/gm/');
     // The bare route no longer assumes the player HUD.
     expect(screen.queryByRole('heading', { name: /character details/i })).toBeNull();
   });
@@ -81,7 +81,8 @@ describe('App', () => {
   });
 
   describe.each([
-    ['hash route #/daggerheart/gm', '/#/daggerheart/gm'],
+    ['path route /daggerheart/gm/', '/daggerheart/gm/'],
+    ['legacy hash #/daggerheart/gm', '/#/daggerheart/gm'],
     ['legacy ?mode=gm', '/?mode=gm'],
   ])('GM scene via %s', (_label, url) => {
     it('renders the GM HUD with only the Fear track and no player tracks', () => {
@@ -105,9 +106,9 @@ describe('App', () => {
     });
   });
 
-  it('renders the Player HUD for a hash-less ?c= share link', () => {
-    // Regression: share links generated before scene hashes existed carry no
-    // hash, and would otherwise land on the selector — unrecoverable in a
+  it('renders the Player HUD for a ?c= share link to the bare app', () => {
+    // Regression: share links generated before scene routes existed address
+    // no scene, and would otherwise land on the selector — unrecoverable in a
     // non-interactive OBS browser source.
     const character = makeCharacter({
       identity: { name: 'Wren', class: 'Ranger', ancestry: 'Human' },
@@ -118,12 +119,12 @@ describe('App', () => {
 
     expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
     expect(screen.queryByLabelText('Choose a screen')).toBeNull();
-    expect(window.location.hash).toBe('#/daggerheart/player');
+    expect(window.location.pathname).toBe('/daggerheart/player/');
   });
 
   describe('GM scene setup → launch', () => {
     it('opens on the GM how-to rather than the live screen', () => {
-      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      window.history.replaceState({}, '', '/daggerheart/gm/');
 
       renderApp();
 
@@ -132,7 +133,7 @@ describe('App', () => {
     });
 
     it('launches to the live screen and persists the launch', () => {
-      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      window.history.replaceState({}, '', '/daggerheart/gm/');
       renderApp();
 
       fireEvent.click(screen.getByRole('button', { name: /launch gm screen/i }));
@@ -144,7 +145,7 @@ describe('App', () => {
 
     it('returns to setup via the Setup button without un-launching', () => {
       localStorage.setItem(launchStorageKey('gm'), 'true');
-      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      window.history.replaceState({}, '', '/daggerheart/gm/');
       renderApp();
 
       fireEvent.click(screen.getByRole('button', { name: /^setup$/i }));
@@ -155,7 +156,7 @@ describe('App', () => {
 
     it('does not leak the launch across scenes on a fresh mount', () => {
       localStorage.setItem(launchStorageKey('gm'), 'true');
-      window.history.replaceState({}, '', '/#/daggerheart/player');
+      window.history.replaceState({}, '', '/daggerheart/player/');
 
       renderApp();
 
@@ -169,13 +170,13 @@ describe('App', () => {
       // would carry its launch into GM — skipping the how-to for a URL that
       // shows it again on the next reload.
       localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
-      window.history.replaceState({}, '', '/#/daggerheart/player');
+      window.history.replaceState({}, '', '/daggerheart/player/');
       renderApp();
       expect(screen.getByLabelText('Character identity')).toBeInTheDocument();
 
       act(() => {
-        window.history.replaceState({}, '', '/#/daggerheart/gm');
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        window.history.replaceState({}, '', '/daggerheart/gm/');
+        window.dispatchEvent(new PopStateEvent('popstate'));
       });
 
       expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
@@ -185,15 +186,15 @@ describe('App', () => {
     it('does not leak the editing state back to a launched player scene', () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
       localStorage.setItem(launchStorageKey('gm'), 'true');
-      window.history.replaceState({}, '', '/#/daggerheart/gm');
+      window.history.replaceState({}, '', '/daggerheart/gm/');
       renderApp();
 
       fireEvent.click(screen.getByRole('button', { name: /^setup$/i }));
       expect(screen.getByLabelText('GM screen setup')).toBeInTheDocument();
 
       act(() => {
-        window.history.replaceState({}, '', '/#/daggerheart/player');
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
+        window.history.replaceState({}, '', '/daggerheart/player/');
+        window.dispatchEvent(new PopStateEvent('popstate'));
       });
 
       // The player scene is launched and has a character — editing must not bleed.
@@ -206,7 +207,7 @@ describe('App', () => {
     // Regression: the GM scene used to short-circuit to a blank page because
     // Fear was stored inside the character record a GM never creates.
     localStorage.setItem(launchStorageKey('gm'), 'true');
-    window.history.replaceState({}, '', '/#/daggerheart/gm');
+    window.history.replaceState({}, '', '/daggerheart/gm/');
 
     renderApp();
 
@@ -216,9 +217,9 @@ describe('App', () => {
     expect(screen.queryByRole('heading', { name: /character details/i })).toBeNull();
   });
 
-  it('renders the Player HUD for the hash route #/daggerheart/player', () => {
+  it('renders the Player HUD for the path route /daggerheart/player/', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(makeCharacter()));
-    window.history.replaceState({}, '', '/#/daggerheart/player');
+    window.history.replaceState({}, '', '/daggerheart/player/');
 
     renderApp();
 

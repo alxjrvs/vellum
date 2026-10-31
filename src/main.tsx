@@ -21,10 +21,13 @@ import { applyOriginHandoff } from './migrate/originHandoff';
 import { listenForExternalCommands } from './commands/commandBus';
 import { shouldLinkDeck, startDeckLink } from './deck/deckLink';
 import { listenForObsScript } from './obsScript/obsScriptPresence';
+import { migrateLegacyRoute } from './viewMode/useViewMode';
 
 // Before anything reads localStorage: import data carried over from the old
 // github.io origin, if this load came through its redirect stub.
 applyOriginHandoff();
+// Old `#/daggerheart/gm` and `?mode=gm` links move to their scene path.
+migrateLegacyRoute();
 // OBS hotkeys and Stream Deck keys reach the HUD as `vellum:command` events.
 listenForExternalCommands();
 // Inside OBS, keep a line open to the Stream Deck plugin on this machine, if

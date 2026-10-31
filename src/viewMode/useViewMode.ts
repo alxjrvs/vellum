@@ -1,37 +1,51 @@
 import { useSyncExternalStore } from 'react';
 
-export type ViewMode = 'player' | 'gm';
+import { SCENES, SYSTEM_ID, type ViewMode } from './routes';
 
-/**
- * The system id this build is mounted with. Scene URLs are namespaced by it so
- * the address generalizes to other systems later: `#/daggerheart/gm`.
- */
-export const SYSTEM_ID = 'daggerheart';
-
-/** The scenes Daggerheart ships. `player` is the default when nothing is addressed. */
-export const SCENES: readonly ViewMode[] = ['player', 'gm'];
+export { SCENES, SYSTEM_ID, type ViewMode };
 
 function isScene(value: string): value is ViewMode {
   return (SCENES as readonly string[]).includes(value);
 }
 
+// `/daggerheart/gm`, `/daggerheart/gm/` or `/daggerheart/gm/index.html` (file://).
+const SCENE_SUFFIX = new RegExp(`${SYSTEM_ID}/([^/]+)(?:/(?:index\\.html)?)?$`);
+
 /**
- * Canonical hash for a scene: `#/daggerheart/player`. Hash routing (not a path
- * route) is deliberate — it keeps `base: './'` intact so the same build runs on
- * GitHub Pages under `/vellum/app/`, from `file://`, and as an OBS browser
- * source with no server rewrites. See docs/architecture.md §8.3.
+ * The directory the app is mounted at, with a trailing slash: `/app/`,
+ * `/app/v0.3.0/`, or `/` in dev. Scene paths hang off it, so the same build
+ * works wherever it is deployed. The build writes a copy of index.html into
+ * each scene directory so a scene path loads without server rewrites.
  */
-export function sceneHash(scene: ViewMode): string {
-  return `#/${SYSTEM_ID}/${scene}`;
+export function appRoot(pathname: string = window.location.pathname): string {
+  const root = pathname.replace(SCENE_SUFFIX, '');
+  return root.endsWith('/') ? root : root.replace(/[^/]*$/, '');
+}
+
+/** Canonical path for a scene: `/app/daggerheart/player/`. */
+export function scenePath(scene: ViewMode, pathname?: string): string {
+  // file:// has no directory index, so name the file there.
+  const file = window.location.protocol === 'file:' ? 'index.html' : '';
+  return `${appRoot(pathname)}${SYSTEM_ID}/${scene}/${file}`;
+}
+
+/** Absolute URL for a scene, with an optional query string (no leading `?`). */
+export function sceneUrl(scene: ViewMode, query = ''): string {
+  return `${window.location.origin}${scenePath(scene)}${query ? `?${query}` : ''}`;
+}
+
+function sceneFromPath(pathname: string): ViewMode | null {
+  const match = pathname.match(SCENE_SUFFIX);
+  return match?.[1] !== undefined && isScene(match[1]) ? match[1] : null;
 }
 
 /**
- * Parse a scene out of a location hash. Accepts the canonical
- * `#/daggerheart/gm` and the bare `#/gm`; anything else yields null so the
- * caller can fall back. The last path segment wins.
+ * Parse a scene out of an old `#/daggerheart/gm` or `#/gm` hash. Only used to
+ * redirect links made before path routing.
  */
-function sceneFromHash(hash: string): ViewMode | null {
-  const segments = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+function sceneFromLegacyHash(hash: string): ViewMode | null {
+  if (!hash.startsWith('#/')) return null;
+  const segments = hash.slice(2).split('/').filter(Boolean);
   const last = segments[segments.length - 1];
   return last !== undefined && isScene(last) ? last : null;
 }
@@ -43,29 +57,47 @@ function sceneFromLegacyQuery(search: string): ViewMode | null {
 }
 
 /**
- * The active scene, or `null` when the URL addresses none — the bare `/app/`
- * route and any unrecognized scene segment. `null` is a real state, not a
- * fallback: it renders the game + role selector so the app is navigable
- * without hand-typing a hash.
+ * Rewrite a pre-path-routing URL (`/app/#/daggerheart/gm`, `/app/?mode=gm`)
+ * to its scene path in place, keeping the rest of the query. OBS sources made
+ * before the switch keep working. Returns true when it rewrote the URL.
  */
-function currentScene(): ViewMode | null {
-  if (typeof window === 'undefined') return null;
-  return sceneFromHash(window.location.hash) ?? sceneFromLegacyQuery(window.location.search);
-}
-
-function subscribe(onChange: () => void): () => void {
-  window.addEventListener('hashchange', onChange);
-  window.addEventListener('popstate', onChange);
-  return () => {
-    window.removeEventListener('hashchange', onChange);
-    window.removeEventListener('popstate', onChange);
-  };
+export function migrateLegacyRoute(): boolean {
+  const { pathname, search, hash } = window.location;
+  if (sceneFromPath(pathname)) return false;
+  const scene = sceneFromLegacyHash(hash) ?? sceneFromLegacyQuery(search);
+  if (!scene) return false;
+  const params = new URLSearchParams(search);
+  params.delete('mode');
+  const query = params.toString();
+  const keepHash = sceneFromLegacyHash(hash) ? '' : hash;
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `${scenePath(scene, pathname)}${query ? `?${query}` : ''}${keepHash}`
+  );
+  return true;
 }
 
 /**
- * Resolve the active scene from the URL, re-rendering when it changes. Scene
- * precedence: canonical hash → legacy `?mode=` query → `null` (the selector).
+ * The active scene, or `null` when the URL addresses none — the bare `/app/`
+ * route. `null` is a real state, not a fallback: it renders the game + role
+ * selector so the app is navigable without hand-typing a path.
  */
+function currentScene(): ViewMode | null {
+  if (typeof window === 'undefined') return null;
+  return (
+    sceneFromPath(window.location.pathname) ??
+    sceneFromLegacyHash(window.location.hash) ??
+    sceneFromLegacyQuery(window.location.search)
+  );
+}
+
+function subscribe(onChange: () => void): () => void {
+  window.addEventListener('popstate', onChange);
+  return () => window.removeEventListener('popstate', onChange);
+}
+
+/** Resolve the active scene from the URL path, re-rendering on navigation. */
 export function useViewMode(): ViewMode | null {
   return useSyncExternalStore(subscribe, currentScene, () => null);
 }

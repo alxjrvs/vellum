@@ -19,6 +19,10 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Changed
 
+- Scenes are plain paths now: `/app/daggerheart/player/` and
+  `/app/daggerheart/gm/`, with no `#` in the URL. Share links and screen links
+  use the new form. Old `#/daggerheart/…` and `?mode=` links still work; they
+  move to the new path when they load, so existing OBS sources need no change.
 - **Setup fits on one screen.** The player and GM setup screens lay out in
   columns with a smaller type scale (they're read in a browser tab, not on a
   camera tile), the setup panel and GM how-to are four short steps built

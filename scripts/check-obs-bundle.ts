@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { SCENES, SYSTEM_ID } from '../src/viewMode/routes';
 
 const distDir = join(process.cwd(), 'dist');
 const indexPath = join(distDir, 'index.html');
@@ -25,6 +26,25 @@ const referencedAssets = [...html.matchAll(/(?:src|href)="\.\/(assets\/[^"]+)"/g
 for (const asset of referencedAssets) {
   if (!existsSync(join(distDir, asset))) {
     failures.push(`Referenced asset missing from dist: ${asset}`);
+  }
+}
+
+// Each scene path gets its own index.html (no server rewrites), and its
+// relative URLs must still land on the shared assets two directories up.
+for (const scene of SCENES) {
+  const page = join(distDir, SYSTEM_ID, scene, 'index.html');
+  if (!existsSync(page)) {
+    failures.push(`Scene page missing from dist: ${SYSTEM_ID}/${scene}/index.html`);
+    continue;
+  }
+  const refs = [...readFileSync(page, 'utf8').matchAll(/(?:src|href)="(\.[^"]+)"/g)].map(
+    (m) => m[1]
+  );
+  if (refs.length === 0) failures.push(`${SYSTEM_ID}/${scene}/index.html references no assets.`);
+  for (const ref of refs) {
+    if (!existsSync(join(dirname(page), ref))) {
+      failures.push(`${SYSTEM_ID}/${scene}/index.html references a missing asset: ${ref}`);
+    }
   }
 }
 

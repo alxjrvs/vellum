@@ -2,7 +2,7 @@ import './GmSetup.css';
 import { useState } from 'react';
 import { useSystem } from '../../systems/useSystem';
 import { useSourceQuery } from '../../sourceLink/useSourceQuery';
-import { sceneHash } from '../../viewMode/useViewMode';
+import { sceneUrl } from '../../viewMode/useViewMode';
 import { OBS_SCRIPT_URL } from '../SetupWizard/obs';
 
 interface GmSetupProps {
@@ -21,7 +21,7 @@ export function GmSetup({ onLaunch }: GmSetupProps) {
   const [copied, setCopied] = useState(false);
 
   const copyScreenLink = () => {
-    const url = `${window.location.origin}${window.location.pathname}${sourceQuery ? `?${sourceQuery}` : ''}${sceneHash('gm')}`;
+    const url = sceneUrl('gm', sourceQuery);
     void navigator.clipboard.writeText(url).then(
       () => setCopied(true),
       () => setCopied(false)
