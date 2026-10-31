@@ -129,7 +129,8 @@ button {
  * Setup screens are Vellum's own UI, in the chassis colors (.vellum-chassis),
  * on the Night ground, and fit the stage with no scrolling: the setup bar
  * across the top, then the setup form (or GM how-to) on the left, the frames,
- * checks and camera stacked in the middle, and the setup panel on the right.
+ * checks and camera stacked in the middle, and the worn frame on the right;
+ * setup instructions open in a modal from the setup bar.
  * They are read in a browser tab, never on a camera tile, so they use a
  * smaller type and spacing scale than the HUD's on-camera minimums.
  */
@@ -182,13 +183,9 @@ button {
   max-width: none;
 }
 
-.setup-shell > .setup-wizard {
+.setup-shell > .frame-info {
   grid-column: 3;
   grid-row: 2 / span 4;
-  position: static;
-  transform: none;
-  width: auto;
-  max-height: none;
 }
 
 /*

@@ -37,3 +37,9 @@
   background: var(--color-plate-raised);
   color: var(--color-label);
 }
+
+.setup-bar__actions {
+  margin-left: auto;
+  display: flex;
+  gap: var(--spacing-sm);
+}

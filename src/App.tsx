@@ -12,6 +12,7 @@ import { HudRegion } from './components/HudRegion';
 import { CameraSetup } from './components/CameraSetup';
 import { SetupChecks } from './components/SetupChecks';
 import { SetupBar } from './components/SetupBar';
+import { FrameInfo } from './components/FrameInfo';
 import { SceneShell } from './scenes/SceneShell';
 import { useFrame } from './frames/useFrame';
 import { FrameDeckReport, PlayerDeckReport } from './deck/DeckReport';
@@ -46,6 +47,7 @@ export function App() {
             <FramePicker />
             <SetupChecks />
             <CameraSetup />
+            <FrameInfo />
           </main>
         )}
         renderLive={({ edit }) => (
@@ -78,12 +80,14 @@ export function App() {
       defaultLaunched={character !== null}
       renderSetup={({ launch }) => (
         <main className="setup-shell vellum-chassis">
-          <SetupBar title="Setup" />
+          <SetupBar title="Setup">
+            <SetupWizard variant="modal" />
+          </SetupBar>
           <CharacterSetup onDone={launch} />
           <FramePicker />
           <SetupChecks />
           <CameraSetup />
-          <SetupWizard />
+          <FrameInfo />
         </main>
       )}
       renderLive={({ edit }) => (

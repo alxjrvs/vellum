@@ -1,5 +1,5 @@
 import './SetupWizard.css';
-import { useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
 import { useSourceLink } from '../../sourceLink/useSourceLink';
@@ -13,10 +13,14 @@ import { readOnboardedFromStorage, writeOnboardedToStorage } from './storage';
  * while the OBS browser source gets only what the OBS script can't do plus a
  * self-test. Confirming or dismissing persists `vellum:onboarded` so it stays
  * closed on reload; a small "Setup help" affordance always reopens it.
+ *
+ * On the setup screen it is a `modal` instead: a "Setup instructions" button
+ * that opens the same steps over the page, leaving the screen to the frame.
  */
-export function SetupWizard() {
+export function SetupWizard({ variant = 'panel' }: { variant?: 'panel' | 'modal' }) {
   const { character } = useCharacter();
-  const [open, setOpen] = useState(() => !readOnboardedFromStorage());
+  const modal = variant === 'modal';
+  const [open, setOpen] = useState(() => !modal && !readOnboardedFromStorage());
   const [copied, setCopied] = useState(false);
   const insideObs = isInsideObs();
 
@@ -42,15 +46,24 @@ export function SetupWizard() {
   };
 
   if (!open) {
-    return (
+    return modal ? (
+      <button type="button" className="setup-button" onClick={() => setOpen(true)}>
+        Setup instructions
+      </button>
+    ) : (
       <button type="button" className="setup-help" onClick={() => setOpen(true)}>
         Setup help
       </button>
     );
   }
 
-  return (
-    <aside className="setup-wizard" role="dialog" aria-label="Vellum setup">
+  const panel = (
+    <aside
+      className={modal ? 'setup-wizard setup-wizard--modal' : 'setup-wizard'}
+      role="dialog"
+      aria-label="Vellum setup"
+      aria-modal={modal || undefined}
+    >
       <div className="setup-wizard__head">
         <h2 className="setup-wizard__title">Set up Vellum</h2>
         <button
@@ -134,5 +147,33 @@ export function SetupWizard() {
 
       <p className="setup-wizard__trust">Runs in your browser. Nothing is uploaded.</p>
     </aside>
+  );
+
+  return modal ? <Backdrop onClose={dismiss}>{panel}</Backdrop> : panel;
+}
+
+/**
+ * Dims the setup screen behind the modal. Escape or a click outside closes it,
+ * and focus moves into it on open. It is fixed to the stage (its transformed
+ * containing block), so it scales with the rest of the screen.
+ */
+function Backdrop({ onClose, children }: { onClose: () => void; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    ref.current?.querySelector<HTMLElement>('button')?.focus();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className="setup-modal"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      {children}
+    </div>
   );
 }
