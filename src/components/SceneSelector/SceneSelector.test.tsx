@@ -23,9 +23,9 @@ describe('SceneSelector', () => {
 
     expect(screen.getByRole('link', { name: /player/i })).toHaveAttribute(
       'href',
-      '#/daggerheart/player'
+      '/daggerheart/player/'
     );
-    expect(screen.getByRole('link', { name: /gm/i })).toHaveAttribute('href', '#/daggerheart/gm');
+    expect(screen.getByRole('link', { name: /gm/i })).toHaveAttribute('href', '/daggerheart/gm/');
   });
 
   it('offers exactly one link per shipped scene', () => {

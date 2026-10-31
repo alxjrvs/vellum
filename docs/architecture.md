@@ -276,7 +276,7 @@ All channels are local. There are no network sockets, no WebSocket connections, 
 **Purpose:** Implement the distinct GM rendering mode — Fear pip track only, minimal frame, no player stats. The GM uses this to track their Fear pool on camera.
 
 **Responsibilities:**
-- GM rendering mode activated by URL hash route `#/daggerheart/gm` (legacy `?mode=gm` query still resolves); no player-stat elements in DOM in GM mode
+- GM rendering mode activated by URL path `/app/daggerheart/gm/` (legacy `?mode=gm` query still resolves); no player-stat elements in DOM in GM mode
 - Fear pip track: 12-pip (max per SRD), +1/−1 manipulation, one click/keypress, max 12 enforced, updates within one frame
 - GM minimal frame: visual frame using Daggerheart theme; legible at Discord call resolution
 - CharacterContext handles GM mode state correctly (Fear value + optional identity; no player stat fields required)
@@ -488,7 +488,7 @@ Panel open/close state is local `useState` — not persisted to localStorage (co
 
 ### Scenario: GM loads GM view and tracks Fear (US-9, AC-3, REQ-016, REQ-017)
 
-1. GM opens the Vellum URL with the `#/daggerheart/gm` hash route (or a legacy `?mode=gm` query).
+1. GM opens the Vellum URL with the `/app/daggerheart/gm/` path (or a legacy `?mode=gm` query).
 2. The app reads the mode flag; `CharacterContext` determines the active view is GM mode.
 3. The HUD renders only the Fear `StatTrack` (max 12) and the minimal GM frame. No player-stat elements are mounted.
 4. The GM character JSON (Fear initial value + optional identity) is imported or starts from defaults.
@@ -565,7 +565,7 @@ Setup is performed once per machine. OBS scene settings persist; the player reop
 - **Data-driven rendering:** System config and theme config are TypeScript data files loaded at app initialization. No stat-specific values are hardcoded in component source. The generic `StatTrack` component family renders any pip/slot track from config inputs — this is the primary extensibility mechanism for future TTRPG system frames.
 - **Reducer pattern for character state:** `useReducer` with explicit action types (`HOPE_INCREMENT`, `HP_MARK_SLOT`, `CONDITION_TOGGLE`, etc.) provides a clear audit trail of state transitions and a single synchronization point for localStorage writes.
 - **Context provider at root:** A single `CharacterContext` provider makes all stat values and dispatch available throughout the component tree without prop drilling through the stat-track component family.
-- **View-mode routing via URL hash:** GM vs. Player scene is determined by a hash route — `#/daggerheart/gm` vs. `#/daggerheart/player`. Hash routing (not a path route) keeps `base: './'` intact so the same build works on the Pages subpath, from `file://`, and in OBS with no server rewrites. No routing library required — `useViewMode` reads the hash (subscribed via `useSyncExternalStore`) and a single conditional at the root renders the scene. A URL that addresses **no** scene (the bare route, or an unrecognized segment) resolves to `null` and renders the **scene selector** — a game + role picker — rather than defaulting to the Player HUD, so every scene is reachable by navigation. Legacy `?mode=gm` query URLs still resolve for back-compat.
+- **View-mode routing via URL path:** GM vs. Player scene is determined by a path under the app root — `/app/daggerheart/gm/` vs. `/app/daggerheart/player/` (the user ruled out `#` routes, 2026-10-31). The build keeps `base: './'` and writes a copy of `index.html` into each scene directory with its asset URLs pointed two levels up, so pinned builds (`/app/vX.Y.Z/daggerheart/gm/`) and `file://` work with no server rewrites; `obs:check` verifies those pages. Old `#/daggerheart/gm` links are rewritten to the path in place at startup. No routing library required — `useViewMode` reads the path (subscribed via `useSyncExternalStore`) and a single conditional at the root renders the scene. A URL that addresses **no** scene (the bare route, or an unrecognized segment) resolves to `null` and renders the **scene selector** — a game + role picker — rather than defaulting to the Player HUD, so every scene is reachable by navigation. Legacy `?mode=gm` query URLs still resolve for back-compat.
 - **Setup → launch is the scene lifecycle, uniformly:** every scene renders a **setup** view until it is **launched**, then the **live** view, with an *edit* path back to setup. `SceneShell` (`src/scenes/SceneShell.tsx`) owns that lifecycle; a scene supplies only its two views plus a readiness rule, so adding a scene does not re-implement the flow. Two rules make it safe in practice:
   - **Launch is persisted per scene** (`vellum:launched:<scene>`), so a reload never re-gates a live screen. `null` (never recorded) is distinct from `false`, letting each scene pick a default — the Player scene treats an existing character as already-launched so upgrading users skip setup, while the GM scene defaults to showing its how-to first.
   - **The OBS browser source skips the launch gate.** That source is non-interactive by default, so gating the HUD behind a click there would burn a setup page into a live camera with no way to dismiss it. Only the *launch* gate is skipped, though: an explicit **edit** still opens setup inside OBS, since a click on the source is exactly the case where the operator wants it, and every setup view carries its own way back to live. Readiness is still enforced, so a scene that genuinely cannot render (a player with no character) stays on setup even inside OBS.
@@ -1047,7 +1047,7 @@ Technical and architectural terms introduced during the architecture phase. Busi
 | **CSS custom properties (tokens)** | CSS variables injected at the `:root` element from the theme config. All component stylesheets reference `var(--token-name)` for colors, fonts, and spacing — never hardcoded values. |
 | **`file://` mode** | OBS browser source loading mode where the URL points to a local `dist/index.html` file rather than a localhost dev server. Requires Vite `base: './'` to produce relative asset paths. |
 | **`localhost:5173`** | Default Vite dev server URL used as the OBS browser source URL during development. |
-| **View mode** | The URL hash route (`#/daggerheart/gm` / `#/daggerheart/player`) that determines whether the HUD renders the Player stat layout or the GM layout. A URL addressing no scene renders the scene selector instead. Legacy `?mode=gm` query URLs still resolve. |
+| **View mode** | The URL path (`/app/daggerheart/gm/` / `/app/daggerheart/player/`) that determines whether the HUD renders the Player stat layout or the GM layout. A URL addressing no scene renders the scene selector instead. Legacy `?mode=gm` query URLs still resolve. |
 | **Gate** | Self-imposed acceptance checkpoint before advancing to the next milestone. Three gates: Foundation Accepted (Gate 1), Feature-Complete Accepted (Gate 2), Session Shipped (Gate 3). |
 | **Person-week (pw)** | Unit of effort used in estimation: approximately 20 focused hours. At an evenings-and-weekends pace, 1 pw translates to roughly 1.5–2 calendar weeks depending on schedule density. |
 | **AI leverage (Heavy / Moderate / Minimal)** | Rating of how much AI-agent assistance applies to a deliverable group. Heavy: 60–80% faster than traditional development. Moderate: 30–50% faster. Minimal: 0–20% faster (human-gated work). |
@@ -1574,7 +1574,7 @@ Then no empty placeholders or blank fields appear; the label shows only Name —
 **Acceptance Criteria:**
 
 ```gherkin
-Given the Vellum URL is loaded with the `#/daggerheart/gm` hash route (or legacy `?mode=gm`)
+Given the Vellum URL is loaded with the `/app/daggerheart/gm/` path (or legacy `?mode=gm`)
 When the HUD renders
 Then only the Fear pip track (max 12) and a minimal frame are shown; no player stat tracks (Hope, HP, Stress, Armor) are in the DOM
 
@@ -1597,7 +1597,7 @@ Then the new Fear value is written to localStorage synchronously
 
 **REQ-IDs:** REQ-015 (Fear pip display), REQ-016 (Fear manipulation), REQ-017 (GM view mode), REQ-024 (in-session manipulation), REQ-025 (one-click cost)
 
-**Notes:** the `#/daggerheart/gm` hash route (legacy `?mode=gm` still resolves) activates GM rendering mode. `useViewMode` reads the scene from the URL hash; no player-stat elements mounted. Fear max = 12 from Daggerheart system config. Fear is **GM state, not character state**: it persists under its own `vellum:fear` key via `useFear`, so the GM scene renders with no character configured. StatTrack Fear instance.
+**Notes:** the `/app/daggerheart/gm/` path (legacy `?mode=gm` still resolves) activates GM rendering mode. `useViewMode` reads the scene from the URL path; no player-stat elements mounted. Fear max = 12 from Daggerheart system config. Fear is **GM state, not character state**: it persists under its own `vellum:fear` key via `useFear`, so the GM scene renders with no character configured. StatTrack Fear instance.
 
 ---
 

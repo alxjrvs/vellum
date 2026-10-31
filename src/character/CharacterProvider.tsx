@@ -3,7 +3,7 @@ import { CharacterContext } from './CharacterContext';
 import { characterReducer } from './reducer';
 import { decodeShareParam } from './shareCode';
 import { readCharacterFromStorage, writeCharacterToStorage } from './storage';
-import { sceneHash } from '../viewMode/useViewMode';
+import { appRoot, scenePath } from '../viewMode/useViewMode';
 import { subscribeCommands } from '../commands/commandBus';
 import { SystemContext } from '../systems/SystemContext';
 import type { CharacterState } from './types';
@@ -32,8 +32,10 @@ function readInitialCharacter(): CharacterState | null {
       if (result.ok) {
         params.delete(SHARE_PARAM);
         const query = params.toString();
-        const hash = window.location.hash || sceneHash('player');
-        const url = `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
+        const { pathname, hash } = window.location;
+        // A share link to the bare app opens the player scene.
+        const path = pathname === appRoot(pathname) ? scenePath('player', pathname) : pathname;
+        const url = `${path}${query ? `?${query}` : ''}${hash}`;
         window.history.replaceState(window.history.state, '', url);
         return result.character;
       }

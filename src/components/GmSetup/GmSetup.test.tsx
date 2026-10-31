@@ -52,7 +52,7 @@ describe('GmSetup', () => {
     fireEvent.click(screen.getByRole('button', { name: /copy gm screen link/i }));
 
     expect(writeText).toHaveBeenCalledOnce();
-    expect(writeText.mock.calls[0][0]).toContain('#/daggerheart/gm');
+    expect(writeText.mock.calls[0][0]).toContain('/daggerheart/gm/');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /link copied/i })).toBeInTheDocument()
     );

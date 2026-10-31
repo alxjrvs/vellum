@@ -10,6 +10,7 @@ import {
   type FromWorker,
   type ToWorker,
 } from '@vellum/tracking';
+import { appRoot } from '../viewMode/useViewMode';
 
 export type TrackingStatus = 'off' | 'loading' | 'tracking' | 'error';
 
@@ -71,7 +72,9 @@ export function useFaceAnchors(
     };
     worker.onerror = () => setTracking({ status: 'error', anchors: null });
 
-    const base = new URL(`${MEDIAPIPE_DIR}/`, document.baseURI);
+    // Resolve against the app root, not the page: scene pages sit two
+    // directories below it.
+    const base = new URL(`${MEDIAPIPE_DIR}/`, new URL(appRoot(), window.location.origin));
     send({
       type: 'init',
       wasmBase: base.href.replace(/\/$/, ''),

@@ -72,7 +72,7 @@ describe('FrameProvider', () => {
 
   it('lets ?frame= in the URL win over the stored choice', () => {
     localStorage.setItem(FRAME_STORAGE_KEY, 'daggerheart');
-    window.history.replaceState({}, '', '/?frame=daggerheart-ledger#/daggerheart/player');
+    window.history.replaceState({}, '', '/daggerheart/player/?frame=daggerheart-ledger');
     renderFrames();
     expect(active()).toBe('daggerheart-ledger');
   });

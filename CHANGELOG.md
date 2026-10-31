@@ -17,6 +17,13 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ## [Unreleased]
 
+### Changed
+
+- Scenes are plain paths now: `/app/daggerheart/player/` and
+  `/app/daggerheart/gm/`, with no `#` in the URL. Share links and screen links
+  use the new form. Old `#/daggerheart/…` and `?mode=` links still work; they
+  move to the new path when they load, so existing OBS sources need no change.
+
 ## [0.3.0] — The expansion
 
 Vellum moves to vellumhud.com on Cloudflare and grows frames, a frame creator,

@@ -68,7 +68,7 @@ Demiplane for stat tracking.
 ### GM only — the Fear view
 
 The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
-browser source at `https://vellumhud.com/app/#/daggerheart/gm` (or
+browser source at `https://vellumhud.com/app/daggerheart/gm/` (or
 keep a second scene collection whose source uses that URL). You can also just
 open the bare `/app/` URL and pick **GM** from the screen picker.
 
@@ -86,7 +86,7 @@ fresh machine or a fresh browser profile.
 
 (Older `?mode=gm` links still work. A source pointed at the bare `/app/` URL
 now lands on the picker rather than the player HUD — set it to
-`#/daggerheart/player` to skip the picker.)
+`/app/daggerheart/player/` to skip the picker.)
 
 ---
 
@@ -101,7 +101,7 @@ now lands on the picker rather than the player HUD — set it to
   reload restores every value within ~1 second. You do **not** need to
   re-enter your details after a reload; click **Edit details** only if a max
   value was wrong.
-- **GM:** adjust the Fear track the same way in the `#/daggerheart/gm` view.
+- **GM:** adjust the Fear track the same way in the `/app/daggerheart/gm/` view.
 
 ### Rolling — the Duality Dice panel
 
@@ -128,8 +128,8 @@ Vellum reports the dice, it doesn't auto-adjust your Hope/Fear tracks.
 
 | Symptom                           | Fix                                                                                                                                                                                                                                                                               |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `…/app/#/daggerheart/player` (or your share link).                                                                                                                                           |
-| OBS shows the screen picker       | The source is on the bare `…/app/` URL. Edit its Properties and append `#/daggerheart/player` (or `#/daggerheart/gm`).                                                                                                                                                            |
+| HUD is blank in OBS               | Right-click browser source → **Refresh**. If still blank, re-check the URL points at `…/app/daggerheart/player` (or your share link).                                                                                                                                             |
+| OBS shows the screen picker       | The source is on the bare `…/app/` URL. Edit its Properties and add `daggerheart/player/` (or `daggerheart/gm/`) to the end.                                                                                                                                                      |
 | HUD looks cut off or off-centre   | The HUD auto-fits whatever size the browser source is, so this means the source is stale — right-click it → **Refresh**. For a pixel-exact 1:1 render set its **Width 1920 / Height 1080**; other sizes scale to fit, and a non-16:9 source letterboxes with transparent margins. |
 | Stats look wrong after a reload   | They restore from localStorage automatically. If they don't, re-open your share link, or click **Edit details** and re-enter your maxes (you'll re-mark current state).                                                                                                           |
 | Character didn't load in OBS      | OBS's browser source has its own isolated storage — set it up via the **share link** URL, not by configuring a separate tab. See `docs/QUICKSTART.md` step 3.                                                                                                                     |
@@ -148,8 +148,8 @@ budget and what counts as a real fallback.
 | Where            | URL                                                    |
 | ---------------- | ------------------------------------------------------ |
 | Screen picker    | `https://vellumhud.com/app/`                           |
-| Player HUD       | `https://vellumhud.com/app/#/daggerheart/player`       |
-| GM / Fear view   | `https://vellumhud.com/app/#/daggerheart/gm`           |
+| Player HUD       | `https://vellumhud.com/app/daggerheart/player`         |
+| GM / Fear view   | `https://vellumhud.com/app/daggerheart/gm`             |
 | Marketing / docs | `https://vellumhud.com/`                               |
 | Your character   | your **share link** (Copy share link → paste into OBS) |
 
