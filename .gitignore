@@ -33,3 +33,5 @@ coverage/
 # Local scratch — per-machine, not for the remote
 .gnar-term/
 ideate/
+_pages/
+.wrangler/
