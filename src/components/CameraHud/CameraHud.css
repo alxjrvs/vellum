@@ -23,6 +23,7 @@
   top: calc(var(--anchor-crown-y) * 100%);
   left: calc(var(--anchor-crown-x) * 100%);
   right: auto;
+  bottom: auto;
   transform: translate(-50%, -100%);
 }
 
@@ -30,5 +31,6 @@
   top: calc(var(--anchor-chin-y) * 100%);
   bottom: auto;
   left: calc(var(--anchor-chin-x) * 100%);
+  right: auto;
   transform: translateX(-50%);
 }

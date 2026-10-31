@@ -1,0 +1,30 @@
+.frame-preview {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.frame-preview__tile {
+  position: relative;
+  width: 640px;
+  height: 360px;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-night);
+  pointer-events: none;
+}
+
+.frame-preview__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  transform: scale(calc(1 / 3));
+  transform-origin: top left;
+}
+
+.frame-preview__caption {
+  color: var(--color-label);
+}

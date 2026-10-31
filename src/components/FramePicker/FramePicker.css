@@ -60,3 +60,48 @@
 .frame-picker__meta {
   color: var(--color-label);
 }
+
+.frame-picker__shelf {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.frame-picker__shelf-title {
+  margin: 0;
+  color: var(--color-label);
+  font-size: var(--font-size-base);
+}
+
+.frame-picker__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.frame-picker__actions button,
+.frame-picker__import {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.frame-picker__import input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.frame-picker__import:focus-within {
+  outline: var(--border-width) solid var(--color-signal);
+}
+
+.frame-picker__error {
+  margin: 0;
+  color: var(--color-hit);
+}
