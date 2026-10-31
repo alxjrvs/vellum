@@ -1,0 +1,6 @@
+# Released versions the deploy keeps serving at /app/vX.Y.Z/, one per line:
+#   <version> <commit>
+# scripts/assemble-site.sh rebuilds each from its commit on every deploy (git
+# tags named vX.Y.Z work too). The version in package.json is always served
+# from the working tree, so add a line here when you bump past a release.
+v0.2.0 1d060798c6495c6c9003ba06bc74505190cb20da
