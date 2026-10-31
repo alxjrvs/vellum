@@ -86,7 +86,7 @@ export function FramePicker() {
                     onClick={() => setFrame(frame.id)}
                   >
                     <span className="frame-picker__thumb">
-                      <FramePreview frame={frame} />
+                      <FramePreview frame={frame} scale={1 / 8} />
                     </span>
                     <span className="frame-picker__plate">
                       <span className="frame-picker__name">{frame.label}</span>

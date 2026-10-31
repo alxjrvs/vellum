@@ -6,7 +6,6 @@
  */
 .frame-picker {
   --thumb-width: 240px;
-  --thumb-height: 135px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
@@ -69,19 +68,9 @@
   box-shadow: 0 0 0 var(--border-width) var(--color-signal);
 }
 
-/* FramePreview, shrunk to a card: an eighth of the stage. */
+/* The thumbnail is FramePreview at an eighth of the stage; just drop its frame. */
 .frame-picker__thumb .frame-preview__tile {
-  width: var(--thumb-width);
-  height: var(--thumb-height);
   border: none;
-}
-
-.frame-picker__thumb .frame-preview__stage {
-  transform: scale(calc(1 / 8));
-}
-
-.frame-picker__thumb .frame-preview__caption {
-  display: none;
 }
 
 .frame-picker__plate {
