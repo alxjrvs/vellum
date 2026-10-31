@@ -273,6 +273,16 @@ function o.proc_handler_call(source, name, cd)
   table.insert(state.events, { source = source.name, call = name, event = cd.eventName, json = cd.jsonString })
 end
 
+-- timers ----------------------------------------------------------------------
+
+fake.state.timers = {}
+function o.timer_add(callback, ms)
+  fake.state.timers[callback] = ms
+end
+function o.timer_remove(callback)
+  fake.state.timers[callback] = nil
+end
+
 -- helpers for scenarios -----------------------------------------------------
 
 -- Run the script's lifecycle the way OBS does when it is first added.

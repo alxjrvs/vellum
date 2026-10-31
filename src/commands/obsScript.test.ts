@@ -58,12 +58,38 @@ describe('OBS script hotkeys', () => {
       fake.state.hotkeys["vellum_hope_up"](false)
       local out = {}
       for _, e in ipairs(fake.state.events) do
-        table.insert(out, e.source .. "|" .. e.call .. "|" .. e.event .. "|" .. e.json)
+        if e.event ~= "vellum:obs-script" then table.insert(out, e.source .. "|" .. e.call .. "|" .. e.event .. "|" .. e.json) end
       end
       return table.concat(out, "\\n")
     `);
     expect(events.split('\n')).toEqual([
       `Vellum HUD|javascript_event|${COMMAND_EVENT}|{"type":"track.adjust","track":"hope","delta":1}`,
+    ]);
+  });
+});
+
+describe('OBS script announcement', () => {
+  it('tells Vellum sources it is loaded, on a timer and right after setup', () => {
+    const result = run(`
+      fake.load({ camera = "cam-1" })
+      fake.press("set_up")
+      local after_setup = #fake.state.events
+      local ms
+      for callback, interval in pairs(fake.state.timers) do
+        ms = interval
+        callback()
+      end
+      local last = fake.state.events[#fake.state.events]
+      script_unload()
+      return table.concat({ after_setup, ms, last.source, last.event, last.json, next(fake.state.timers) == nil and "removed" or "kept" }, "\\n")
+    `);
+    expect(result.split('\n')).toEqual([
+      '1',
+      '3000',
+      'Vellum HUD',
+      'vellum:obs-script',
+      '{"version":1}',
+      'removed',
     ]);
   });
 });

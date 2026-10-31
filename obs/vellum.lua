@@ -21,6 +21,10 @@ below; see src/commands/types.ts for the vocabulary.
 obs = obslua
 
 local EVENT_NAME = "vellum:command"
+-- Sent every few seconds so the page's setup checks can see the script is loaded.
+local ANNOUNCE_EVENT = "vellum:obs-script"
+local ANNOUNCE_JSON = '{"version":1}'
+local ANNOUNCE_MS = 3000
 
 local DEFAULT_LINK = "https://vellumhud.com/app/#/daggerheart/player"
 local SCENE_NAME = "Vellum"
@@ -81,7 +85,8 @@ local function is_vellum_source(source)
   return is_vellum_url(url)
 end
 
-local function send(json)
+local function send(json, event_name)
+  event_name = event_name or EVENT_NAME
   local sources = obs.obs_enum_sources()
   if sources == nil then
     return
@@ -89,13 +94,17 @@ local function send(json)
   for _, source in ipairs(sources) do
     if is_vellum_source(source) then
       local cd = obs.calldata_create()
-      obs.calldata_set_string(cd, "eventName", EVENT_NAME)
+      obs.calldata_set_string(cd, "eventName", event_name)
       obs.calldata_set_string(cd, "jsonString", json)
       obs.proc_handler_call(obs.obs_source_get_proc_handler(source), "javascript_event", cd)
       obs.calldata_destroy(cd)
     end
   end
   obs.source_list_release(sources)
+end
+
+local function announce()
+  send(ANNOUNCE_JSON, ANNOUNCE_EVENT)
 end
 
 -- Cameras -------------------------------------------------------------------
@@ -267,6 +276,8 @@ local function set_up(settings)
   obs.obs_frontend_set_current_scene(scene_source)
   obs.obs_source_release(scene_source)
 
+  announce()
+
   if not obs.obs_frontend_virtualcam_active() then
     obs.obs_frontend_start_virtualcam()
   end
@@ -370,6 +381,11 @@ function script_load(settings)
     obs.obs_hotkey_load(hotkey_id, saved)
     obs.obs_data_array_release(saved)
   end
+  obs.timer_add(announce, ANNOUNCE_MS)
+end
+
+function script_unload()
+  obs.timer_remove(announce)
 end
 
 function script_save(settings)

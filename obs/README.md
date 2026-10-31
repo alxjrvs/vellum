@@ -37,6 +37,10 @@ with a `vellum:command` event whose detail is the command JSON (see
 browser sources whose URL is on `vellumhud.com` (or `localhost`/`127.0.0.1`)
 receive them. Keep the hotkey ids stable: OBS saves bindings by id.
 
+**Announcement.** Every 3 seconds, and right after Set up, the script sends a
+`vellum:obs-script` event with `{"version":1}` to the same Vellum browser
+sources, so the page's setup checks can tell the script is loaded.
+
 ## Stream Deck plugin (live keys)
 
 For keys that show your current values, install the Vellum plugin instead of
