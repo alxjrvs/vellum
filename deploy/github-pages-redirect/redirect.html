@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Vellum has moved to vellumhud.com</title>
+    <script>
+      // Vellum moved from alxjrvs.github.io/vellum/ to vellumhud.com. This stub
+      // keeps every old URL (including OBS browser sources) working.
+      //
+      // localStorage is per-origin, so for app URLs the stub packs this
+      // origin's vellum:* keys into the URL fragment, which browsers never send
+      // to a server; the app imports them on arrival (src/migrate/originHandoff.ts).
+      (function () {
+        var NEW_ORIGIN = 'https://vellumhud.com';
+        var path = location.pathname.replace(/^\/vellum/, '') || '/';
+        var target = NEW_ORIGIN + path + location.search;
+        if (/^\/app(\/|$)/.test(path)) {
+          var keys = {};
+          try {
+            for (var i = 0; i < localStorage.length; i += 1) {
+              var key = localStorage.key(i);
+              if (key && key.indexOf('vellum:') === 0) keys[key] = localStorage.getItem(key);
+            }
+          } catch (e) {
+            keys = {};
+          }
+          var bytes = new TextEncoder().encode(JSON.stringify(keys));
+          var binary = '';
+          for (var j = 0; j < bytes.length; j += 1) binary += String.fromCharCode(bytes[j]);
+          var payload = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+          target += '#migrate=' + payload + '&to=' + encodeURIComponent(location.hash);
+        } else {
+          target += location.hash;
+        }
+        location.replace(target);
+      })();
+    </script>
+    <noscript><meta http-equiv="refresh" content="0; url=https://vellumhud.com/" /></noscript>
+  </head>
+  <body>
+    <p>Vellum has moved to <a href="https://vellumhud.com/">vellumhud.com</a>.</p>
+  </body>
+</html>
