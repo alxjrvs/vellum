@@ -7,6 +7,8 @@ import { GmSetup } from './components/GmSetup';
 import { Ticker } from './components/Ticker';
 import { SetupWizard } from './components/SetupWizard';
 import { FramePicker } from './components/FramePicker';
+import { CameraHud } from './components/CameraHud';
+import { CameraSetup } from './components/CameraSetup';
 import { SceneSelector } from './components/SceneSelector';
 import { SceneShell } from './scenes/SceneShell';
 import { useViewMode } from './viewMode/useViewMode';
@@ -46,10 +48,11 @@ export function App() {
           <main className="setup-shell">
             <GmSetup onLaunch={launch} />
             <FramePicker />
+            <CameraSetup />
           </main>
         )}
         renderLive={({ edit }) => (
-          <main className="hud" data-view="gm">
+          <CameraHud data-view="gm">
             <div className="hud__region hud__region--ticker">
               <Ticker />
             </div>
@@ -59,7 +62,7 @@ export function App() {
                 Setup
               </button>
             </div>
-          </main>
+          </CameraHud>
         )}
       />
     );
@@ -79,11 +82,12 @@ export function App() {
         <main className="setup-shell">
           <CharacterSetup onDone={launch} />
           <FramePicker />
+          <CameraSetup />
           <SetupWizard />
         </main>
       )}
       renderLive={({ edit }) => (
-        <main className="hud">
+        <CameraHud>
           <div className="hud__region hud__region--ticker">
             <Ticker />
           </div>
@@ -105,7 +109,7 @@ export function App() {
             </button>
           </div>
           <SetupWizard />
-        </main>
+        </CameraHud>
       )}
     />
   );

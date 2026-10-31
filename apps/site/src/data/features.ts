@@ -92,7 +92,7 @@ export const features: Feature[] = [
     title: 'Light face tracking',
     blurb:
       'Widgets can follow your face: a crown over your head, a nameplate under your chin. Off by default, and the camera never leaves your machine.',
-    status: 'next',
+    status: 'live',
     href: '/tracking/',
   },
   {

@@ -110,6 +110,15 @@ https://vellumhud.com/app/?frame=daggerheart-ledger#/daggerheart/player
 | Daggerheart | `daggerheart`        |
 | Ledger      | `daggerheart-ledger` |
 
+## Camera and face tracking (optional)
+
+Vellum can draw your webcam itself and move the nameplate and conditions to
+follow your face. Turn it on in setup under **Camera and face tracking**, copy
+your link again, and hide the scene's **Video Capture Device** (Vellum carries
+the camera now). OBS must be started with `--enable-media-stream` for a browser
+source to open the camera; the setup panel shows how for each OS. The face
+detector runs inside the page and nothing leaves your machine.
+
 ## Hotkeys and Stream Deck
 
 `vellum-hotkeys.lua` adds hotkeys that drive the HUD while you play: Hope,

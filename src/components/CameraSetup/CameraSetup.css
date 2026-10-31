@@ -1,0 +1,71 @@
+.camera-setup {
+  width: 100%;
+  max-width: 48rem;
+  margin: var(--spacing-lg) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.camera-setup__heading {
+  margin: 0;
+  font-size: var(--font-size-heading);
+}
+
+.camera-setup__lede,
+.camera-setup__status {
+  margin: 0;
+  color: var(--color-label);
+}
+
+.camera-setup__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.camera-setup__toggle input {
+  width: var(--track-height);
+  height: var(--track-height);
+  accent-color: var(--color-signal);
+}
+
+.camera-setup__toggle:has(input:disabled) {
+  color: var(--color-muted);
+  cursor: default;
+}
+
+.camera-setup__preview {
+  width: 320px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate);
+}
+
+.camera-setup__preview[data-mirror='on'] {
+  transform: scaleX(-1);
+}
+
+.camera-setup__help {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-left: var(--edge-width) solid var(--color-signal);
+  background: var(--color-plate);
+}
+
+.camera-setup__help p {
+  margin: 0;
+}
+
+.camera-setup__flags {
+  margin: var(--spacing-xs) 0 0;
+  padding-left: var(--spacing-lg);
+}
+
+.camera-setup code {
+  font-family: var(--font-family-mono);
+}

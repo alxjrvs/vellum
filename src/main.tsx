@@ -6,6 +6,7 @@ import { Stage } from './components/Stage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { FrameProvider } from './frames/FrameProvider';
+import { CameraProvider } from './camera/CameraProvider';
 // Self-hosted faces (bundled, so OBS needs no network) — weights the chassis uses.
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
@@ -32,11 +33,13 @@ createRoot(rootElement).render(
   <StrictMode>
     <SystemProvider system={daggerheartSystem}>
       <FrameProvider>
-        <CharacterProvider>
-          <Stage>
-            <App />
-          </Stage>
-        </CharacterProvider>
+        <CameraProvider>
+          <CharacterProvider>
+            <Stage>
+              <App />
+            </Stage>
+          </CharacterProvider>
+        </CameraProvider>
       </FrameProvider>
     </SystemProvider>
   </StrictMode>
