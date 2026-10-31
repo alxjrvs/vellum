@@ -17,6 +17,21 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ## [Unreleased]
 
+### Added
+
+- **One OBS script does the whole setup.** Load `vellum.lua` (served at
+  vellumhud.com/downloads/vellum.lua) under Tools → Scripts, paste your link,
+  pick your webcam, and press **Set up Vellum**: it builds a `Vellum` scene with
+  the webcam under the HUD, fits both to the canvas, and starts the Virtual
+  Camera. Pasting a new link updates the HUD at once. The same script carries
+  the hotkeys.
+
+### Removed
+
+- `obs/vellum-hotkeys.lua`, `obs/vellum.scene.json`, `obs/setup-obs.sh` and
+  `obs/setup-obs.ps1`, replaced by `obs/vellum.lua`. Remove the old hotkey
+  script from Tools → Scripts and rebind your keys after loading the new one.
+
 ### Changed
 
 - **New design language: the broadcast package.** One design system now drives

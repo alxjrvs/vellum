@@ -12,7 +12,7 @@
 /app/v*/mediapipe-*
   Cache-Control: public, max-age=31536000, immutable
 
-# The Stream Deck plugin: always download it, never render it.
+# Downloads (the OBS script, the Stream Deck plugin): always save, never render.
 /downloads/*
   Content-Disposition: attachment
 

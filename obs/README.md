@@ -1,156 +1,89 @@
-# OBS setup kit
+# Vellum for OBS
 
-Automates the Vellum-specific half of OBS setup: a scene collection with the
-**Vellum HUD** browser source pre-configured (1920×1080, transparent). The
-browser source points at the **hosted player URL**
-`https://vellumhud.com/app/#/daggerheart/player`, so there is **no
-build or `dist` to produce** — install the collection and it renders the live
-app. (See _Scene addresses_ below for the GM URL.) This doc is the
-OBS-install detail; for the full first-time onramp (configure your character →
-copy share link → paste into OBS → go live in Discord) start with
-`docs/QUICKSTART.md`, and see `docs/runbook.md` for the game-day operator flow.
+`vellum.lua` is the whole OBS side of Vellum, in one script that OBS runs
+itself on Windows, macOS and Linux (OBS 28 or newer; Lua ships with OBS, so
+there is nothing else to install). The deploy publishes it at
+`https://vellumhud.com/downloads/vellum.lua`. The user guide is
+`apps/site/src/content/docs/docs/obs.mdx` (vellumhud.com/docs/obs/).
 
-## Files
+## What it does
 
-- `vellum.scene.json` — importable scene-collection file (fixed valid UUIDs,
-  browser source already pointed at the hosted player URL).
-- `setup-obs.sh` — macOS/Linux installer: regenerates fresh UUIDs and installs
-  the file as an OBS scene collection named **Vellum**.
-- `setup-obs.ps1` — Windows PowerShell installer (same behavior).
-- `vellum-hotkeys.lua` — optional OBS script that adds **Vellum** hotkeys
-  (see _Hotkeys and Stream Deck_ below).
+**Setup.** The script's panel (Tools → Scripts → vellum.lua) has three
+controls: **Your Vellum link**, **Camera**, and **Set up Vellum**. Pressing the
+button:
 
-All three paths produce the same result: a **Vellum** scene collection whose
-browser source loads the hosted app. They are idempotent and non-destructive —
-they only ever write a collection named **Vellum** and never touch your other
-collections.
+1. creates the **Vellum** scene if it doesn't exist (other scenes are never
+   touched);
+2. creates or updates **Vellum Camera**, a Video Capture Device for the chosen
+   webcam, at the bottom of the scene;
+3. creates or updates **Vellum HUD**, a 1920×1080 browser source on the link,
+   at the top;
+4. fits both to the canvas, switches to the scene, and starts the Virtual
+   Camera.
 
-## Install
+It is idempotent: running it again updates the same three sources. A
+same-named source of another kind is left alone and the panel says so. The
+camera list comes from OBS's own webcam source (`macos-avcapture`,
+`av_capture_input`, `dshow_input` or `v4l2_input`, whichever this OBS has).
+Choosing **Vellum draws the camera (face tracking)** hides Vellum Camera so
+the page can open the webcam itself (OBS needs `--enable-media-stream`).
+Pasting a new link later updates Vellum HUD straight away.
 
-Pick whichever is easiest — they're equivalent.
+**Hotkeys.** The script registers `Vellum: …` hotkeys (Settings → Hotkeys):
+Hope, HP, Stress, Armor and Fear up and down, the three conditions, and next or
+previous frame. A press calls the browser source's own `javascript_event` proc
+with a `vellum:command` event whose detail is the command JSON (see
+`src/commands/types.ts`), so there is no websocket, password or network. Only
+browser sources whose URL is on `vellumhud.com` (or `localhost`/`127.0.0.1`)
+receive them. Keep the hotkey ids stable: OBS saves bindings by id.
 
-### (a) No script — OBS Import (works on every OS)
+## Stream Deck plugin (live keys)
 
-Because the browser source points at a constant hosted URL, the checked-in
-file is directly importable with no substitution step:
+For keys that show your current values, install the Vellum plugin instead of
+binding hotkeys: download `https://vellumhud.com/downloads/vellum.streamDeckPlugin`
+and double-click it. It adds **Stat**, **Condition** and **Frame** actions (Stat
+also works on Stream Deck + dials). The plugin listens on `127.0.0.1:28196`;
+the Vellum page inside OBS connects to it on its own, so there is nothing to
+configure in OBS. Source: `apps/streamdeck`.
 
-1. OBS → **Scene Collection → Import**.
-2. Choose `obs/vellum.scene.json` from this repo.
-3. **Scene Collection → Vellum** to activate it.
+## Tests
 
-### (b) macOS / Linux — `setup-obs.sh`
+`src/commands/obsScript.test.ts` runs this file under
+[fengari](https://fengari.io/) (Lua in JavaScript) against a fake `obslua`
+(`src/commands/fakeObslua.lua`), checking the scene it builds, the camera
+list, link updates, and that every hotkey sends a command the app accepts.
+The fake only covers the calls the script makes; add to it when the script
+calls something new.
 
-Quit OBS first (it rewrites scene files on exit), then:
+## Why a script
 
-```sh
-obs/setup-obs.sh
-```
+OBS's extension points, and why this one:
 
-Picks the scenes dir by OS (`~/Library/Application Support/obs-studio/basic/scenes`
-on macOS, `~/.config/obs-studio/basic/scenes` on Linux), regenerates fresh
-UUIDs, and writes `Vellum.json`.
-
-### (c) Windows — `setup-obs.ps1`
-
-Quit OBS first, then:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File obs\setup-obs.ps1
-```
-
-Writes to `%APPDATA%\obs-studio\basic\scenes\Vellum.json`.
-
-The hosted URL is a clearly-marked constant at the top of each script
-(`VELLUM_URL` / `$VellumUrl`) — change that one line to point at a different
-deploy.
-
-## What's automated vs. manual
-
-**Automated:** the scene collection and the browser-source config (which now
-points at the hosted app — no `dist`).
-
-**Manual (OS security / hardware / Discord — can't be scripted):**
-
-1. In OBS, **Scene Collection → Vellum** if it isn't already active.
-2. **Sources → + → Video Capture Device** → pick your webcam → drag it
-   **below** `Vellum HUD` so the HUD composites on top.
-3. **Start Virtual Camera** → approve the first-time system prompt:
-   - **macOS:** approve the system-extension prompt (**System Settings →
-     Privacy & Security** may need an "Allow").
-   - **Windows:** the OBS virtual-camera driver installs with OBS; no prompt
-     is normally required.
-   - **Linux:** ensure the `v4l2loopback` kernel module is loaded so the
-     virtual camera device exists.
-4. Discord → **Settings → Voice & Video → Camera → OBS Virtual Camera**.
+| Mechanism               | Verdict                                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| Lua script              | **Used.** Ships with OBS on every OS; can build scenes, start the Virtual Camera and register hotkeys.  |
+| Python script           | Same API, but the user must install Python and point OBS at it.                                         |
+| Native plugin (C/C++)   | Per-OS builds, an installer, and macOS signing, for nothing a script can't do.                          |
+| Scene collection import | Can't know the user's webcam, and importing switches the whole collection. (Vellum shipped one before.) |
+| Custom browser dock     | Keeps its own storage, separate from browser sources, so it can't carry the character into the HUD.     |
+| obs-websocket           | Needs the user to enable it and set a password; the Stream Deck plugin uses a loopback socket instead.  |
 
 ## Scene addresses
 
-The bare `/app/` URL is a **picker** (game + role); each screen has its own
-address, and those are what belong in a browser source:
+The bare `/app/` URL is a picker (game + role); each screen has its own
+address:
 
 | Screen | URL                                              |
 | ------ | ------------------------------------------------ |
 | Player | `https://vellumhud.com/app/#/daggerheart/player` |
 | GM     | `https://vellumhud.com/app/#/daggerheart/gm`     |
 
-The shipped scene collection points at the **player** URL.
+With no link pasted, the script uses the player URL. To pin a frame, add
+`?frame=<id>` before the `#`, for example
+`https://vellumhud.com/app/?frame=daggerheart-ledger#/daggerheart/player`.
 
-## Frames
+## Manual setup
 
-A frame is the HUD's look: palette, type, and whether each stat draws as a bar
-or as chits. Pick one on the setup screen and it is remembered. To pin a frame
-on a browser source instead, add `?frame=<id>` before the `#`:
-
-```
-https://vellumhud.com/app/?frame=daggerheart-ledger#/daggerheart/player
-```
-
-| Frame       | id                   |
-| ----------- | -------------------- |
-| Daggerheart | `daggerheart`        |
-| Ledger      | `daggerheart-ledger` |
-
-## Camera and face tracking (optional)
-
-Vellum can draw your webcam itself and move the nameplate and conditions to
-follow your face. Turn it on in setup under **Camera and face tracking**, copy
-your link again, and hide the scene's **Video Capture Device** (Vellum carries
-the camera now). OBS must be started with `--enable-media-stream` for a browser
-source to open the camera; the setup panel shows how for each OS. The face
-detector runs inside the page and nothing leaves your machine.
-
-## Hotkeys and Stream Deck
-
-`vellum-hotkeys.lua` adds hotkeys that drive the HUD while you play: Hope,
-HP, Stress, Armor and Fear up and down, the three conditions, and next or
-previous frame. It talks to the Vellum browser source directly, so there is no
-websocket, password or network involved.
-
-1. **Tools → Scripts → +**, and pick `obs/vellum-hotkeys.lua`.
-2. **Settings → Hotkeys**, search for "Vellum", and bind the keys you want.
-3. Stream Deck: use the built-in **Hotkey** action and press the same key
-   combination. Each Stream Deck button is just a key press to OBS.
-
-It only targets browser sources whose URL is on `vellumhud.com` (or a local
-dev server), so other browser sources never see the events.
-
-### Stream Deck plugin (live keys)
-
-For keys that show your current values, install the Vellum plugin instead:
-download `https://vellumhud.com/downloads/vellum.streamDeckPlugin` and
-double-click it. It adds **Stat**, **Condition** and **Frame** actions (Stat
-also works on Stream Deck + dials). The plugin listens on `127.0.0.1:28196`;
-the Vellum page inside OBS connects to it on its own, so there is nothing to
-configure in OBS. Source: `apps/streamdeck`.
-
-## GM view
-
-For the GM's view, edit the `Vellum HUD` source (double-click → Properties)
-and set the URL to `https://vellumhud.com/app/#/daggerheart/gm`, or
-keep a second collection whose browser source points at that URL. It shows the
-**Fear track and the duality dice** — no player tracks, no identity — and needs
-**no character setup**, so it works on a fresh machine.
-
-(Older `?mode=gm` links still resolve, so existing sources keep working. A
-source still pointed at the bare `/app/` URL now shows the picker — set it to
-the player URL above to restore the old behavior.)
+Without the script's Set up button: add a Browser source (the link,
+1920×1080), add a Video Capture Device below it, start the Virtual Camera, and
+choose OBS Virtual Camera in Discord. Hotkeys still need the script loaded.
