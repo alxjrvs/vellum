@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Vellum mark">
-  <!-- Vellum mark: a V folded from a single gold band, cut flat like a chisel nib.
-       Self-contained; no fonts, no external refs. Reads at 16x16. -->
-  <rect width="64" height="64" rx="14" fill="#1C1510"/>
-  <!-- left band (lit face) -->
-  <polygon points="14,12 25,12 37.5,52 26.5,52" fill="#C9A14A"/>
-  <!-- right band (shaded face, passes behind) -->
-  <polygon points="39,12 50,12 37.5,52 26.5,52" fill="#9A7930"/>
-  <!-- fold facet where the bands overlap -->
-  <polygon points="32,34.4 37.5,52 26.5,52" fill="#6B5316"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Vellum favicon: the nameplate reduced to its edge and a V. -->
+  <rect width="64" height="64" rx="12" fill="#0D1016"/>
+  <polygon points="12.5,12 18.5,12 10.0,52 4.0,52" fill="#FFC83D"/>
+  <polygon points="21.5,12 57.7,12 49.2,52 13.0,52" fill="#F5F7FA"/>
+  <path d="M28.870678740040265 45.48 26.710678740040265 18.64Q26.710678740040265 18.0 27.350678740040266 18.0H34.030678740040265Q34.59067874004027 18.0 34.55067874004027 18.56V32.92Q34.51067874004026 33.04 34.63067874004027 33.04Q34.750678740040264 33.04 34.79067874004026 32.92L38.15067874004026 18.56Q38.27067874004027 18.0 38.83067874004027 18.0H45.31067874004027Q45.59067874004026 18.0 45.73067874004026 18.16Q45.87067874004026 18.32 45.750678740040264 18.64L36.95067874004027 45.48Q36.79067874004026 46.0 36.23067874004026 46.0H29.430678740040264Q28.870678740040265 46.0 28.870678740040265 45.48Z" fill="#0D1016"/>
 </svg>

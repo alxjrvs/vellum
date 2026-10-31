@@ -1,7 +1,8 @@
+/* The vitals stack: one plate per stat, butted together like a lower-third. */
 .player-hud {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-lg);
+  align-items: stretch;
+  gap: 2px;
   font-family: var(--font-family-body);
 }

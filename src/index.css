@@ -14,7 +14,7 @@ body {
   height: 100%;
   overflow: hidden;
   background: transparent;
-  color: var(--color-ink);
+  color: var(--color-text);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
   /* OBS overlays the cursor on player video tiles; hide on the
@@ -29,6 +29,9 @@ button {
 /*
  * Game-UI HUD: free-floating widgets anchored to the four corners and the
  * bottom-center of the 1920x1080 stage — not boxed together in one card.
+ *
+ * Outside-in: right-hand regions carry data-side="right", and every widget
+ * mirrors inside them so labels and accent edges sit on the outer edge.
  */
 .hud {
   position: absolute;
@@ -45,8 +48,15 @@ button {
   top: var(--spacing-lg);
   left: 50%;
   transform: translateX(-50%);
-  width: 820px;
+  width: 520px;
   justify-content: center;
+}
+
+/* The GM's Fear pool fills the top-left, and the GM has no nameplate, so the
+   GM ticker moves to the bottom-center slot. */
+.hud[data-view='gm'] .hud__region--ticker {
+  top: auto;
+  bottom: var(--spacing-xl);
 }
 
 .hud__region--vitals {
@@ -78,30 +88,40 @@ button {
 
 .edit-details {
   padding: var(--spacing-xs) var(--spacing-md);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-hud-surface);
-  color: var(--color-parchment);
+  border: none;
+  border-right: var(--edge-width) solid var(--color-rule);
+  background: var(--color-plate);
+  color: var(--color-label);
   font-family: var(--font-family-display);
   font-size: var(--font-size-label);
-  letter-spacing: 0.06em;
-  opacity: 0.6;
-  transition: opacity 0.12s ease;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: border-color 0.12s ease;
 }
 
-.edit-details:hover {
-  opacity: 1;
+.edit-details:hover,
+.edit-details:focus-visible {
+  border-right-color: var(--color-signal);
+  color: var(--color-text);
 }
 
-/* Setup form retains the plain document flow with breathing room. */
+/* Setup screens sit on the Night ground in plain document flow. */
 .setup-shell {
+  box-sizing: border-box;
+  min-height: 100%;
   padding: var(--spacing-xl);
+  background: var(--color-night);
+  color: var(--color-text);
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-family-display);
-  color: var(--color-gold);
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--color-text);
   margin: 0;
 }

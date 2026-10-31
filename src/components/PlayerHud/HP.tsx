@@ -2,8 +2,10 @@ import './HP.css';
 import { useCharacter } from '../../character/useCharacter';
 import { StatTrack } from '../StatTrack';
 import { HpThresholds } from './HpThresholds';
+import { useTrackDisplay } from '../../themes/useTrackDisplay';
 
 export function HP() {
+  const display = useTrackDisplay('hp');
   const { character, dispatch } = useCharacter();
   if (!character) return null;
   // Hearts read as remaining health: full hearts fill from the left and deplete
@@ -20,7 +22,8 @@ export function HP() {
         label="HP"
         shape="heart"
         interaction="level"
-        tone="var(--color-health)"
+        tone="var(--color-hit)"
+        display={display}
         trackLength={total}
         currentValue={health}
         onSetValue={(nextHealth) => dispatch({ type: 'HP_SET', count: total - nextHealth })}

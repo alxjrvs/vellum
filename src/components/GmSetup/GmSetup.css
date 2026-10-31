@@ -5,7 +5,7 @@
   max-width: 48rem;
   margin: 0 auto;
   font-family: var(--font-family-body);
-  color: var(--color-ink);
+  color: var(--color-text);
 }
 
 .gm-setup__title {
@@ -14,7 +14,7 @@
 
 .gm-setup__lede {
   margin: 0;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-size: var(--font-size-base);
 }
 
@@ -40,10 +40,10 @@
 .gm-setup__copy-button,
 .gm-setup__launch {
   padding: var(--spacing-sm) var(--spacing-lg);
-  border: var(--border-width) solid var(--color-card-border);
+  border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-sm);
-  background: var(--color-card-surface);
-  color: var(--color-ink);
+  background: var(--color-plate);
+  color: var(--color-text);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
   cursor: pointer;
@@ -52,19 +52,19 @@
 .gm-setup__launch {
   align-self: flex-start;
   margin-top: var(--spacing-lg);
-  border-color: var(--color-gold);
+  border-color: var(--color-signal);
   font-family: var(--font-family-display);
   font-size: var(--font-size-heading);
-  color: var(--color-gold);
+  color: var(--color-signal);
 }
 
 .gm-setup__copy-button:hover,
 .gm-setup__launch:hover {
-  background: var(--color-hud-surface-strong);
+  background: var(--color-plate);
 }
 
 .gm-setup__note {
   margin: 0;
-  color: var(--color-ink-muted);
+  color: var(--color-label);
   font-size: var(--font-size-label);
 }

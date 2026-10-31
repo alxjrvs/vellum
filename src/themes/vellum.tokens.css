@@ -1,0 +1,48 @@
+/*
+ * Vellum chassis tokens — the one design system shared by vellumhud.com and
+ * every in-game screen (docs/branding/BRANDING.md).
+ *
+ * The site links this file directly (site/vellum.tokens.css is a symlink to
+ * it). The app imports it first, then a frame (a per-game ThemeConfig)
+ * overrides any of the --color-* / --font-* tokens on :root at runtime. So a
+ * frame only ever re-skins the chassis; it never invents new token names.
+ *
+ * Fonts are self-hosted by the app (@fontsource) so nothing loads from the
+ * network at runtime; the site pulls the same families from Google Fonts.
+ */
+:root {
+  /* Surfaces */
+  --color-night: #0d1016; /* page / setup ground */
+  --color-plate: #171c26; /* every HUD plate and card */
+  --color-plate-raised: #202736; /* inputs, chips, hover */
+  --color-rule: #2a3242; /* hairlines, empty track segments */
+
+  /* Text — labels are Soft on Plate (~10:1). Never use Muted for a label. */
+  --color-text: #f5f7fa;
+  --color-label: #c6cedb;
+  --color-muted: #9aa4b5;
+
+  /* Signal = "yours" / active / primary action. Signal Ink sits on it. */
+  --color-signal: #ffc83d;
+  --color-signal-ink: #0d1016;
+
+  /* Stat semantics */
+  --color-hit: #ff4d5e; /* damage only */
+  --color-stress: #ff8a3d;
+  --color-armor: #7fa0c4;
+  --color-fear: #a98bff; /* the GM's color, never a player's */
+
+  /* The nameplate — also the Vellum wordmark */
+  --color-nameplate: #f5f7fa;
+  --color-nameplate-ink: #0d1016;
+  --color-player: #3ddc97; /* the player's own edge color */
+
+  --font-family-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-family-body: 'Barlow', system-ui, sans-serif;
+  --font-family-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* The slant: every plate edge, bar and chit leans this way on the left
+     side of the screen, and mirrors on the right (outside-in). */
+  --slant: -12deg;
+  --slant-mirror: 12deg;
+}

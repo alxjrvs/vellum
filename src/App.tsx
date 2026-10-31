@@ -52,7 +52,7 @@ export function App() {
               <Ticker />
             </div>
             <GmHud />
-            <div className="hud__region hud__region--utility">
+            <div className="hud__region hud__region--utility" data-side="right">
               <button type="button" className="edit-details" onClick={edit}>
                 Setup
               </button>
@@ -87,7 +87,7 @@ export function App() {
           <div className="hud__region hud__region--vitals">
             <PlayerHud />
           </div>
-          <div className="hud__region hud__region--status">
+          <div className="hud__region hud__region--status" data-side="right">
             <ConditionsPanel />
           </div>
           <div className="hud__region hud__region--dice">
@@ -96,7 +96,7 @@ export function App() {
           <div className="hud__region hud__region--name">
             <IdentityLabel />
           </div>
-          <div className="hud__region hud__region--utility">
+          <div className="hud__region hud__region--utility" data-side="right">
             <button type="button" className="edit-details" onClick={edit}>
               Edit details
             </button>

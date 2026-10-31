@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Vellum — The character sheet, on camera.</title>
+    <meta name="color-scheme" content="dark" />
+    <title>Vellum — Your sheet. On air.</title>
     <meta
       name="description"
       content="Vellum is a local-only, system-aware camera overlay for tabletop RPGs. It renders a live character HUD over your webcam for the virtual table — no account, no server, no telemetry."
     />
-    <meta property="og:title" content="Vellum — The character sheet, on camera." />
+    <meta property="og:title" content="Vellum — Your sheet. On air." />
     <meta
       property="og:description"
       content="A local-only, system-aware camera overlay that puts live tabletop stats on your webcam — for any system you teach it."
@@ -18,49 +18,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..640&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <!-- The one shared design system: the same chassis tokens the app uses
+         (symlink to src/themes/vellum.tokens.css; see docs/branding/BRANDING.md). -->
+    <link rel="stylesheet" href="vellum.tokens.css" />
     <style>
-      /* ============================================================
-   Vellum brand tokens — docs/branding/BRANDING.md
-   Light: Vellum ground, Iron Gall ink. Dark: the gold sings.
-   ============================================================ */
-      :root {
-        --bg: #f6efde; /* Vellum */
-        --surface: #eae0c6; /* Vellum Shade */
-        --ink: #1c1510; /* Iron Gall */
-        --ink-2: #5c5140; /* Sepia — secondary text */
-        --accent: #7d6120; /* Gilt Deep — text-safe gold on light */
-        --gilt: #c9a14a; /* Gilt — ornament only on light */
-        --rule: #8a7e6c; /* Plummet — hairlines, both treatments */
-        --rubric: #9e2b2b; /* Rubric — step numbering */
-        --code-kw: #96431a; /* Ember Deep */
-        --code-str: #7d6120; /* Gilt Deep */
-        --code-type: #3e7360; /* Verdigris */
-        --btn-bg: #1c1510;
-        --btn-fg: #f6efde;
-
-        --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-        --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
-        --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #1c1510; /* Iron Gall */
-          --surface: #282017; /* Iron Gall Raised */
-          --ink: #f6efde; /* Vellum */
-          --ink-2: #b5a88d; /* Parchment Dim */
-          --accent: #c9a14a; /* Gilt — links & accents on dark */
-          --rubric: #d96a5a; /* Rubric Bright */
-          --code-kw: #d96a5a; /* Rubric Bright */
-          --code-str: #c9a14a; /* Gilt */
-          --code-type: #7fb89f; /* Verdigris Bright */
-          --btn-bg: #c9a14a;
-          --btn-fg: #1c1510;
-        }
-      }
-
       /* ---------- base ---------- */
       * {
         box-sizing: border-box;
@@ -74,53 +38,39 @@
         html {
           scroll-behavior: auto;
         }
-        *,
-        *::before,
-        *::after {
-          animation: none !important;
-          transition: none !important;
-        }
       }
       body {
-        background: var(--bg);
-        color: var(--ink);
-        font-family: var(--font-body);
-        font-size: 1rem; /* 16px base */
+        background: var(--color-night);
+        color: var(--color-text);
+        font-family: var(--font-family-body);
+        font-size: 1.0625rem;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
       }
       ::selection {
-        background: var(--gilt);
-        color: #1c1510;
+        background: var(--color-signal);
+        color: var(--color-signal-ink);
       }
-
       a {
-        color: var(--accent);
-        text-decoration-thickness: 1px;
+        color: var(--color-signal);
         text-underline-offset: 3px;
       }
-      a:hover {
-        text-decoration-thickness: 2px;
-      }
       :focus-visible {
-        outline: 2px solid var(--accent);
+        outline: 2px solid var(--color-signal);
         outline-offset: 3px;
-        border-radius: 2px;
       }
-
       .wrap {
-        max-width: 66rem;
+        max-width: 72rem;
         margin-inline: auto;
-        padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+        padding-inline: clamp(1rem, 4vw, 2.5rem);
       }
-
       .skip-link {
         position: absolute;
         left: -999px;
         top: 0;
-        background: var(--ink);
-        color: var(--bg);
+        background: var(--color-signal);
+        color: var(--color-signal-ink);
         padding: 0.5rem 1rem;
         z-index: 10;
       }
@@ -128,73 +78,61 @@
         left: 0;
       }
 
-      /* Major-third type scale — Fraunces top three steps only */
+      /* Display type: Barlow Condensed, heavy, italic, uppercase. */
       h1,
-      h2 {
-        font-family: var(--font-display);
-        font-optical-sizing: auto;
-        letter-spacing: -0.01em;
+      h2,
+      h3 {
+        font-family: var(--font-family-display);
+        font-style: italic;
+        text-transform: uppercase;
         text-wrap: balance;
+        line-height: 0.95;
       }
       h1 {
-        font-weight: 600;
-        font-size: clamp(2.4rem, 6.5vw, 3.8125rem);
-        line-height: 1.05;
-      } /* 61 */
-      h2 {
-        font-weight: 560;
-        font-size: clamp(1.75rem, 4.5vw, 2.4375rem);
-        line-height: 1.15;
-      } /* 39 */
-      h3 {
-        font-family: var(--font-body);
-        font-weight: 600;
-        font-size: 1.5625rem;
-        line-height: 1.3;
-      } /* 25 */
-      .eyebrow {
-        font-size: 0.78125rem; /* 12.5 micro */
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
-        color: var(--ink-2);
-        line-height: 1.4;
+        font-weight: 900;
+        font-size: clamp(3rem, 9vw, 5.5rem);
+        line-height: 0.88;
       }
-      .small {
-        font-size: 0.875rem;
-        line-height: 1.5;
-        color: var(--ink-2);
+      h1 em {
+        color: var(--color-signal);
+        font-style: italic;
+      }
+      h2 {
+        font-weight: 800;
+        font-size: clamp(2rem, 5vw, 3rem);
+      }
+      h3 {
+        font-weight: 800;
+        font-size: 1.6rem;
+        line-height: 1.05;
+      }
+      .eyebrow {
+        font-family: var(--font-family-body);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--color-signal);
       }
       p {
-        max-width: 62ch;
+        max-width: 64ch;
       }
-
-      /* ---------- the ruling line ---------- */
-      .rule {
-        border: 0;
-        height: 1px;
-        background: var(--rule);
-        margin: 0;
+      .lede {
+        color: var(--color-label);
+        font-size: 1.1875rem;
       }
-      .rule-tick {
-        position: relative;
-        overflow: visible;
+      .small {
+        font-size: 0.9375rem;
+        color: var(--color-label);
       }
-      /* One gilt fold-triangle terminal — the signature device, used once. */
-      .rule-tick::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: -3.5px;
-        width: 0;
-        height: 0;
-        border-left: 8px solid var(--gilt);
-        border-top: 4px solid transparent;
-        border-bottom: 4px solid transparent;
-      }
-
       section {
-        padding-block: clamp(3.5rem, 9vw, 6.5rem);
+        padding-block: clamp(3.5rem, 8vw, 6rem);
+        border-top: 1px solid var(--color-rule);
+      }
+      .sec-head {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
       }
 
       /* ---------- header ---------- */
@@ -202,8 +140,8 @@
         position: sticky;
         top: 0;
         z-index: 5;
-        background: var(--bg);
-        border-bottom: 1px solid var(--rule);
+        background: var(--color-night);
+        border-bottom: 1px solid var(--color-rule);
       }
       .masthead {
         display: flex;
@@ -213,339 +151,393 @@
         flex-wrap: wrap;
         padding-block: 0.875rem;
       }
-      .masthead .wordmark svg {
+      .wordmark {
         display: block;
-        height: 44px;
+        line-height: 0;
+      }
+      .wordmark svg {
+        height: 36px;
         width: auto;
       }
-      /* Wordmark letters follow the treatment ink (light/dark files differ only here);
-   the V's gold facets are fixed and never recolored. */
-      .wm-stroke {
-        stroke: var(--ink);
-      }
-      .wm-fill {
-        fill: var(--ink);
-      }
-      nav.site-nav {
+      .site-nav {
         display: flex;
-        gap: clamp(1rem, 3vw, 2rem);
+        gap: 1.5rem;
         flex-wrap: wrap;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
-      nav.site-nav a {
-        color: var(--ink);
+      .site-nav a {
+        color: var(--color-label);
         text-decoration: none;
-        font-size: 0.875rem;
-        font-weight: 500;
-        border-bottom: 1px solid transparent;
-        padding-block: 2px;
       }
-      nav.site-nav a:hover {
-        border-bottom-color: var(--accent);
-        color: var(--accent);
+      .site-nav a:hover {
+        color: var(--color-text);
+      }
+
+      /* ---------- buttons: slanted plates ---------- */
+      .cta-row {
+        display: flex;
+        gap: 0.875rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.85rem 1.75rem;
+        font-family: var(--font-family-display);
+        font-size: 1.1875rem;
+        font-weight: 800;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        clip-path: polygon(0.65rem 0, 100% 0, calc(100% - 0.65rem) 100%, 0 100%);
+      }
+      .btn-primary {
+        background: var(--color-signal);
+        color: var(--color-signal-ink);
+      }
+      .btn-secondary {
+        background: var(--color-plate-raised);
+        color: var(--color-text);
+      }
+      .btn:hover {
+        filter: brightness(1.08);
       }
 
       /* ---------- hero ---------- */
       .hero {
-        position: relative;
-        padding-block: clamp(4rem, 10vw, 7rem) clamp(3.5rem, 8vw, 5.5rem);
+        border-top: none;
+        background: linear-gradient(115deg, var(--color-night) 52%, var(--color-plate) 52%);
       }
-      /* The ruled page: faint plummet guide lines, laid down before the writing. */
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background: repeating-linear-gradient(
-          to bottom,
-          transparent 0,
-          transparent calc(2.75rem - 1px),
-          color-mix(in srgb, var(--rule) 22%, transparent) calc(2.75rem - 1px),
-          color-mix(in srgb, var(--rule) 22%, transparent) 2.75rem
-        );
-        mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-      }
-      .hero .wrap {
-        position: relative;
-      }
-      .hero .eyebrow {
-        margin-bottom: 1.25rem;
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        gap: clamp(2rem, 5vw, 3.5rem);
+        align-items: center;
       }
       .hero h1 {
-        max-width: 16ch;
-      }
-      .hero .subhead {
-        font-family: var(--font-display);
-        font-weight: 500;
-        font-optical-sizing: auto;
-        font-size: clamp(1.25rem, 2.6vw, 1.5625rem);
-        line-height: 1.3;
-        color: var(--ink-2);
-        margin-top: 1rem;
-        max-width: 30ch;
-      }
-      .hero .lede {
-        margin-top: 1.5rem;
-        color: var(--ink);
-      }
-      .cta-row {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 2.25rem;
-      }
-      .btn {
-        display: inline-block;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1rem;
-        line-height: 1;
-        padding: 0.9rem 1.5rem;
-        border-radius: 7px;
-      }
-      .btn-primary {
-        background: var(--btn-bg);
-        color: var(--btn-fg);
-        border: 1px solid var(--btn-bg);
-      }
-      .btn-primary:hover {
-        filter: brightness(1.12);
-      }
-      .btn-secondary {
-        background: transparent;
-        color: var(--ink);
-        border: 1px solid var(--rule);
-      }
-      .btn-secondary:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      @media (prefers-reduced-motion: no-preference) {
-        .rise {
-          animation: rise 0.7s ease both;
-        }
-        .rise-1 {
-          animation-delay: 0.06s;
-        }
-        .rise-2 {
-          animation-delay: 0.12s;
-        }
-        .rise-3 {
-          animation-delay: 0.18s;
-        }
-        .rise-4 {
-          animation-delay: 0.26s;
-        }
-        @keyframes rise {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: none;
-          }
-        }
-      }
-
-      /* ---------- demo placeholder: the overlay sheet ---------- */
-      .demo {
-        margin-top: clamp(2.5rem, 6vw, 4rem);
-      }
-      .demo-frame {
-        aspect-ratio: 16 / 9;
-        background: #282017; /* a video tile is dark in both treatments */
-        border: 1px solid var(--rule);
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .demo-frame svg {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-      .demo figcaption {
         margin-top: 0.75rem;
       }
+      .hero .lede {
+        margin-top: 1.25rem;
+      }
 
-      /* ---------- the shift ---------- */
-      .shift-grid {
+      /* The demo tile: the real HUD language over a stand-in webcam. */
+      .tile {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        max-width: 100%;
+        overflow: hidden;
+        container-type: inline-size;
+        background:
+          radial-gradient(ellipse 30% 44% at 50% 74%, #5c4d43 0 60%, transparent 61%),
+          radial-gradient(ellipse 12% 19% at 50% 40%, #8a705d 0 70%, transparent 71%),
+          radial-gradient(circle at 70% 20%, #47505a, #1b2026 70%);
+      }
+      .tile > * {
+        position: absolute;
+        font-family: var(--font-family-display);
+      }
+      .t-vitals {
+        top: 4cqi;
+        left: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: clamp(1.5rem, 4vw, 3rem);
-        margin-top: 2.5rem;
+        gap: 2px;
       }
-      .shift-grid > div {
-        border-top: 1px solid var(--rule);
-        padding-top: 1.25rem;
+      .t-row {
+        display: flex;
+        align-items: center;
+        gap: 1.6cqi;
+        padding: 1cqi 2.4cqi 1cqi 1.6cqi;
+        background: var(--color-plate);
+        border-left: 1.2cqi solid var(--color-player);
       }
-      .shift-grid .eyebrow {
-        margin-bottom: 0.5rem;
+      .t-k {
+        width: 9cqi;
+        font-size: 2.6cqi;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--color-label);
       }
-      .shift-grid h3 {
-        margin-bottom: 0.5rem;
+      .t-n {
+        min-width: 7cqi;
+        font-size: 4.4cqi;
+        font-weight: 800;
+        font-style: italic;
+        line-height: 1;
+      }
+      .t-n small {
+        font-size: 0.6em;
+        color: var(--color-label);
+      }
+      .t-chits {
+        display: flex;
+        gap: 0.6cqi;
+        transform: skewX(var(--slant));
+      }
+      .t-chits i {
+        width: 2.4cqi;
+        height: 2cqi;
+        background: var(--color-rule);
+      }
+      .t-chits i.on {
+        background: var(--fill);
+      }
+      .t-bar {
+        width: 18cqi;
+        height: 2cqi;
+        transform: skewX(var(--slant));
+        background: linear-gradient(90deg, var(--fill) var(--pct), var(--color-rule) var(--pct));
+      }
+      .t-conds {
+        top: 4cqi;
+        right: 0;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.8cqi;
+        right: 3cqi;
+      }
+      .t-chip {
+        padding: 0.8cqi 1.4cqi;
+        background: var(--color-plate);
+        border-right: 0.8cqi solid var(--color-hit);
+        font-size: 2.4cqi;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+      .t-name {
+        bottom: 4cqi;
+        left: 50%;
+        transform: translateX(-50%);
+        display: grid;
+        grid-template-columns: 1.2cqi auto;
+        justify-items: start;
+      }
+      .t-name::before {
+        content: '';
+        grid-row: 1 / span 2;
+        justify-self: stretch;
+        background: var(--color-player);
+      }
+      .t-name b {
+        padding: 0.6cqi 2.4cqi 0.4cqi 1.4cqi;
+        background: var(--color-nameplate);
+        color: var(--color-nameplate-ink);
+        font-size: 5cqi;
+        font-weight: 900;
+        font-style: italic;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+      .t-name span {
+        padding: 0.7cqi 1.4cqi;
+        background: var(--color-plate);
+        color: var(--color-label);
+        font-family: var(--font-family-body);
+        font-size: 2.2cqi;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .tile figcaption {
+        right: 1.6cqi;
+        bottom: 1.2cqi;
+        font: 500 1.6cqi/1 var(--font-family-mono);
+        color: var(--color-label);
       }
 
-      /* ---------- pillars ---------- */
+      /* ---------- before / after, pillars ---------- */
+      .duo,
       .pillars {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: clamp(1.5rem, 4vw, 3rem);
-        margin-top: 2.5rem;
+        gap: 2px;
       }
-      .pillar {
-        border-top: 1px solid var(--rule);
-        padding-top: 1.25rem;
+      .duo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 2rem;
       }
-      .pillar .eyebrow {
-        margin-bottom: 0.75rem;
-        color: var(--accent);
+      .pillars {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-      .pillar h3 {
-        margin-bottom: 0.625rem;
-        font-size: 1.25rem;
+      .card {
+        display: grid;
+        gap: 0.6rem;
+        align-content: start;
+        padding: 1.5rem 1.6rem;
+        background: var(--color-plate);
+        border-top: 4px solid var(--color-rule);
+        min-width: 0;
       }
-      .pillar p {
-        color: var(--ink-2);
+      .card.lead {
+        border-top-color: var(--color-signal);
+      }
+
+      /* ---------- the two rules ---------- */
+      .rules {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2px;
+      }
+      .oi {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+        font: 700 0.875rem/1 var(--font-family-display);
+        letter-spacing: 0.05em;
+        color: var(--color-label);
+      }
+      .oi span {
+        padding: 6px 8px;
+        background: var(--color-plate-raised);
+      }
+      .oi .bar {
+        width: 40px;
+        height: 8px;
+        padding: 0;
+        background: var(--color-hit);
+        transform: skewX(var(--slant));
+      }
+      .oi .mid ~ .bar {
+        transform: skewX(var(--slant-mirror));
+      }
+      .oi .mid {
+        flex: 1;
+        min-width: 60px;
+        text-align: center;
+        background: transparent;
+        border: 1px dashed var(--color-rule);
+        font: 400 0.75rem/1 var(--font-family-mono);
+        color: var(--color-muted);
       }
 
       /* ---------- compose ---------- */
       .compose-grid {
         display: grid;
-        grid-template-columns: 5fr 6fr;
-        gap: clamp(2rem, 5vw, 4rem);
-        margin-top: 2.5rem;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        gap: clamp(2rem, 5vw, 3.5rem);
         align-items: start;
       }
-      .compose-copy p + p {
-        margin-top: 1rem;
+      .compose-copy {
+        display: grid;
+        gap: 1rem;
       }
-      .compose-copy .chain {
-        font-family: var(--font-mono);
-        font-size: 0.875rem;
-        color: var(--ink-2);
-        margin-top: 1.5rem;
-        display: block;
+      .chain {
+        font-family: var(--font-family-display);
+        font-size: 1.25rem;
+        font-weight: 800;
+        font-style: italic;
+        text-transform: uppercase;
+        color: var(--color-label);
       }
-      .compose-copy .chain b {
-        color: var(--accent);
-        font-weight: 700;
+      .chain b {
+        color: var(--color-signal);
       }
       .codeblock {
-        background: var(--surface);
-        border: 1px solid var(--rule);
-        border-radius: 8px;
+        background: var(--color-plate);
+        border-left: 6px solid var(--color-signal);
         overflow-x: auto;
       }
       .codeblock pre {
-        font-family: var(--font-mono);
-        font-size: 0.8125rem;
-        line-height: 1.65;
         padding: 1.25rem 1.5rem;
-        min-width: max-content;
+        font: 400 0.875rem/1.65 var(--font-family-mono);
+        color: var(--color-text);
       }
       .codeblock .c {
-        color: var(--ink-2);
-      } /* comment */
+        color: var(--color-muted);
+      }
       .codeblock .k {
-        color: var(--code-kw);
-      } /* keyword */
+        color: var(--color-hit);
+      }
       .codeblock .s {
-        color: var(--code-str);
-      } /* string */
+        color: var(--color-signal);
+      }
       .codeblock .t {
-        color: var(--code-type);
-      } /* type */
+        color: var(--color-armor);
+      }
 
-      /* ---------- quick start ---------- */
+      /* ---------- quick start: the rundown ---------- */
       .steps {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2px;
         list-style: none;
-        counter-reset: step;
-        margin-top: 2.5rem;
-        max-width: 46rem;
       }
       .steps li {
-        counter-increment: step;
         display: grid;
-        grid-template-columns: 3.5rem 1fr;
-        gap: 1.25rem;
-        padding-block: 1.5rem;
-        border-top: 1px solid var(--rule);
+        gap: 0.6rem;
+        align-content: start;
+        padding: 1.4rem 1.4rem 1.6rem;
+        background: var(--color-plate);
+        border-top: 4px solid var(--color-rule);
+        min-width: 0;
       }
-      .steps li::before {
-        content: counter(step);
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-optical-sizing: auto;
-        font-size: 2.4375rem;
-        line-height: 1;
-        color: var(--rubric); /* rubrication: red ink for the numbered headings */
+      .steps li:first-child {
+        border-top-color: var(--color-signal);
       }
-      .steps h3 {
-        font-size: 1.25rem;
-        margin-bottom: 0.375rem;
+      .steps .time {
+        font: 500 0.8125rem/1 var(--font-family-mono);
+        color: var(--color-signal);
       }
       .steps p {
-        color: var(--ink-2);
+        font-size: 0.9375rem;
+        color: var(--color-label);
       }
-      .steps code {
-        font-family: var(--font-mono);
-        font-size: 0.85em;
-        background: var(--surface);
-        border: 1px solid var(--rule);
-        border-radius: 4px;
-        padding: 0.1em 0.4em;
-        color: var(--ink);
-        overflow-wrap: anywhere;
-      }
-      .steps li > div {
-        min-width: 0;
+      .steps strong {
+        color: var(--color-text);
       }
 
       /* ---------- footer ---------- */
       footer.site {
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid var(--color-rule);
         padding-block: 2.5rem 3rem;
       }
       .foot-grid {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
         gap: 2rem;
-        flex-wrap: wrap;
+        align-items: start;
       }
-      .foot-mark svg {
-        display: block;
-        width: 40px;
-        height: 40px;
+      .foot-grid svg {
+        height: 30px;
+        width: auto;
       }
       .foot-meta {
-        max-width: 46rem;
-      }
-      .foot-meta p + p {
-        margin-top: 0.5rem;
-      }
-      footer.site a {
-        color: var(--accent);
+        display: grid;
+        gap: 0.5rem;
       }
 
-      /* ---------- responsive ---------- */
-      @media (max-width: 47rem) {
-        .shift-grid,
-        .pillars,
-        .compose-grid {
+      @media (max-width: 860px) {
+        .hero {
+          background: var(--color-night);
+        }
+        .hero-grid,
+        .compose-grid,
+        .rules,
+        .duo,
+        .pillars {
           grid-template-columns: 1fr;
         }
-        .masthead .wordmark svg {
-          height: 36px;
+        .steps {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        .steps li {
-          grid-template-columns: 2.5rem 1fr;
-          gap: 1rem;
+        .foot-grid {
+          grid-template-columns: 1fr;
         }
-        .steps li::before {
-          font-size: 1.75rem;
+      }
+      @media (max-width: 480px) {
+        .steps {
+          grid-template-columns: 1fr;
+        }
+        .wordmark svg {
+          height: 30px;
         }
       }
     </style>
@@ -555,35 +547,19 @@
 
     <header class="site">
       <div class="wrap masthead">
-        <a class="wordmark" href="#top" aria-label="Vellum — home">
-          <!-- Vellum wordmark (docs/branding). Letters take the treatment ink via CSS;
-           the folded-V mark's three gold facets are fixed. -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 285 120"
-            role="img"
-            aria-label="Vellum"
-          >
-            <g>
-              <polygon points="30,40 41,40 53.5,80 42.5,80" fill="#C9A14A" />
-              <polygon points="55,40 66,40 53.5,80 42.5,80" fill="#9A7930" />
-              <polygon points="48,62.4 53.5,80 42.5,80" fill="#6B5316" />
-            </g>
-            <g class="wm-stroke" stroke-width="6" fill="none">
-              <path d="M101 43 H82 V77 H101" />
-              <path d="M79 58.5 H96" />
-              <path d="M117 40 V77 H134" />
-              <path d="M150 40 V77 H167" />
-              <path d="M183 40 V67 A10 10 0 0 0 203 67 V40" />
-            </g>
+        <a class="wordmark" href="#top">
+          <svg class="nav-mark" viewBox="0 0 249.9 76.8" role="img" aria-label="Vellum">
+            <polygon points="16.3,0 27.3,0 11.0,76.8 0.0,76.8" fill="#FFC83D" />
+            <polygon points="31.3,0 248.9,0 232.6,76.8 15.0,76.8" fill="#F5F7FA" />
             <path
-              class="wm-fill"
-              d="M219 80 V40 H226.97 L234 56.4 L241.03 40 H249 V80 H243 V50.6 L234 71.6 L225 50.6 V80 Z"
+              d="M41.225520377690195 59.967999999999996 37.76952037769019 17.023999999999994Q37.76952037769019 15.999999999999993 38.79352037769019 15.999999999999993H49.481520377690195Q50.377520377690196 15.999999999999993 50.313520377690196 16.895999999999994V39.872Q50.249520377690196 40.06399999999999 50.441520377690196 40.06399999999999Q50.633520377690196 40.06399999999999 50.697520377690196 39.872L56.073520377690194 16.895999999999994Q56.265520377690194 15.999999999999993 57.161520377690195 15.999999999999993H67.5295203776902Q67.9775203776902 15.999999999999993 68.2015203776902 16.255999999999993Q68.42552037769019 16.511999999999993 68.2335203776902 17.023999999999994L54.1535203776902 59.967999999999996Q53.8975203776902 60.8 53.0015203776902 60.8H42.121520377690196Q41.225520377690195 60.8 41.225520377690195 59.967999999999996Z M94.7135203776902 26.303999999999995H82.8095203776902Q82.4895203776902 26.303999999999995 82.4895203776902 26.623999999999995L81.7215203776902 32.896Q81.5935203776902 33.215999999999994 81.9775203776902 33.215999999999994H88.1855203776902Q88.6335203776902 33.215999999999994 88.85752037769021 33.471999999999994Q89.0815203776902 33.727999999999994 89.0175203776902 34.175999999999995L87.9935203776902 42.559999999999995Q87.8015203776902 43.519999999999996 86.9055203776902 43.519999999999996H80.6975203776902Q80.3775203776902 43.519999999999996 80.3775203776902 43.839999999999996L79.6095203776902 50.175999999999995Q79.4815203776902 50.495999999999995 79.8655203776902 50.495999999999995H91.7695203776902Q92.21752037769019 50.495999999999995 92.4415203776902 50.751999999999995Q92.6655203776902 51.007999999999996 92.6015203776902 51.455999999999996L91.5775203776902 59.839999999999996Q91.5135203776902 60.288 91.2255203776902 60.544Q90.93752037769019 60.8 90.4895203776902 60.8H67.5135203776902Q67.1295203776902 60.8 66.9055203776902 60.544Q66.68152037769019 60.288 66.7455203776902 59.839999999999996L71.9935203776902 16.959999999999994Q72.0575203776902 16.511999999999993 72.3455203776902 16.255999999999993Q72.6335203776902 15.999999999999993 73.0175203776902 15.999999999999993H95.9935203776902Q96.4415203776902 15.999999999999993 96.6655203776902 16.255999999999993Q96.8895203776902 16.511999999999993 96.8255203776902 16.959999999999994L95.8015203776902 25.343999999999994Q95.7375203776902 25.791999999999994 95.44952037769019 26.047999999999995Q95.1615203776902 26.303999999999995 94.7135203776902 26.303999999999995Z M95.5295203776902 59.839999999999996 100.77752037769021 16.959999999999994Q100.8415203776902 16.511999999999993 101.1295203776902 16.255999999999993Q101.41752037769021 15.999999999999993 101.80152037769021 15.999999999999993H111.6575203776902Q112.0415203776902 15.999999999999993 112.26552037769021 16.255999999999993Q112.48952037769021 16.511999999999993 112.4255203776902 16.959999999999994L108.39352037769021 50.175999999999995Q108.26552037769021 50.495999999999995 108.64952037769021 50.495999999999995H120.8095203776902Q121.25752037769021 50.495999999999995 121.4815203776902 50.751999999999995Q121.7055203776902 51.007999999999996 121.6415203776902 51.455999999999996L120.6175203776902 59.839999999999996Q120.4255203776902 60.8 119.5295203776902 60.8H96.2975203776902Q95.9135203776902 60.8 95.6895203776902 60.544Q95.4655203776902 60.288 95.5295203776902 59.839999999999996Z M124.44152037769021 59.839999999999996 129.6895203776902 16.959999999999994Q129.75352037769022 16.511999999999993 130.04152037769023 16.255999999999993Q130.32952037769022 15.999999999999993 130.7135203776902 15.999999999999993H140.5695203776902Q140.9535203776902 15.999999999999993 141.1775203776902 16.255999999999993Q141.40152037769022 16.511999999999993 141.33752037769023 16.959999999999994L137.30552037769021 50.175999999999995Q137.1775203776902 50.495999999999995 137.56152037769021 50.495999999999995H149.7215203776902Q150.16952037769022 50.495999999999995 150.3935203776902 50.751999999999995Q150.6175203776902 51.007999999999996 150.5535203776902 51.455999999999996L149.5295203776902 59.839999999999996Q149.33752037769023 60.8 148.4415203776902 60.8H125.20952037769021Q124.82552037769021 60.8 124.6015203776902 60.544Q124.3775203776902 60.288 124.44152037769021 59.839999999999996Z M154.56952037769022 49.727999999999994Q154.56952037769022 49.024 154.6975203776902 47.488L158.47352037769022 16.959999999999994Q158.5375203776902 16.511999999999993 158.82552037769022 16.255999999999993Q159.1135203776902 15.999999999999993 159.49752037769022 15.999999999999993H169.35352037769022Q169.7375203776902 15.999999999999993 169.9615203776902 16.255999999999993Q170.1855203776902 16.511999999999993 170.12152037769022 16.959999999999994L166.2815203776902 48.64Q166.15352037769023 49.727999999999994 166.5375203776902 50.367999999999995Q166.92152037769023 51.007999999999996 167.75352037769022 51.007999999999996Q168.58552037769022 51.007999999999996 169.1295203776902 50.367999999999995Q169.6735203776902 49.727999999999994 169.80152037769022 48.64L173.70552037769022 16.959999999999994Q173.7695203776902 16.511999999999993 174.0255203776902 16.255999999999993Q174.2815203776902 15.999999999999993 174.72952037769022 15.999999999999993H184.52152037769022Q184.96952037769023 15.999999999999993 185.19352037769022 16.255999999999993Q185.4175203776902 16.511999999999993 185.35352037769022 16.959999999999994L181.5775203776902 47.488Q181.0655203776902 51.583999999999996 179.01752037769023 54.72Q176.96952037769023 57.855999999999995 173.70552037769022 59.583999999999996Q170.4415203776902 61.312 166.47352037769022 61.312Q160.96952037769023 61.312 157.76952037769024 58.176Q154.56952037769022 55.04 154.56952037769022 49.727999999999994Z M211.3855203776902 15.999999999999993H221.1135203776902Q221.4975203776902 15.999999999999993 221.72152037769018 16.255999999999993Q221.9455203776902 16.511999999999993 221.8815203776902 16.959999999999994L216.63352037769022 59.839999999999996Q216.5695203776902 60.288 216.28152037769019 60.544Q215.9935203776902 60.8 215.60952037769022 60.8H205.75352037769022Q205.3695203776902 60.8 205.14552037769022 60.544Q204.9215203776902 60.288 204.98552037769022 59.839999999999996L208.1855203776902 33.664Q208.2495203776902 33.408 208.0895203776902 33.376Q207.9295203776902 33.343999999999994 207.80152037769022 33.536L203.44952037769022 39.80799999999999L202.68152037769022 40.959999999999994H202.6175203776902L199.35352037769022 33.536Q199.28952037769022 33.343999999999994 199.16152037769024 33.376Q199.03352037769022 33.408 198.9695203776902 33.664L195.7695203776902 59.839999999999996Q195.70552037769022 60.288 195.44952037769022 60.544Q195.19352037769022 60.8 194.7455203776902 60.8H184.9535203776902Q184.5055203776902 60.8 184.28152037769019 60.544Q184.0575203776902 60.288 184.12152037769022 59.839999999999996L189.3695203776902 16.959999999999994Q189.4335203776902 16.511999999999993 189.7215203776902 16.255999999999993Q190.00952037769022 15.999999999999993 190.3935203776902 15.999999999999993H200.12152037769022Q200.88952037769022 15.999999999999993 201.14552037769022 16.703999999999994L204.5375203776902 25.023999999999994Q204.6655203776902 25.279999999999994 204.9215203776902 25.023999999999994L210.2335203776902 16.703999999999994Q210.6175203776902 15.999999999999993 211.3855203776902 15.999999999999993Z"
+              fill="#0D1016"
             />
           </svg>
         </a>
         <nav class="site-nav" aria-label="Site">
           <a href="#what">What it is</a>
+          <a href="#rules">Legibility</a>
           <a href="#compose">Compose</a>
           <a href="#quick-start">Quick start</a>
           <a href="https://github.com/alxjrvs/vellum">GitHub</a>
@@ -594,115 +570,68 @@
     <main id="main">
       <!-- ============ hero ============ -->
       <section class="hero" id="top" aria-labelledby="hero-h">
-        <div class="wrap">
-          <p class="eyebrow rise">Open source · Local-only · 0.2.0 beta — live in your browser</p>
-          <h1 id="hero-h" class="rise rise-1">The character sheet, on&nbsp;camera.</h1>
-          <p class="subhead rise rise-2">A layer of story over every camera.</p>
-          <p class="lede rise rise-2">
-            Vellum renders a live character HUD over your webcam — through OBS, into your video call
-            — so your table sees your stats where they're already looking.
-          </p>
-          <div class="cta-row rise rise-3">
-            <a class="btn btn-primary" href="app/">Open Vellum</a>
-            <a class="btn btn-secondary" href="#quick-start">Quick start</a>
+        <div class="wrap hero-grid">
+          <div>
+            <p class="eyebrow">Open source · Local-only · 0.2.0 beta</p>
+            <h1 id="hero-h">Your sheet. <em>On air.</em></h1>
+            <p class="lede">
+              Vellum renders a live character HUD over your webcam, through OBS, into your Discord
+              call. Your table sees your stats where they're already looking. It runs in your
+              browser; nothing leaves your machine.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="app/">Open Vellum</a>
+              <a class="btn btn-secondary" href="#quick-start">Quick start</a>
+            </div>
           </div>
 
-          <figure class="demo rise rise-4">
-            <div class="demo-frame">
-              <!-- The overlay sheet: a drafting-vellum wireframe of the player HUD,
-               ruled in plummet over the space where the player sits. -->
-              <svg
-                viewBox="0 0 640 360"
-                role="img"
-                aria-label="Wireframe sketch of the player HUD: hope pips, HP and stress tracks, condition badges, and a nameplate arranged around a webcam silhouette, drawn like a drafting overlay sheet."
-              >
-                <g stroke="#8A7E6C" fill="none" stroke-width="1">
-                  <!-- registration corners -->
-                  <path d="M16 28 V16 H28 M612 16 H624 V28 M624 332 V344 H612 M28 344 H16 V332" />
-                </g>
-                <!-- silhouette: the player behind the sheet -->
-                <g
-                  stroke="#8A7E6C"
-                  fill="none"
-                  stroke-width="1.25"
-                  stroke-dasharray="5 5"
-                  opacity="0.75"
-                >
-                  <circle cx="320" cy="150" r="52" />
-                  <path d="M220 330 C 228 244, 412 244, 420 330" />
-                </g>
-                <!-- hope pips -->
-                <g font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1.5">
-                  <text x="40" y="52" fill="#B5A88D">HOPE</text>
-                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
-                    <circle cx="47" cy="72" r="7" fill="#C9A14A" stroke="none" />
-                    <circle cx="71" cy="72" r="7" fill="#C9A14A" stroke="none" />
-                    <circle cx="95" cy="72" r="7" />
-                    <circle cx="119" cy="72" r="7" />
-                    <circle cx="143" cy="72" r="7" />
-                    <circle cx="167" cy="72" r="7" />
-                  </g>
-                  <!-- hp / stress slots -->
-                  <text x="40" y="112" fill="#B5A88D">HP</text>
-                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
-                    <rect x="40" y="122" width="16" height="16" />
-                    <rect x="64" y="122" width="16" height="16" />
-                    <rect x="88" y="122" width="16" height="16" />
-                    <rect x="112" y="122" width="16" height="16" />
-                    <rect x="136" y="122" width="16" height="16" />
-                    <rect x="160" y="122" width="16" height="16" />
-                  </g>
-                  <text x="40" y="168" fill="#B5A88D">STRESS</text>
-                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
-                    <rect x="40" y="178" width="16" height="16" />
-                    <rect x="64" y="178" width="16" height="16" />
-                    <rect x="88" y="178" width="16" height="16" />
-                    <rect x="112" y="178" width="16" height="16" />
-                    <rect x="136" y="178" width="16" height="16" />
-                  </g>
-                  <!-- conditions -->
-                  <text x="492" y="52" fill="#B5A88D">CONDITIONS</text>
-                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
-                    <rect x="492" y="62" width="72" height="20" rx="10" />
-                    <rect x="492" y="90" width="96" height="20" rx="10" />
-                  </g>
-                  <!-- nameplate -->
-                  <g stroke="#8A7E6C" stroke-dasharray="3 3" fill="none">
-                    <rect x="40" y="288" width="212" height="38" rx="4" />
-                  </g>
-                  <text x="54" y="311" fill="#B5A88D">NAME · CLASS &amp; HERITAGE</text>
-                  <!-- title block, like a drafting sheet -->
-                  <g stroke="#8A7E6C" fill="none">
-                    <rect x="428" y="288" width="172" height="38" />
-                    <path d="M428 307 H600" />
-                  </g>
-                  <text x="438" y="302" fill="#B5A88D">VELLUM · SCENE: PLAYER</text>
-                  <text x="438" y="320" fill="#B5A88D">OVERLAY SHEET · 16:9</text>
-                </g>
-              </svg>
+          <figure
+            class="tile"
+            role="img"
+            aria-label="The player HUD on a webcam tile: HP, Hope and Stress plates on the left, a Vulnerable condition on the right, and the nameplate Marlowe Venn, Ranger, at the bottom."
+          >
+            <div class="t-vitals">
+              <div class="t-row">
+                <span class="t-k">HP</span><span class="t-n">4<small>/6</small></span>
+                <span class="t-chits" style="--fill: var(--color-hit)"
+                  ><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i
+                  ><i></i
+                ></span>
+              </div>
+              <div class="t-row">
+                <span class="t-k">Hope</span><span class="t-n">4<small>/6</small></span>
+                <span class="t-chits" style="--fill: var(--color-signal)"
+                  ><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i
+                  ><i></i
+                ></span>
+              </div>
+              <div class="t-row">
+                <span class="t-k">Stress</span><span class="t-n">3<small>/6</small></span>
+                <span class="t-bar" style="--fill: var(--color-stress); --pct: 50%"></span>
+              </div>
             </div>
-            <figcaption class="small">
-              Live HUD composited on a Discord call — demo clip coming soon.
-            </figcaption>
+            <div class="t-conds"><span class="t-chip">Vulnerable</span></div>
+            <div class="t-name"><b>Marlowe Venn</b><span>Lvl 3 Ranger · Human</span></div>
+            <figcaption>OBS Virtual Camera · 1920×1080</figcaption>
           </figure>
         </div>
       </section>
 
-      <div class="wrap"><hr class="rule rule-tick" /></div>
-
       <!-- ============ the shift ============ -->
       <section id="what" aria-labelledby="what-h">
         <div class="wrap">
-          <p class="eyebrow">The shift</p>
-          <h2 id="what-h">Off the tab, onto the table.</h2>
-          <p style="margin-top: 1.25rem">
-            In a remote session, everyone's stats live in a character-sheet tab off-camera —
-            private, invisible, and a tab-switch away. Vellum composites them onto the webcam feed
-            itself: OBS renders the HUD over your camera, the virtual camera carries it into the
-            call, and your character state becomes ambient information the whole table shares.
-          </p>
-          <div class="shift-grid">
-            <div>
+          <div class="sec-head">
+            <p class="eyebrow">The shift</p>
+            <h2 id="what-h">Off the tab, onto the table.</h2>
+            <p class="lede">
+              In a remote session, everyone's stats live in a character-sheet tab off-camera:
+              private, invisible, and a tab-switch away. Vellum puts them on the webcam feed itself.
+              OBS renders the HUD over your camera, the virtual camera carries it into the call, and
+              your character state becomes information the whole table shares.
+            </p>
+          </div>
+          <div class="duo">
+            <div class="card">
               <p class="eyebrow">Before</p>
               <h3>The other tab</h3>
               <p class="small">
@@ -710,11 +639,11 @@
                 starts with "hang on, let me look."
               </p>
             </div>
-            <div>
+            <div class="card lead">
               <p class="eyebrow">After</p>
               <h3>The frame</h3>
               <p class="small">
-                Your stats ride your camera tile — visible to everyone, updated live, exactly where
+                Your stats ride your camera tile, visible to everyone, updated live, exactly where
                 the table is already looking.
               </p>
             </div>
@@ -722,130 +651,152 @@
         </div>
       </section>
 
-      <div class="wrap"><hr class="rule" /></div>
-
       <!-- ============ pillars ============ -->
       <section aria-labelledby="pillars-h">
         <div class="wrap">
-          <h2 id="pillars-h">Built like a good tool.</h2>
+          <div class="sec-head"><h2 id="pillars-h">Built like a good tool.</h2></div>
           <div class="pillars">
-            <div class="pillar">
-              <p class="eyebrow">Local-only &amp; yours</p>
+            <div class="card">
+              <p class="eyebrow">Local-only</p>
               <h3>Nothing leaves your machine</h3>
-              <p>
+              <p class="small">
                 No account, no server, no telemetry. Vellum runs from a static file and writes to
-                localStorage — there is nothing to sign up for and nothing to phone home to.
+                localStorage. There is nothing to sign up for and nothing to phone home to.
               </p>
             </div>
-            <div class="pillar">
+            <div class="card">
               <p class="eyebrow">Composable</p>
               <h3>Daggerheart in the box, your system next</h3>
-              <p>
-                Systems, scenes, and themes are config, not core code. Daggerheart ships as the
-                reference implementation; the platform exists so you can teach it yours.
+              <p class="small">
+                Systems, scenes, and frames are config, not core code. Daggerheart ships as the
+                reference; the platform exists so you can teach it yours.
               </p>
             </div>
-            <div class="pillar">
+            <div class="card">
               <p class="eyebrow">Made for the call</p>
-              <h3>Not the stream</h3>
-              <p>
-                Designed for a 4–6 person Discord call at 480p — legible at thumbnail size, calm on
-                camera. A table tool, not a broadcast package.
+              <h3>Readable on a tiny tile</h3>
+              <p class="small">
+                Designed for a 4–6 person Discord call at 480p. Every label stays readable at
+                thumbnail size, on every frame.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <div class="wrap"><hr class="rule" /></div>
+      <!-- ============ the two rules ============ -->
+      <section id="rules" aria-labelledby="rules-h">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="eyebrow">For frame makers</p>
+            <h2 id="rules-h">Two rules every frame keeps.</h2>
+            <p class="lede">
+              A frame can change colors, faces, and whether a stat draws as a bar or as chits. It
+              can't break these two rules, and Vellum checks them.
+            </p>
+          </div>
+          <div class="rules">
+            <div class="card lead">
+              <h3>Labels are always readable</h3>
+              <p class="small">
+                At least 2.1% of the frame's width: 40px on the 1920 canvas, about 13px on a 640×360
+                Discord tile. At least 7:1 contrast, always on a solid plate, never straight on
+                video.
+              </p>
+            </div>
+            <div class="card lead">
+              <h3>Everything reads outside-in</h3>
+              <p class="small">
+                Each widget reads from the nearest frame edge toward your face. Left side: label,
+                value, bar. Right side, mirrored: bar, value, label.
+              </p>
+              <div class="oi" aria-hidden="true">
+                <span>LABEL</span><span>4</span><span class="bar"></span
+                ><span class="mid">face</span><span class="bar"></span><span>4</span
+                ><span>LABEL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- ============ compose ============ -->
       <section id="compose" aria-labelledby="compose-h">
         <div class="wrap">
-          <p class="eyebrow">For system authors</p>
-          <h2 id="compose-h">Compose it.</h2>
+          <div class="sec-head">
+            <p class="eyebrow">For system authors</p>
+            <h2 id="compose-h">Compose it.</h2>
+          </div>
           <div class="compose-grid">
             <div class="compose-copy">
               <p>
                 A <strong>system</strong> declares its resources, conditions, and character schema.
-                It offers <strong>scenes</strong> — URL-addressable HUDs, one per role, each the
-                target of an OBS browser source. Scenes compose <strong>widgets</strong>: generic
-                pip tracks, slot tracks, badges, and nameplates bound to your config.
+                It offers <strong>scenes</strong>: URL-addressable HUDs, one per role, each the
+                target of an OBS browser source. Scenes compose <strong>widgets</strong>: tracks,
+                badges, and nameplates bound to your config. A <strong>frame</strong> skins them.
               </p>
-              <p>Add your system as one folder — config plus a few components, no core edits.</p>
+              <p>Add your system as one folder: config plus a few components, no core edits.</p>
               <span class="chain" aria-hidden="true"
-                ><b>System</b> → <b>Scenes</b> → <b>Widgets</b></span
+                ><b>System</b> → <b>Scenes</b> → <b>Widgets</b> → <b>Frame</b></span
               >
             </div>
             <div class="codeblock">
-              <pre><code><span class="c">// systems/daggerheart/index.ts — illustrative</span>
-<span class="k">export const</span> daggerheart: <span class="t">SystemDefinition</span> = {
+              <pre><code><span class="c">// frames/daggerheart.ts — illustrative</span>
+<span class="k">export const</span> daggerheart: <span class="t">ThemeConfig</span> = {
   id: <span class="s">"daggerheart"</span>,
-  label: <span class="s">"Daggerheart"</span>,
-  resources: [
-    pipTrack(<span class="s">"hope"</span>, { max: <span class="k">6</span> }),
-    slotTrack(<span class="s">"hp"</span>, { thresholds: <span class="k">true</span> }),
-    slotTrack(<span class="s">"stress"</span>),
-  ],
-  conditions: coreConditions,
-  characterSchema,
-  scenes: [
-    scene(<span class="s">"player"</span>, [<span class="s">"identity"</span>, <span class="s">"hope"</span>, <span class="s">"hp"</span>, <span class="s">"stress"</span>]),
-    scene(<span class="s">"gm"</span>, [<span class="s">"fear"</span>]),
-  ],
-  defaultTheme: <span class="s">"daggerheart"</span>,
+  colors: { plate: <span class="s">"#1b140b"</span>, nameplate: <span class="s">"#f3e6c4"</span>, … },
+  tracks: {
+    hp: <span class="s">"chits"</span>,
+    stress: <span class="s">"bar"</span>,
+    hope: <span class="s">"chits"</span>,
+    armor: <span class="s">"chits"</span>,
+    fear: <span class="s">"chits"</span>,
+  },
 };</code></pre>
             </div>
           </div>
         </div>
       </section>
 
-      <div class="wrap"><hr class="rule" /></div>
-
       <!-- ============ quick start ============ -->
       <section id="quick-start" aria-labelledby="qs-h">
         <div class="wrap">
-          <p class="eyebrow">Quick start</p>
-          <h2 id="qs-h">Four steps to the table.</h2>
+          <div class="sec-head">
+            <p class="eyebrow">Quick start</p>
+            <h2 id="qs-h">Four steps to the table.</h2>
+          </div>
           <ol class="steps">
             <li>
-              <div>
-                <h3>Open Vellum</h3>
-                <p>
-                  No install — <a href="app/">open the app in your browser</a>, or download the
-                  static bundle to run fully offline. Either way it runs entirely on your machine;
-                  nothing you enter is uploaded.
-                </p>
-              </div>
+              <span class="time">Step 1</span>
+              <h3>Open Vellum</h3>
+              <p>
+                No install. <a href="app/">Open the app in your browser</a>, or download the static
+                bundle to run fully offline. Nothing you enter is uploaded.
+              </p>
             </li>
             <li>
-              <div>
-                <h3>Build your character</h3>
-                <p>
-                  Fill in the character form, then hit <strong>Copy share link</strong>. Your whole
-                  sheet packs into a URL — no files to prepare or email around.
-                </p>
-              </div>
+              <span class="time">Step 2</span>
+              <h3>Build your character</h3>
+              <p>
+                Fill in the character form, then hit <strong>Copy share link</strong>. Your whole
+                sheet packs into a URL.
+              </p>
             </li>
             <li>
-              <div>
-                <h3>Drop it into OBS</h3>
-                <p>
-                  Import the Vellum scene collection — <strong>macOS, Windows, or Linux</strong> —
-                  or add a browser source pointed at your share link. The in-app setup wizard walks
-                  you through the rest.
-                </p>
-              </div>
+              <span class="time">Step 3</span>
+              <h3>Drop it into OBS</h3>
+              <p>
+                Import the Vellum scene collection on <strong>macOS, Windows, or Linux</strong>, or
+                add a browser source pointed at your share link.
+              </p>
             </li>
             <li>
-              <div>
-                <h3>Go live in Discord</h3>
-                <p>
-                  Add your webcam under the HUD, start the OBS Virtual Camera, and pick it in
-                  Discord. Your tile is now camera plus HUD — and every value persists across a
-                  reload.
-                </p>
-              </div>
+              <span class="time">Step 4</span>
+              <h3>Go on camera</h3>
+              <p>
+                Put your webcam under the HUD, start the OBS Virtual Camera, and pick it in Discord.
+                Every value persists across a reload.
+              </p>
             </li>
           </ol>
         </div>
@@ -854,23 +805,24 @@
 
     <footer class="site">
       <div class="wrap foot-grid">
-        <div class="foot-mark" aria-hidden="true">
-          <!-- The folded-V mark (docs/branding/favicon.svg) -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-            <rect width="64" height="64" rx="14" fill="#1C1510" />
-            <polygon points="14,12 25,12 37.5,52 26.5,52" fill="#C9A14A" />
-            <polygon points="39,12 50,12 37.5,52 26.5,52" fill="#9A7930" />
-            <polygon points="32,34.4 37.5,52 26.5,52" fill="#6B5316" />
+        <div aria-hidden="true">
+          <svg class="foot-mark" viewBox="0 0 249.9 76.8" role="img" aria-label="Vellum">
+            <polygon points="16.3,0 27.3,0 11.0,76.8 0.0,76.8" fill="#FFC83D" />
+            <polygon points="31.3,0 248.9,0 232.6,76.8 15.0,76.8" fill="#F5F7FA" />
+            <path
+              d="M41.225520377690195 59.967999999999996 37.76952037769019 17.023999999999994Q37.76952037769019 15.999999999999993 38.79352037769019 15.999999999999993H49.481520377690195Q50.377520377690196 15.999999999999993 50.313520377690196 16.895999999999994V39.872Q50.249520377690196 40.06399999999999 50.441520377690196 40.06399999999999Q50.633520377690196 40.06399999999999 50.697520377690196 39.872L56.073520377690194 16.895999999999994Q56.265520377690194 15.999999999999993 57.161520377690195 15.999999999999993H67.5295203776902Q67.9775203776902 15.999999999999993 68.2015203776902 16.255999999999993Q68.42552037769019 16.511999999999993 68.2335203776902 17.023999999999994L54.1535203776902 59.967999999999996Q53.8975203776902 60.8 53.0015203776902 60.8H42.121520377690196Q41.225520377690195 60.8 41.225520377690195 59.967999999999996Z M94.7135203776902 26.303999999999995H82.8095203776902Q82.4895203776902 26.303999999999995 82.4895203776902 26.623999999999995L81.7215203776902 32.896Q81.5935203776902 33.215999999999994 81.9775203776902 33.215999999999994H88.1855203776902Q88.6335203776902 33.215999999999994 88.85752037769021 33.471999999999994Q89.0815203776902 33.727999999999994 89.0175203776902 34.175999999999995L87.9935203776902 42.559999999999995Q87.8015203776902 43.519999999999996 86.9055203776902 43.519999999999996H80.6975203776902Q80.3775203776902 43.519999999999996 80.3775203776902 43.839999999999996L79.6095203776902 50.175999999999995Q79.4815203776902 50.495999999999995 79.8655203776902 50.495999999999995H91.7695203776902Q92.21752037769019 50.495999999999995 92.4415203776902 50.751999999999995Q92.6655203776902 51.007999999999996 92.6015203776902 51.455999999999996L91.5775203776902 59.839999999999996Q91.5135203776902 60.288 91.2255203776902 60.544Q90.93752037769019 60.8 90.4895203776902 60.8H67.5135203776902Q67.1295203776902 60.8 66.9055203776902 60.544Q66.68152037769019 60.288 66.7455203776902 59.839999999999996L71.9935203776902 16.959999999999994Q72.0575203776902 16.511999999999993 72.3455203776902 16.255999999999993Q72.6335203776902 15.999999999999993 73.0175203776902 15.999999999999993H95.9935203776902Q96.4415203776902 15.999999999999993 96.6655203776902 16.255999999999993Q96.8895203776902 16.511999999999993 96.8255203776902 16.959999999999994L95.8015203776902 25.343999999999994Q95.7375203776902 25.791999999999994 95.44952037769019 26.047999999999995Q95.1615203776902 26.303999999999995 94.7135203776902 26.303999999999995Z M95.5295203776902 59.839999999999996 100.77752037769021 16.959999999999994Q100.8415203776902 16.511999999999993 101.1295203776902 16.255999999999993Q101.41752037769021 15.999999999999993 101.80152037769021 15.999999999999993H111.6575203776902Q112.0415203776902 15.999999999999993 112.26552037769021 16.255999999999993Q112.48952037769021 16.511999999999993 112.4255203776902 16.959999999999994L108.39352037769021 50.175999999999995Q108.26552037769021 50.495999999999995 108.64952037769021 50.495999999999995H120.8095203776902Q121.25752037769021 50.495999999999995 121.4815203776902 50.751999999999995Q121.7055203776902 51.007999999999996 121.6415203776902 51.455999999999996L120.6175203776902 59.839999999999996Q120.4255203776902 60.8 119.5295203776902 60.8H96.2975203776902Q95.9135203776902 60.8 95.6895203776902 60.544Q95.4655203776902 60.288 95.5295203776902 59.839999999999996Z M124.44152037769021 59.839999999999996 129.6895203776902 16.959999999999994Q129.75352037769022 16.511999999999993 130.04152037769023 16.255999999999993Q130.32952037769022 15.999999999999993 130.7135203776902 15.999999999999993H140.5695203776902Q140.9535203776902 15.999999999999993 141.1775203776902 16.255999999999993Q141.40152037769022 16.511999999999993 141.33752037769023 16.959999999999994L137.30552037769021 50.175999999999995Q137.1775203776902 50.495999999999995 137.56152037769021 50.495999999999995H149.7215203776902Q150.16952037769022 50.495999999999995 150.3935203776902 50.751999999999995Q150.6175203776902 51.007999999999996 150.5535203776902 51.455999999999996L149.5295203776902 59.839999999999996Q149.33752037769023 60.8 148.4415203776902 60.8H125.20952037769021Q124.82552037769021 60.8 124.6015203776902 60.544Q124.3775203776902 60.288 124.44152037769021 59.839999999999996Z M154.56952037769022 49.727999999999994Q154.56952037769022 49.024 154.6975203776902 47.488L158.47352037769022 16.959999999999994Q158.5375203776902 16.511999999999993 158.82552037769022 16.255999999999993Q159.1135203776902 15.999999999999993 159.49752037769022 15.999999999999993H169.35352037769022Q169.7375203776902 15.999999999999993 169.9615203776902 16.255999999999993Q170.1855203776902 16.511999999999993 170.12152037769022 16.959999999999994L166.2815203776902 48.64Q166.15352037769023 49.727999999999994 166.5375203776902 50.367999999999995Q166.92152037769023 51.007999999999996 167.75352037769022 51.007999999999996Q168.58552037769022 51.007999999999996 169.1295203776902 50.367999999999995Q169.6735203776902 49.727999999999994 169.80152037769022 48.64L173.70552037769022 16.959999999999994Q173.7695203776902 16.511999999999993 174.0255203776902 16.255999999999993Q174.2815203776902 15.999999999999993 174.72952037769022 15.999999999999993H184.52152037769022Q184.96952037769023 15.999999999999993 185.19352037769022 16.255999999999993Q185.4175203776902 16.511999999999993 185.35352037769022 16.959999999999994L181.5775203776902 47.488Q181.0655203776902 51.583999999999996 179.01752037769023 54.72Q176.96952037769023 57.855999999999995 173.70552037769022 59.583999999999996Q170.4415203776902 61.312 166.47352037769022 61.312Q160.96952037769023 61.312 157.76952037769024 58.176Q154.56952037769022 55.04 154.56952037769022 49.727999999999994Z M211.3855203776902 15.999999999999993H221.1135203776902Q221.4975203776902 15.999999999999993 221.72152037769018 16.255999999999993Q221.9455203776902 16.511999999999993 221.8815203776902 16.959999999999994L216.63352037769022 59.839999999999996Q216.5695203776902 60.288 216.28152037769019 60.544Q215.9935203776902 60.8 215.60952037769022 60.8H205.75352037769022Q205.3695203776902 60.8 205.14552037769022 60.544Q204.9215203776902 60.288 204.98552037769022 59.839999999999996L208.1855203776902 33.664Q208.2495203776902 33.408 208.0895203776902 33.376Q207.9295203776902 33.343999999999994 207.80152037769022 33.536L203.44952037769022 39.80799999999999L202.68152037769022 40.959999999999994H202.6175203776902L199.35352037769022 33.536Q199.28952037769022 33.343999999999994 199.16152037769024 33.376Q199.03352037769022 33.408 198.9695203776902 33.664L195.7695203776902 59.839999999999996Q195.70552037769022 60.288 195.44952037769022 60.544Q195.19352037769022 60.8 194.7455203776902 60.8H184.9535203776902Q184.5055203776902 60.8 184.28152037769019 60.544Q184.0575203776902 60.288 184.12152037769022 59.839999999999996L189.3695203776902 16.959999999999994Q189.4335203776902 16.511999999999993 189.7215203776902 16.255999999999993Q190.00952037769022 15.999999999999993 190.3935203776902 15.999999999999993H200.12152037769022Q200.88952037769022 15.999999999999993 201.14552037769022 16.703999999999994L204.5375203776902 25.023999999999994Q204.6655203776902 25.279999999999994 204.9215203776902 25.023999999999994L210.2335203776902 16.703999999999994Q210.6175203776902 15.999999999999993 211.3855203776902 15.999999999999993Z"
+              fill="#0D1016"
+            />
           </svg>
         </div>
         <div class="foot-meta">
           <p class="small">
-            Vellum is open source on <a href="https://github.com/alxjrvs/vellum">GitHub</a> — MIT
+            Vellum is open source on <a href="https://github.com/alxjrvs/vellum">GitHub</a>. MIT
             license planned.
           </p>
           <p class="small">
             Vellum is not affiliated with Darrington Press. Daggerheart is a trademark of its owner;
-            Vellum's Daggerheart module encodes SRD-derived mechanics only — no rulebook text or
+            Vellum's Daggerheart module encodes SRD-derived mechanics only, with no rulebook text or
             art.
           </p>
           <p class="small">Local, legible, yours.</p>

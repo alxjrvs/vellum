@@ -17,7 +17,25 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ## [Unreleased]
 
+### Changed
+
+- **New design language: the broadcast package.** One design system now drives
+  vellumhud.com, the setup screens, and the HUD: solid slanted plates, Barlow
+  Condensed numerals, and the Nameplate wordmark. Chassis tokens live in
+  `src/themes/vellum.tokens.css` and the site links the same file. Fonts are
+  self-hosted, so OBS still needs no network. See `docs/branding/BRANDING.md`.
+- **Two enforced HUD rules.** Labels are at least 40px on the 1920 canvas
+  (about 13px on a 640×360 tile) at 7:1 contrast, and right-hand widgets mirror
+  so every label reads from the outer edge in.
+- **Breaking (`ThemeConfig`):** color tokens are renamed to the chassis set
+  (`plate`, `label`, `signal`, `hit`, …), and frames gain `tracks` to choose bar
+  or chits per stat, plus new `fontSizeValue` and track layout sizes. HP hearts
+  are retired in favor of bars or chits.
+
 ### Added
+
+- **`validateFrame`** (`src/themes/frameRules.ts`) checks a frame's label size
+  and contrast; the official Daggerheart frame is tested against it.
 
 - **Screen picker on the bare `/app/` route.** Opening the app with no scene in
   the URL now shows a game + role selector (Daggerheart → Player / GM) that

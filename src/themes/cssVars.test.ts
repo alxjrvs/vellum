@@ -5,38 +5,39 @@ import { daggerheartTheme } from './daggerheart.theme';
 describe('themeToCssVars', () => {
   it('emits CSS custom properties for every color token, kebab-cased and color-prefixed', () => {
     const vars = themeToCssVars(daggerheartTheme);
-    expect(vars['--color-parchment']).toBe('#f3e6c4');
-    expect(vars['--color-ink']).toBe('#1a1208');
-    expect(vars['--color-card-surface']).toBe('rgba(243, 230, 196, 0.96)');
-    expect(vars['--color-ink-muted']).toBe('#5a4a32');
-    expect(vars['--color-accent']).toBe('#c2612f');
+    expect(vars['--color-plate']).toBe('#1b140b');
+    expect(vars['--color-plate-raised']).toBe('#2a2013');
+    expect(vars['--color-label']).toBe('#e2d3ad');
+    expect(vars['--color-signal-ink']).toBe('#1a1208');
+    expect(vars['--color-nameplate']).toBe('#f3e6c4');
   });
 
-  it('emits CSS custom properties for the new HUD/heart color tokens', () => {
+  it('emits a token for every chassis color the frame overrides', () => {
     const vars = themeToCssVars(daggerheartTheme);
-    expect(vars['--color-health']).toBe('#e4443a');
-    expect(vars['--color-steel']).toBe('#7fa0c4');
-    expect(vars['--color-hud-surface']).toBe('#1b140b');
-    expect(vars['--color-hud-surface-strong']).toBe('#0f0a05');
-    expect(vars['--color-hud-border']).toBe('rgba(201, 161, 74, 0.55)');
+    for (const name of Object.keys(daggerheartTheme.colors)) {
+      const kebab = name.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+      expect(vars[`--color-${kebab}`]).toBeDefined();
+    }
   });
 
   it('emits CSS custom properties for typography tokens', () => {
     const vars = themeToCssVars(daggerheartTheme);
-    expect(vars['--font-family-display']).toContain('Cinzel');
-    expect(vars['--font-size-base']).toBe('24px');
-    expect(vars['--font-size-heading']).toBe('40px');
-    expect(vars['--font-size-label']).toBe('19px');
-    expect(vars['--font-size-title']).toBe('72px');
+    expect(vars['--font-family-display']).toContain('Barlow Condensed');
+    expect(vars['--font-size-base']).toBe('26px');
+    expect(vars['--font-size-label']).toBe('40px');
+    expect(vars['--font-size-value']).toBe('64px');
   });
 
   it('emits CSS custom properties for layout tokens', () => {
     const vars = themeToCssVars(daggerheartTheme);
-    expect(vars['--spacing-md']).toBe('16px');
-    expect(vars['--spacing-xl']).toBe('40px');
-    expect(vars['--radius-sm']).toBe('4px');
-    expect(vars['--border-width']).toBe('2px');
-    expect(vars['--pip-size']).toBe('30px');
-    expect(vars['--heart-size']).toBe('52px');
+    expect(vars['--spacing-md']).toBe('18px');
+    expect(vars['--spacing-xl']).toBe('48px');
+    expect(vars['--track-height']).toBe('24px');
+    expect(vars['--edge-width']).toBe('14px');
+  });
+
+  it('does not emit the per-stat track display choices as CSS', () => {
+    const vars = themeToCssVars(daggerheartTheme);
+    expect(Object.keys(vars).some((k) => k.includes('hope'))).toBe(false);
   });
 });

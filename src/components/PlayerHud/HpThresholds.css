@@ -1,11 +1,11 @@
+/*
+ * Damage tiers under the HP plate: Minor · 7 · Major · 12 · Severe. Each tier
+ * is a button; the threshold numbers sit between them like the sheet.
+ */
 .hp-thresholds {
   display: flex;
   align-items: stretch;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-md);
-  background: var(--color-hud-surface);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-sm);
+  gap: 2px;
   font-family: var(--font-family-display);
 }
 
@@ -14,67 +14,61 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: var(--spacing-xs) 0;
-  border: var(--border-width) solid transparent;
-  border-radius: var(--radius-sm);
-  background: transparent;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-xs);
+  border: none;
+  border-bottom: var(--spacing-xs) solid var(--tier-color, var(--color-label));
+  background: var(--color-plate);
   font-family: inherit;
   cursor: pointer;
-  transition:
-    background 0.12s ease,
-    border-color 0.12s ease,
-    transform 0.08s ease;
+  transition: background 0.12s ease;
 }
 
 .hp-thresholds__tier:hover {
-  background: rgba(0, 0, 0, 0.35);
-  border-color: var(--color-hud-border);
-  transform: translateY(-1px);
+  background: var(--color-plate-raised);
 }
 
-.hp-thresholds__tier:active {
-  transform: translateY(0);
+.hp-thresholds__tier:focus-visible {
+  outline: var(--border-width) solid var(--color-text);
+  outline-offset: -4px;
+}
+
+.hp-thresholds__tier[data-tier='major'] {
+  --tier-color: var(--color-stress);
+}
+
+.hp-thresholds__tier[data-tier='severe'] {
+  --tier-color: var(--color-hit);
 }
 
 .hp-thresholds__name {
   font-size: var(--font-size-label);
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1;
+  color: var(--color-label);
 }
 
 .hp-thresholds__cost {
   font-family: var(--font-family-body);
-  font-size: var(--font-size-label);
-  line-height: 1;
-  color: var(--color-parchment);
-  opacity: 0.7;
-}
-
-.hp-thresholds__tier[data-tier='minor'] .hp-thresholds__name {
-  color: var(--color-parchment);
-}
-
-.hp-thresholds__tier[data-tier='major'] .hp-thresholds__name {
-  color: var(--color-accent);
-}
-
-.hp-thresholds__tier[data-tier='severe'] .hp-thresholds__name {
-  color: var(--color-danger);
-}
-
-/* Threshold values sit between the tiers, like the character sheet. */
-.hp-thresholds__mark {
-  align-self: center;
-  min-width: 1.6em;
-  padding: 2px var(--spacing-xs);
-  border: var(--border-width) solid var(--color-hud-border);
-  border-radius: var(--radius-sm);
-  background: rgba(0, 0, 0, 0.35);
   font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.hp-thresholds__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8em;
+  padding: 0 var(--spacing-sm);
+  background: var(--color-nameplate);
+  color: var(--color-nameplate-ink);
+  font-size: var(--font-size-value);
+  font-weight: 800;
+  font-style: italic;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  text-align: center;
-  color: var(--color-gold);
 }

@@ -24,8 +24,8 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
     const root = document.documentElement;
-    expect(root.style.getPropertyValue('--color-parchment')).toBe('#f3e6c4');
-    expect(root.style.getPropertyValue('--color-ink')).toBe('#1a1208');
+    expect(root.style.getPropertyValue('--color-plate')).toBe('#1b140b');
+    expect(root.style.getPropertyValue('--color-nameplate-ink')).toBe('#1a1208');
   });
 
   it('injects typography and layout tokens as CSS custom properties on :root', () => {
@@ -35,11 +35,11 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
     const root = document.documentElement;
-    expect(root.style.getPropertyValue('--font-size-base')).toBe('24px');
-    expect(root.style.getPropertyValue('--spacing-md')).toBe('16px');
-    expect(root.style.getPropertyValue('--spacing-xl')).toBe('40px');
-    expect(root.style.getPropertyValue('--pip-size')).toBe('30px');
-    expect(root.style.getPropertyValue('--heart-size')).toBe('52px');
+    expect(root.style.getPropertyValue('--font-size-base')).toBe('26px');
+    expect(root.style.getPropertyValue('--spacing-md')).toBe('18px');
+    expect(root.style.getPropertyValue('--spacing-xl')).toBe('48px');
+    expect(root.style.getPropertyValue('--chit-width')).toBe('30px');
+    expect(root.style.getPropertyValue('--track-height')).toBe('24px');
   });
 
   it('exposes the theme to descendants via useTheme()', () => {
@@ -58,7 +58,7 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
     unmount();
-    expect(document.documentElement.style.getPropertyValue('--color-parchment')).toBe('');
+    expect(document.documentElement.style.getPropertyValue('--color-plate')).toBe('');
   });
 
   it('throws when useTheme is called outside a provider', () => {
