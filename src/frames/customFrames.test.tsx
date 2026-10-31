@@ -134,7 +134,7 @@ function renderPicker() {
 describe('My frames', () => {
   it('makes a frame from the active one, checks the rules, and saves it', () => {
     renderPicker();
-    fireEvent.click(screen.getByRole('button', { name: 'Make a frame from this one' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Customize' }));
     const creator = screen.getByRole('dialog', { name: 'Frame creator' });
     fireEvent.change(within(creator).getByRole('textbox', { name: 'Name' }), {
       target: { value: 'Gilded' },
@@ -176,7 +176,7 @@ describe('My frames', () => {
   });
 
   function importFile(file: File) {
-    const input = screen.getByLabelText('Import a frame file');
+    const input = screen.getByLabelText('Import');
     Object.defineProperty(input, 'files', { configurable: true, value: [file] });
     return act(async () => {
       fireEvent.change(input);

@@ -12,6 +12,7 @@ import { HudRegion } from './components/HudRegion';
 import { CameraSetup } from './components/CameraSetup';
 import { SetupChecks } from './components/SetupChecks';
 import { SceneSelector } from './components/SceneSelector';
+import { SetupBar } from './components/SetupBar';
 import { SceneShell } from './scenes/SceneShell';
 import { useViewMode } from './viewMode/useViewMode';
 import { FrameDeckReport, PlayerDeckReport } from './deck/DeckReport';
@@ -24,7 +25,8 @@ export function App() {
   // than silently assuming the player HUD.
   if (viewMode === null) {
     return (
-      <main className="setup-shell">
+      <main className="setup-shell setup-shell--single vellum-chassis">
+        <SetupBar title="Choose a screen" />
         <SceneSelector />
       </main>
     );
@@ -48,10 +50,11 @@ export function App() {
         // float over a live camera with no way to dismiss it. GmSetup is the
         // GM's how-to.
         renderSetup={({ launch }) => (
-          <main className="setup-shell">
+          <main className="setup-shell vellum-chassis">
+            <SetupBar title="GM setup" />
             <GmSetup onLaunch={launch} />
-            <SetupChecks />
             <FramePicker />
+            <SetupChecks />
             <CameraSetup />
           </main>
         )}
@@ -84,10 +87,11 @@ export function App() {
       canLaunch={character !== null}
       defaultLaunched={character !== null}
       renderSetup={({ launch }) => (
-        <main className="setup-shell">
+        <main className="setup-shell vellum-chassis">
+          <SetupBar title="Player setup" />
           <CharacterSetup onDone={launch} />
-          <SetupChecks />
           <FramePicker />
+          <SetupChecks />
           <CameraSetup />
           <SetupWizard />
         </main>

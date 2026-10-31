@@ -51,7 +51,11 @@ export function GmSetup({ onLaunch }: GmSetupProps) {
       <h2 className="gm-setup__heading">Get it onto your camera</h2>
       <ol className="gm-setup__steps">
         <li>
-          <button type="button" className="gm-setup__copy-button" onClick={copyScreenLink}>
+          <button
+            type="button"
+            className="setup-button gm-setup__copy-button"
+            onClick={copyScreenLink}
+          >
             {copied ? 'Link copied' : 'Copy GM screen link'}
           </button>
         </li>
@@ -68,7 +72,11 @@ export function GmSetup({ onLaunch }: GmSetupProps) {
         </li>
       </ol>
 
-      <button type="button" className="gm-setup__launch" onClick={onLaunch}>
+      <button
+        type="button"
+        className="setup-button setup-button--primary gm-setup__launch"
+        onClick={onLaunch}
+      >
         Launch GM screen
       </button>
       <p className="gm-setup__note">

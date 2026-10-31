@@ -126,11 +126,12 @@ button {
 }
 
 /*
- * Setup screens sit on the Night ground and fit the stage with no scrolling:
- * the setup form (or GM how-to) on the left, the checks, frames and camera
- * stacked in the middle, and the setup panel on the right. They are read in a
- * browser tab, never on a camera tile, so they use a smaller type and spacing
- * scale than the HUD's on-camera minimums.
+ * Setup screens are Vellum's own UI, in the chassis colors (.vellum-chassis),
+ * on the Night ground, and fit the stage with no scrolling: the setup bar
+ * across the top, then the setup form (or GM how-to) on the left, the frames,
+ * checks and camera stacked in the middle, and the setup panel on the right.
+ * They are read in a browser tab, never on a camera tile, so they use a
+ * smaller type and spacing scale than the HUD's on-camera minimums.
  */
 .setup-shell,
 .setup-wizard {
@@ -144,6 +145,9 @@ button {
   --spacing-md: 12px;
   --spacing-lg: 20px;
   --spacing-xl: 32px;
+  --edge-width: 10px;
+  /* Every control on a setup screen is at least this tall. */
+  --control-height: 56px;
 }
 
 .setup-shell {
@@ -152,20 +156,27 @@ button {
   overflow-y: auto;
   padding: var(--spacing-xl);
   display: grid;
-  grid-template-columns: minmax(0, 560px) minmax(0, 1fr) minmax(0, 420px);
-  grid-template-rows: min-content min-content 1fr;
+  grid-template-columns: minmax(0, 560px) minmax(0, 1fr) minmax(0, 380px);
+  grid-template-rows: min-content min-content min-content min-content 1fr;
   align-items: start;
-  gap: var(--spacing-lg) var(--spacing-xl);
+  gap: var(--spacing-md) var(--spacing-xl);
   background: var(--color-night);
   color: var(--color-text);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
 }
 
-.setup-shell > :first-child {
+.setup-shell > .setup-bar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.setup-shell > :nth-child(2) {
   grid-column: 1;
-  grid-row: 1 / span 3;
+  grid-row: 2 / span 4;
 }
 
-.setup-shell > :not(:first-child) {
+.setup-shell > :nth-child(n + 3) {
   grid-column: 2;
   margin: 0;
   max-width: none;
@@ -173,11 +184,103 @@ button {
 
 .setup-shell > .setup-wizard {
   grid-column: 3;
-  grid-row: 1 / span 3;
+  grid-row: 2 / span 4;
   position: static;
   transform: none;
   width: auto;
   max-height: none;
+}
+
+/* The bare /app/ route has one thing to show: the screen picker. */
+.setup-shell--single {
+  grid-template-columns: minmax(0, 1200px);
+  grid-template-rows: min-content 1fr;
+  justify-content: center;
+}
+
+.setup-shell--single > :nth-child(2) {
+  grid-row: 2;
+}
+
+/*
+ * Setup primitives, shared by every setup panel: section headings are
+ * nameplate tabs, buttons are slanted plates, inputs are big solid wells.
+ * State reads by color, never by opacity or by moving.
+ */
+.setup-shell h2,
+.setup-wizard h2 {
+  align-self: flex-start;
+  justify-self: start;
+  padding: var(--spacing-xs) calc(var(--spacing-xl) + var(--spacing-sm)) var(--spacing-xs)
+    var(--spacing-md);
+  border-left: var(--edge-width) solid var(--color-signal);
+  background: var(--color-nameplate);
+  color: var(--color-nameplate-ink);
+  font-size: var(--font-size-heading);
+  font-weight: 900;
+  line-height: 1.1;
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--spacing-lg)) 100%, 0 100%);
+}
+
+.setup-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--control-height);
+  padding: 0 calc(var(--spacing-lg) + var(--spacing-md));
+  border: none;
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  clip-path: polygon(var(--spacing-md) 0, 100% 0, calc(100% - var(--spacing-md)) 100%, 0 100%);
+}
+
+.setup-button:hover:not(:disabled),
+.setup-button:focus-visible {
+  background: var(--color-text);
+  color: var(--color-night);
+}
+
+.setup-button:disabled {
+  background: var(--color-plate);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.setup-button--primary {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+  font-size: var(--font-size-heading);
+  font-weight: 900;
+  font-style: italic;
+}
+
+.setup-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--spacing-md);
+  border: none;
+  border-bottom: var(--border-width) solid var(--color-rule);
+  border-radius: 0;
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+}
+
+.setup-input:focus {
+  outline: none;
+  border-bottom-color: var(--color-signal);
 }
 
 h1,

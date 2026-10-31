@@ -36,39 +36,11 @@ export function DiceRoller() {
 
   const latest = history[0];
 
+  // The controls sit on top and the history hangs below the Roll button, in a
+  // box of fixed height: a new roll never moves a button, wherever the frame
+  // places the roller.
   return (
     <section className="dice-roller" aria-label="Duality dice roller">
-      <div className="dice-roller__log" aria-label="Roll history" aria-live="polite">
-        {history.length === 0 ? (
-          <p className="dice-roller__empty">No rolls yet</p>
-        ) : (
-          <ol className="dice-roller__log-list">
-            {history.map((entry) => (
-              <li
-                key={entry.id}
-                className="dice-roller__log-row"
-                data-outcome={entry.outcome}
-                data-latest={entry === latest}
-              >
-                <span className="dice-roller__log-total">{entry.total}</span>
-                <span className="dice-roller__log-outcome">{OUTCOME_LABEL[entry.outcome]}</span>
-                <span className="dice-roller__log-dice">
-                  <span data-kind="hope">{entry.hope}</span>
-                  <span className="dice-roller__log-sep">/</span>
-                  <span data-kind="fear">{entry.fear}</span>
-                  {entry.advantageValue !== undefined && (
-                    <span data-kind="advantage">{signed(entry.advantageValue)}</span>
-                  )}
-                  {entry.modifier !== 0 && (
-                    <span data-kind="modifier">{signed(entry.modifier)}</span>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ol>
-        )}
-      </div>
-
       <div className="dice-roller__dock">
         <div className="dice-roller__dock-row">
           <div className="dice-roller__field" role="group" aria-label="Modifier">
@@ -130,6 +102,36 @@ export function DiceRoller() {
             Clear
           </button>
         </div>
+      </div>
+      <div className="dice-roller__log" aria-label="Roll history" aria-live="polite">
+        {history.length === 0 ? (
+          <p className="dice-roller__empty">No rolls yet</p>
+        ) : (
+          <ol className="dice-roller__log-list">
+            {history.map((entry) => (
+              <li
+                key={entry.id}
+                className="dice-roller__log-row"
+                data-outcome={entry.outcome}
+                data-latest={entry === latest}
+              >
+                <span className="dice-roller__log-total">{entry.total}</span>
+                <span className="dice-roller__log-outcome">{OUTCOME_LABEL[entry.outcome]}</span>
+                <span className="dice-roller__log-dice">
+                  <span data-kind="hope">{entry.hope}</span>
+                  <span className="dice-roller__log-sep">/</span>
+                  <span data-kind="fear">{entry.fear}</span>
+                  {entry.advantageValue !== undefined && (
+                    <span data-kind="advantage">{signed(entry.advantageValue)}</span>
+                  )}
+                  {entry.modifier !== 0 && (
+                    <span data-kind="modifier">{signed(entry.modifier)}</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
     </section>
   );

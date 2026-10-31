@@ -1,11 +1,10 @@
-import { useState, type CSSProperties } from 'react';
+import { useState } from 'react';
 import { parseFrame } from '../../frames/customFrames';
 import { useFrame } from '../../frames/useFrame';
 import type { ThemeConfig } from '../../themes/types';
 import { FrameCreator } from '../FrameCreator';
+import { FramePreview } from '../FrameCreator/FramePreview';
 import './FramePicker.css';
-
-const SWATCHES = ['nameplate', 'signal', 'hit', 'stress', 'armor', 'fear'] as const;
 
 const SHELVES: { origin: ThemeConfig['origin']; title: string }[] = [
   { origin: 'official', title: 'Official' },
@@ -67,56 +66,66 @@ export function FramePicker() {
   return (
     <section className="frame-picker" aria-label="Frame">
       <h2 className="frame-picker__heading">Frame</h2>
-      {SHELVES.map(({ origin, title }) => {
-        const shelf = frames.filter((f) => f.origin === origin);
-        if (shelf.length === 0) return null;
-        return (
-          <div key={origin} className="frame-picker__shelf">
-            <h3 className="frame-picker__shelf-title">{title}</h3>
-            <div className="frame-picker__options" role="radiogroup" aria-label={title}>
-              {shelf.map((frame) => (
-                <button
-                  key={frame.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={frame.id === active.id}
-                  className="frame-picker__option"
-                  onClick={() => setFrame(frame.id)}
-                >
-                  <span className="frame-picker__swatches" aria-hidden="true">
-                    {SWATCHES.map((name) => (
-                      <span
-                        key={name}
-                        className="frame-picker__swatch"
-                        style={{ '--swatch': frame.colors[name] } as CSSProperties}
-                      />
-                    ))}
-                  </span>
-                  <span className="frame-picker__name">{frame.label}</span>
-                  <span className="frame-picker__meta">{trackSummary(frame)}</span>
-                </button>
-              ))}
+      {/* One strip of fixed-size cards, a shelf per origin. More frames scroll
+          sideways rather than pushing the controls below them down. */}
+      <div className="frame-picker__strip">
+        {SHELVES.map(({ origin, title }) => {
+          const shelf = frames.filter((f) => f.origin === origin);
+          if (shelf.length === 0) return null;
+          return (
+            <div key={origin} className="frame-picker__shelf">
+              <h3 className="frame-picker__shelf-title">{title}</h3>
+              <div className="frame-picker__options" role="radiogroup" aria-label={title}>
+                {shelf.map((frame) => (
+                  <button
+                    key={frame.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={frame.id === active.id}
+                    className="frame-picker__option"
+                    onClick={() => setFrame(frame.id)}
+                  >
+                    <span className="frame-picker__thumb">
+                      <FramePreview frame={frame} scale={1 / 8} />
+                    </span>
+                    <span className="frame-picker__plate">
+                      <span className="frame-picker__name">{frame.label}</span>
+                      <span className="frame-picker__meta">{trackSummary(frame)}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
+      {/* Every action is always in the same place; ones that only apply to
+          your own frames are disabled, not removed. */}
       <div className="frame-picker__actions">
-        <button type="button" onClick={() => setCreating(active)}>
-          {active.origin === 'custom' ? 'Edit this frame' : 'Make a frame from this one'}
+        {/* Customizing an official or community frame starts a copy in My
+            frames; customizing one of yours edits it. */}
+        <button type="button" className="setup-button" onClick={() => setCreating(active)}>
+          Customize
         </button>
-        {active.origin === 'custom' && (
-          <>
-            <button type="button" onClick={() => exportFrame(active)}>
-              Export file
-            </button>
-            <button type="button" onClick={() => deleteFrame(active.id)}>
-              Delete
-            </button>
-          </>
-        )}
-        <label className="frame-picker__import">
-          Import a frame file
+        <button
+          type="button"
+          className="setup-button"
+          disabled={active.origin !== 'custom'}
+          onClick={() => exportFrame(active)}
+        >
+          Export
+        </button>
+        <button
+          type="button"
+          className="setup-button"
+          disabled={active.origin !== 'custom'}
+          onClick={() => deleteFrame(active.id)}
+        >
+          Delete
+        </button>
+        <label className="setup-button frame-picker__import">
+          Import
           <input
             type="file"
             accept=".json,application/json"
