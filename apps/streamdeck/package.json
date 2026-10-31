@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@elgato/streamdeck": "1",
+    "@vellum/protocol": "workspace:*",
     "ws": "8"
   },
   "devDependencies": {

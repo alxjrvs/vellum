@@ -1,6 +1,5 @@
-import { parseCommand } from '../commands/parseCommand';
-import type { Command, TrackId } from '../commands/types';
-import type { CoreConditionId } from '../systems/types';
+import type { Command, CoreConditionId, TrackId } from './commands';
+import { parseCommand } from './parseCommand';
 
 /**
  * The wire format between a Vellum page and the Vellum Stream Deck plugin.
@@ -10,8 +9,8 @@ import type { CoreConditionId } from '../systems/types';
  * showing, and receives the commands the keys send. Nothing here crosses the
  * network: both ends are on the same computer.
  *
- * This file is shared by the app and the plugin (apps/streamdeck), so it must
- * stay free of DOM and Node APIs.
+ * Shared by the app and the plugin (apps/streamdeck), so it stays free of DOM
+ * and Node APIs.
  */
 export const DECK_PROTOCOL_VERSION = 1;
 export const DECK_PORT = 28196;

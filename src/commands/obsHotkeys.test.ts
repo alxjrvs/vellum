@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import script from '../../obs/vellum-hotkeys.lua?raw';
 import { COMMAND_EVENT } from './commandBus';
-import { parseCommand } from './parseCommand';
+import { parseCommand } from '@vellum/protocol';
 
 // Rows of the script's COMMANDS table: { "id", "description", 'json' }.
 const ROW = /\{\s*"([^"]+)",\s*"([^"]+)",\s*'([^']+)'\s*\}/g;

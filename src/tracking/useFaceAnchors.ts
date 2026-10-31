@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
-import { FACE_LOST_GRACE_MS, faceToAnchors, smoothAnchors, type FaceAnchors } from './anchors';
-import { FACE_MODEL_FILE, MEDIAPIPE_DIR } from './assets';
-import type { FromWorker, ToWorker } from './messages';
+import {
+  FACE_LOST_GRACE_MS,
+  FACE_MODEL_FILE,
+  MEDIAPIPE_DIR,
+  createFaceWorker,
+  faceToAnchors,
+  smoothAnchors,
+  type FaceAnchors,
+  type FromWorker,
+  type ToWorker,
+} from '@vellum/tracking';
 
 export type TrackingStatus = 'off' | 'loading' | 'tracking' | 'error';
 
@@ -31,7 +39,7 @@ export function useFaceAnchors(
       return;
     }
     setTracking({ status: 'loading', anchors: null });
-    const worker = new Worker(new URL('./faceWorker.ts', import.meta.url), { type: 'module' });
+    const worker = createFaceWorker();
     const send = (message: ToWorker, transfer: Transferable[] = []) =>
       worker.postMessage(message, transfer);
 

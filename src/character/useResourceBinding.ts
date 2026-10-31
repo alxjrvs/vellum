@@ -1,4 +1,4 @@
-import type { TrackId } from '../commands/types';
+import type { TrackId } from '@vellum/protocol';
 import type { StatTrackProps } from '../components/StatTrack';
 import { useSystem } from '../systems/useSystem';
 import { useCharacter } from './useCharacter';

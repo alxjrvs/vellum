@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import { MEDIAPIPE_DIR } from './src/tracking/assets';
+import { MEDIAPIPE_DIR } from '@vellum/tracking/assets';
 
 /**
  * Face tracking runs entirely on the device, so its WASM runtime and model ship
@@ -65,8 +65,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.test.{ts,tsx}', 'src/setupTests.ts', 'src/main.tsx'],
+      include: ['src/**/*.{ts,tsx}', 'packages/*/src/**/*.ts'],
+      exclude: ['**/*.test.{ts,tsx}', 'src/setupTests.ts', 'src/main.tsx'],
     },
   },
 });

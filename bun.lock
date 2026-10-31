@@ -8,8 +8,9 @@
         "@fontsource/barlow": "5",
         "@fontsource/barlow-condensed": "5",
         "@fontsource/ibm-plex-mono": "5",
-        "@mediapipe/tasks-vision": "1.2.0",
         "@randsum/daggerheart": "1.1.1",
+        "@vellum/protocol": "workspace:*",
+        "@vellum/tracking": "workspace:*",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
       },
@@ -54,10 +55,22 @@
       "version": "0.1.0",
       "dependencies": {
         "@elgato/streamdeck": "1",
+        "@vellum/protocol": "workspace:*",
         "ws": "8",
       },
       "devDependencies": {
         "@types/ws": "8",
+      },
+    },
+    "packages/protocol": {
+      "name": "@vellum/protocol",
+      "version": "0.0.0",
+    },
+    "packages/tracking": {
+      "name": "@vellum/tracking",
+      "version": "0.0.0",
+      "dependencies": {
+        "@mediapipe/tasks-vision": "1.2.0",
       },
     },
   },
@@ -586,9 +599,13 @@
 
     "@ungap/structured-clone": ["@ungap/structured-clone@1.4.0", "", {}, "sha512-1mEZtMKPM09vDmQt5y7YvmN2+DFTP7Tg0EWXdic8/C6VRnpb33e4ghisCIE3WZjsE2N8mf+QV1Zqh7ZFYLWInQ=="],
 
+    "@vellum/protocol": ["@vellum/protocol@workspace:packages/protocol"],
+
     "@vellum/site": ["@vellum/site@workspace:apps/site"],
 
     "@vellum/streamdeck": ["@vellum/streamdeck@workspace:apps/streamdeck"],
+
+    "@vellum/tracking": ["@vellum/tracking@workspace:packages/tracking"],
 
     "@vitejs/plugin-react": ["@vitejs/plugin-react@5.2.0", "", { "dependencies": { "@babel/core": "^7.29.0", "@babel/plugin-transform-react-jsx-self": "^7.27.1", "@babel/plugin-transform-react-jsx-source": "^7.27.1", "@rolldown/pluginutils": "1.0.0-rc.3", "@types/babel__core": "^7.20.5", "react-refresh": "^0.18.0" }, "peerDependencies": { "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw=="],
 

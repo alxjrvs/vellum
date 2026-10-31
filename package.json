@@ -4,7 +4,8 @@
   "version": "0.2.0",
   "type": "module",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "dev": "vite",
@@ -27,8 +28,9 @@
     "@fontsource/barlow": "5",
     "@fontsource/barlow-condensed": "5",
     "@fontsource/ibm-plex-mono": "5",
-    "@mediapipe/tasks-vision": "1.2.0",
     "@randsum/daggerheart": "1.1.1",
+    "@vellum/protocol": "workspace:*",
+    "@vellum/tracking": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

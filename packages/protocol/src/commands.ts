@@ -1,4 +1,6 @@
-import type { CoreConditionId } from '../systems/types';
+/** Conditions every system shares. A system labels them; commands name them by id. */
+export const CORE_CONDITION_IDS = ['hidden', 'restrained', 'vulnerable'] as const;
+export type CoreConditionId = (typeof CORE_CONDITION_IDS)[number];
 
 /**
  * Every input that can change the HUD (a click, an OBS hotkey, a Stream Deck

@@ -1,6 +1,6 @@
 import type { CharacterAction } from '../character/reducer';
 import type { CharacterState } from '../character/types';
-import type { Command, TrackId } from './types';
+import type { Command, TrackId } from '@vellum/protocol';
 
 export interface CommandLimits {
   readonly hopeMax: number;

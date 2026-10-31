@@ -5,7 +5,7 @@ import {
   type KeyDownEvent,
   type WillAppearEvent,
 } from '@elgato/streamdeck';
-import { CORE_CONDITION_IDS, type CoreConditionId } from '../../../../src/systems/types';
+import { CORE_CONDITION_IDS, type CoreConditionId } from '@vellum/protocol';
 import type { DeckBridge } from '../bridge';
 import { conditionKey, toDataUrl } from '../keyImage';
 

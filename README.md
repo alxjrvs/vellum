@@ -42,6 +42,20 @@ ships an offline zip.)
 - Modern Chromium target (OBS browser source = CEF).
 - 1920×1080 OBS canvas; 640×360 in-call effective size.
 
+## Repo layout
+
+Bun workspaces. Dependencies flow one way: apps depend on packages, never the
+reverse.
+
+| Path                | What                                                        |
+| ------------------- | ----------------------------------------------------------- |
+| `src/`              | The HUD app (Vite + React), served at vellumhud.com/app/    |
+| `apps/site`         | vellumhud.com: marketing and docs (Astro + Starlight)       |
+| `apps/streamdeck`   | Stream Deck plugin with live keys                           |
+| `packages/protocol` | Command vocabulary and the Stream Deck wire format (no DOM) |
+| `packages/tracking` | On-device face tracking: MediaPipe worker and anchor math   |
+| `obs/`              | OBS scripts and scene collection                            |
+
 ## Documentation
 
 - `docs/QUICKSTART.md` — the one-screen "Paste and Play" onramp (start here).
