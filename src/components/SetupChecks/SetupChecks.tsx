@@ -165,7 +165,7 @@ export function SetupChecks() {
         ))}
       </ul>
       <p className="setup-checks__more">
-        Step by step: <a href="https://vellumhud.com/docs/obs/">OBS setup guide</a>.
+        Step by step: <a href="https://vellumhud.com/docs/">setup guide</a>.
       </p>
     </section>
   );

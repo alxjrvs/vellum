@@ -33,10 +33,6 @@
   font-size: var(--font-size-base);
 }
 
-.gm-setup__copy {
-  margin-top: var(--spacing-xs);
-}
-
 .gm-setup__copy-button,
 .gm-setup__launch {
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -67,4 +63,8 @@
   margin: 0;
   color: var(--color-label);
   font-size: var(--font-size-label);
+}
+
+.gm-setup a {
+  color: var(--color-signal);
 }
