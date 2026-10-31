@@ -1,7 +1,6 @@
-import type { TrackId } from '../commands/types';
 import type { CharacterState } from '../character/types';
 import type { SystemConfig } from '../systems/types';
-import type { DeckState, DeckTrack } from './protocol';
+import type { DeckState, DeckTrack, TrackId } from '@vellum/protocol';
 
 /** The player's stats as the HUD shows them, for the keys to draw. */
 export function playerDeckState(character: CharacterState, system: SystemConfig): DeckState {

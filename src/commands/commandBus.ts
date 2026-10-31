@@ -1,5 +1,4 @@
-import { parseCommand } from './parseCommand';
-import type { Command } from './types';
+import { parseCommand, type Command } from '@vellum/protocol';
 
 type Listener = (command: Command) => void;
 

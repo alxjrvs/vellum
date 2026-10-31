@@ -8,7 +8,7 @@ import {
   type TouchTapEvent,
   type WillAppearEvent,
 } from '@elgato/streamdeck';
-import { TRACK_IDS, type TrackId } from '../../../../src/commands/types';
+import { TRACK_IDS, type TrackId } from '@vellum/protocol';
 import type { DeckBridge } from '../bridge';
 import { TONES, toDataUrl, trackKey } from '../keyImage';
 

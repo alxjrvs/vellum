@@ -33,7 +33,7 @@ Pasting a new link later updates Vellum HUD straight away.
 Hope, HP, Stress, Armor and Fear up and down, the three conditions, and next or
 previous frame. A press calls the browser source's own `javascript_event` proc
 with a `vellum:command` event whose detail is the command JSON (see
-`src/commands/types.ts`), so there is no websocket, password or network. Only
+`packages/protocol/src/commands.ts`), so there is no websocket, password or network. Only
 browser sources whose URL is on `vellumhud.com` (or `localhost`/`127.0.0.1`)
 receive them. Keep the hotkey ids stable: OBS saves bindings by id.
 

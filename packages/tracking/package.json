@@ -1,0 +1,14 @@
+{
+  "name": "@vellum/tracking",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "On-device face tracking: the MediaPipe worker and the anchor math the HUD's face-following widgets use.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./assets": "./src/assets.ts"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "1.2.0"
+  }
+}

@@ -3,7 +3,7 @@ import { lauxlib, lua, lualib, to_luastring } from 'fengari';
 import script from '../../obs/vellum.lua?raw';
 import fakeObslua from './fakeObslua.lua?raw';
 import { COMMAND_EVENT } from './commandBus';
-import { parseCommand } from './parseCommand';
+import { parseCommand } from '@vellum/protocol';
 
 // Rows of the script's COMMANDS table: { "id", "description", 'json' }.
 const ROW = /\{\s*"([^"]+)",\s*"([^"]+)",\s*'([^']+)'\s*\}/g;

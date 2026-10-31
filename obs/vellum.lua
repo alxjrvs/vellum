@@ -15,7 +15,7 @@ One script does the whole OBS side of Vellum:
 Install: Tools > Scripts > + > pick this file. Requires OBS 28 or newer.
 
 The page receives a `vellum:command` window event whose detail is the JSON
-below; see src/commands/types.ts for the vocabulary.
+below; see packages/protocol/src/commands.ts for the vocabulary.
 ]]
 
 obs = obslua
