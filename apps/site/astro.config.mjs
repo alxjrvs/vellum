@@ -28,7 +28,7 @@ export default defineConfig({
         {
           label: 'Play',
           items: [
-            { label: 'Hotkeys and Stream Deck', slug: 'docs/control' },
+            { label: 'Hotkeys', slug: 'docs/control' },
             { label: 'Face tracking', slug: 'docs/face-tracking' },
           ],
         },

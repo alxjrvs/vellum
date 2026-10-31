@@ -4,8 +4,8 @@ import StatusChit from '../components/StatusChit.astro';
 ---
 
 <Site
-  title="Hotkeys and Stream Deck"
-  description="Drive your Vellum HUD from hotkeys or a Stream Deck. Every input sends the same command, and everything stays on your machine."
+  title="Programmable hotkeys"
+  description="Drive your Vellum HUD with programmable hotkeys. Bind any key or button, and everything stays on your machine."
 >
   <section class="page-hero">
     <div class="wrap">
@@ -13,7 +13,7 @@ import StatusChit from '../components/StatusChit.astro';
       <h1>Hands on the game,<br /><em>not the mouse.</em></h1>
       <p class="lede">
         During a session you shouldn't have to dig through OBS to mark a point of HP. Vellum takes
-        input from a click, a hotkey or a Stream Deck key, and they all send the same command.
+        input from a click or a programmable hotkey, and both send the same command.
       </p>
     </div>
   </section>
@@ -21,10 +21,10 @@ import StatusChit from '../components/StatusChit.astro';
   <section aria-labelledby="ways-h">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">Three ways in</p>
+        <p class="eyebrow">Two ways in</p>
         <h2 id="ways-h">Pick the one that fits your desk.</h2>
       </div>
-      <div class="grid-3">
+      <div class="grid-2">
         <div class="card lead">
           <div class="card-top"><h3>Click</h3><StatusChit status="live" /></div>
           <p class="small">
@@ -33,17 +33,11 @@ import StatusChit from '../components/StatusChit.astro';
           </p>
         </div>
         <div class="card">
-          <div class="card-top"><h3>Hotkeys</h3><StatusChit status="live" /></div>
+          <div class="card-top"><h3>Programmable hotkeys</h3><StatusChit status="live" /></div>
           <p class="small">
             Load the Vellum script in OBS (Tools, Scripts) and bind keys in OBS's Hotkeys settings.
-            They work while OBS is in the background.
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-top"><h3>Stream Deck</h3><StatusChit status="live" /></div>
-          <p class="small">
-            Point Stream Deck's built-in Hotkey action at the Vellum hotkeys, or install the plugin
-          for keys that show your values.
+            Any keyboard, macro pad or button controller that can send a key combination will drive
+            them, even while OBS is in the background.
           </p>
         </div>
       </div>
@@ -67,7 +61,7 @@ import StatusChit from '../components/StatusChit.astro';
           <li>Switch frames mid-session</li>
         </ul>
       </div>
-      <div class="keys" aria-label="Example Stream Deck layout">
+      <div class="keys" aria-label="Example hotkey layout">
         <div class="key" style="--key: var(--color-signal)">
           <b>+1</b><span>Hope</span><kbd>Ctrl Alt 1</kbd>
         </div>
@@ -90,29 +84,12 @@ import StatusChit from '../components/StatusChit.astro';
     </div>
   </section>
 
-  <section aria-labelledby="plugin-h">
-    <div class="wrap split flip">
-      <div class="stack">
-        <div class="status-line"><StatusChit status="live" /></div>
-        <h2 id="plugin-h">Keys that show your stats.</h2>
+  <section aria-labelledby="path-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Under the hood</p>
+        <h2 id="path-h">One path for every input.</h2>
         <p class="lede">
-          The Vellum Stream Deck plugin draws your live Hope, HP, Stress, Armor and Fear on the keys
-          themselves, lights condition keys while they're on, and turns dials on Stream Deck + into
-          stat knobs.
-        </p>
-        <p class="small">
-          It listens on your own computer for the Vellum HUD in OBS. No OBS WebSocket, no password,
-          and nothing goes through the internet.
-        </p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="/downloads/vellum.streamDeckPlugin" download
-            >Download the plugin</a
-          >
-        </div>
-      </div>
-      <div class="card lead">
-        <h3>How the input path works</h3>
-        <p class="small">
           Every input becomes one typed command, such as "add 1 to Hope". The HUD is the only thing
           that changes your sheet: it applies the command, saves it, and redraws. A key press and a
           click take the same path, so they can never disagree.
@@ -125,10 +102,10 @@ import StatusChit from '../components/StatusChit.astro';
     <div class="wrap">
       <div class="sec-head">
         <h2 id="cta-h">Set it up</h2>
-        <p class="lede">The guide walks through the script, the bindings and Stream Deck.</p>
+        <p class="lede">The guide walks through loading the script and binding your keys.</p>
       </div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="/docs/control/">Hotkeys and Stream Deck guide</a>
+        <a class="btn btn-primary" href="/docs/control/">Hotkeys guide</a>
       </div>
     </div>
   </section>
