@@ -17,6 +17,13 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ## [Unreleased]
 
+## [0.3.0] — The expansion
+
+Vellum moves to vellumhud.com on Cloudflare and grows frames, a frame creator,
+face-following widgets, one OBS script for setup and hotkeys, a Stream Deck
+plugin with live keys, and setup checks. Still strictly local: nothing a
+player does leaves their machine.
+
 ### Added
 
 - **One OBS script does the whole setup.** Load `vellum.lua` (served at
