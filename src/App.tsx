@@ -10,6 +10,7 @@ import { FramePicker } from './components/FramePicker';
 import { CameraHud } from './components/CameraHud';
 import { HudRegion } from './components/HudRegion';
 import { CameraSetup } from './components/CameraSetup';
+import { SetupChecks } from './components/SetupChecks';
 import { SceneSelector } from './components/SceneSelector';
 import { SceneShell } from './scenes/SceneShell';
 import { useViewMode } from './viewMode/useViewMode';
@@ -49,6 +50,7 @@ export function App() {
         renderSetup={({ launch }) => (
           <main className="setup-shell">
             <GmSetup onLaunch={launch} />
+            <SetupChecks />
             <FramePicker />
             <CameraSetup />
           </main>
@@ -84,6 +86,7 @@ export function App() {
       renderSetup={({ launch }) => (
         <main className="setup-shell">
           <CharacterSetup onDone={launch} />
+          <SetupChecks />
           <FramePicker />
           <CameraSetup />
           <SetupWizard />
