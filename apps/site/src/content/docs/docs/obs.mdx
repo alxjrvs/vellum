@@ -1,48 +1,70 @@
 ---
 title: OBS setup
-description: Install the Vellum scene collection or add the browser source by hand, on macOS, Windows or Linux.
+description: Load one script into OBS, paste your link, pick your webcam, and press Set up Vellum.
 ---
 
-Vellum runs in OBS as a **browser source** on top of your webcam. OBS's **Virtual Camera** turns the result into a camera Discord can use.
+Vellum runs in OBS as a **browser source** laid over your webcam. OBS's **Virtual Camera** hands the finished picture to Discord as your camera. The Vellum script for OBS builds all of that for you.
 
-## Option A: import the scene collection
+**You need:** [OBS Studio](https://obsproject.com/) 28 or newer on Windows, macOS or Linux. Nothing else to install: OBS runs the script itself.
 
-Works on every OS.
+## 1. Get your link
 
-1. Download [`vellum.scene.json`](https://github.com/alxjrvs/vellum/blob/main/obs/vellum.scene.json).
-2. **Scene Collection → Import**, choose the file, then **Scene Collection → Vellum**.
-3. Double-click **Vellum HUD** and paste your share link as the URL.
+Open [the app](/app/), fill in your character, and press **Copy share link**. The link carries your whole character, which is how it gets into OBS (OBS has its own browser storage, separate from your normal browser).
 
-Import never touches your other scene collections.
+GMs can skip this step. With no link, the script uses the player screen; paste `https://vellumhud.com/app/#/daggerheart/gm` for the GM screen.
 
-## Option B: install with a script
+## 2. Load the script
 
-Quit OBS first, because it rewrites scene files when it exits.
+1. Download [`vellum.lua`](/downloads/vellum.lua) and keep it somewhere it won't move, such as your Documents folder. OBS loads it from there every time it starts.
+2. In OBS, open **Tools → Scripts**, press **+**, and pick `vellum.lua`.
 
-- **macOS or Linux:** run `obs/setup-obs.sh` from the repository.
-- **Windows:** run `powershell -ExecutionPolicy Bypass -File obs\setup-obs.ps1`.
+## 3. Set up Vellum
 
-Both write a collection named **Vellum** and nothing else.
+With **vellum.lua** selected in the Scripts window:
 
-## Option C: add the browser source by hand
+1. Paste your link into **Your Vellum link**.
+2. Pick your webcam under **Camera**. If it isn't listed, plug it in and press **Refresh camera list**.
+3. Press **Set up Vellum**.
 
-1. **Sources → + → Browser**.
-2. Paste your share link as the URL.
-3. Set the size to **1920 × 1080**. Other sizes work, because the HUD scales to fit, but 1920 × 1080 is sharpest.
+The script makes a scene called **Vellum** with your webcam underneath and the HUD on top, both fitted to your canvas, switches to it, and starts the Virtual Camera. It never touches your other scenes, and pressing it again updates the same scene.
 
-## Add your webcam and start the Virtual Camera
+The first time the Virtual Camera starts:
 
-1. **Sources → + → Video Capture Device**, pick your camera, and drag it **below** Vellum HUD.
-2. **Start Virtual Camera.** The first time:
-   - **macOS:** approve the system extension in **System Settings → Privacy & Security**.
-   - **Windows:** the driver comes with OBS; there's normally no prompt.
-   - **Linux:** load the `v4l2loopback` kernel module so the camera device exists.
-3. In Discord, **Settings → Voice & Video → Camera → OBS Virtual Camera**.
+- **macOS:** approve the OBS system extension in **System Settings → Privacy & Security**.
+- **Windows:** the driver comes with OBS; there's normally no prompt.
+- **Linux:** load the `v4l2loopback` kernel module so the camera device exists.
 
-## Changing values during play
+## 4. Pick the camera in Discord
 
-Right-click the Vellum HUD source and choose **Interact**, then click pips on the HUD. [Hotkeys](/docs/control/) let you skip the Interact window entirely.
+In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**. That's it: your face, with your stats on it.
 
-## The GM screen
+## During play
 
-Set the browser source URL to the GM address, `https://vellumhud.com/app/#/daggerheart/gm`. It shows the Fear track and the duality dice and needs no character.
+- **Change values** with [hotkeys](/docs/control/). The same script adds them: open **Settings → Hotkeys**, search for "Vellum", and bind keys. Or right-click **Vellum HUD**, choose **Interact**, and click pips on the HUD.
+- **Changed your character in the app?** Copy the share link again and paste it into **Your Vellum link**. The HUD reloads with it straight away; you don't need to press Set up again.
+- **Next session:** OBS remembers the scene and the script. Open OBS and press **Start Virtual Camera**.
+
+## Face tracking
+
+If Vellum draws the camera itself so the nameplate can follow your face, choose **Vellum draws the camera (face tracking)** under **Camera** and press **Set up Vellum** again. The script hides its own webcam source so the two don't fight over the camera. OBS also has to start with `--enable-media-stream`; see [Face tracking](/docs/face-tracking/).
+
+## Setting it up by hand
+
+If you'd rather not run a script, the setup is three sources' worth of clicks:
+
+1. **Sources → + → Browser**. Paste your link as the URL and set the size to **1920 × 1080**. Other sizes work, because the HUD scales to fit, but 1920 × 1080 is sharpest.
+2. **Sources → + → Video Capture Device**, pick your webcam, and drag it **below** the browser source.
+3. **Start Virtual Camera**, then choose **OBS Virtual Camera** in Discord.
+
+For hotkeys you still need the script, but you can load it and never press Set up.
+
+## Why a script
+
+OBS has a few ways to extend it, and we picked the one that asks least of you:
+
+- **Scripts** (Lua) run inside OBS on every OS with nothing extra to install. They can build scenes, start the Virtual Camera, and register hotkeys, and they talk to the browser source directly, with no network or password. That's everything Vellum needs.
+- **Plugins** are compiled native code. They'd need a separate installer per OS and signing on macOS, for nothing a script can't already do.
+- **Python scripts** work the same way but need Python installed and pointed at in OBS. Lua comes with OBS.
+- **Scene collection files** can carry a browser source, but not your webcam, which is different on every machine, and importing one switches your whole collection.
+- **Custom browser docks** show a web page inside OBS, but they keep separate storage from browser sources, so they couldn't carry your character into the HUD.
+- **The OBS WebSocket** lets outside apps control OBS, but it needs a password set up, and Vellum's hotkeys don't need it.

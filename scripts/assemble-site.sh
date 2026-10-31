@@ -5,7 +5,8 @@
 #                     otherwise the legacy site/ (symlinks dereferenced)
 #   /app/             the current build (latest)
 #   /app/vX.Y.Z/      every released version, frozen
-#   /downloads/       the Stream Deck plugin, when `bun run deck:build` ran
+#   /downloads/       the OBS script (vellum.lua), and the Stream Deck plugin
+#                     when `bun run deck:build` ran
 #
 # Each deploy replaces the whole asset set, so a pinned URL only survives if
 # every deploy re-publishes it. Released versions are rebuilt from their git
@@ -31,8 +32,9 @@ cp "$ROOT/deploy/_headers" "$OUT/_headers"
 cp -R "$ROOT/dist/." "$OUT/app/"
 mkdir -p "$OUT/app/v$VERSION"
 cp -R "$ROOT/dist/." "$OUT/app/v$VERSION/"
+mkdir -p "$OUT/downloads"
+cp "$ROOT/obs/vellum.lua" "$OUT/downloads/vellum.lua"
 if [ -f "$ROOT/apps/streamdeck/dist/com.vellumhud.vellum.streamDeckPlugin" ]; then
-  mkdir -p "$OUT/downloads"
   cp "$ROOT/apps/streamdeck/dist/com.vellumhud.vellum.streamDeckPlugin" \
     "$OUT/downloads/vellum.streamDeckPlugin"
 fi

@@ -30,21 +30,19 @@ built-in Virtual Camera), the **Discord desktop app**, and a webcam.
    URL with your character baked in. This is the paste-into-OBS transport, and
    it's what gets your character past OBS's separate, isolated browser storage.
 
-4. **Get it into OBS**, either way:
-   - **Import the scene** (easiest): OBS → **Scene Collection → Import** →
-     choose `obs/vellum.scene.json`, then **Scene Collection → Vellum**. Open
-     the `Vellum HUD` source's **Properties** and paste your share link as the
-     URL.
-   - **Or add a Browser Source by hand:** **Sources → + → Browser**, paste your
-     share link as the URL, set 1920×1080. Other sizes work — the HUD scales to
-     fit the source — but 1920×1080 renders it 1:1 and sharpest.
+4. **Load the Vellum script into OBS.** Download
+   `https://vellumhud.com/downloads/vellum.lua` (or `obs/vellum.lua` from this
+   repo), then OBS → **Tools → Scripts → +** and pick it.
 
-5. **Add your webcam below the HUD.** **Sources → + → Video Capture Device** →
-   pick your camera → drag it **below** `Vellum HUD` so the HUD composites on
-   top.
+5. **Set up Vellum.** In the script's panel, paste your share link into **Your
+   Vellum link**, pick your webcam under **Camera**, and press **Set up
+   Vellum**. The script builds a `Vellum` scene (webcam under the HUD, both
+   fitted to the canvas), switches to it, and starts the Virtual Camera.
+   Prefer clicks? Add a Browser Source (your share link, 1920×1080) and a Video
+   Capture Device below it by hand.
 
-6. **Go live.** **Start Virtual Camera** in OBS (approve the one-time OS prompt
-   the first time), then in Discord: **Settings → Voice & Video → Camera →
+6. **Go live.** Approve the one-time OS prompt the first time the Virtual
+   Camera starts, then in Discord: **Settings → Voice & Video → Camera →
    OBS Virtual Camera**. Your face, with your stats on it.
 
 ---

@@ -22,24 +22,20 @@ Fill in **Character details** with the numbers from your sheet, then click **Cop
 
 ## 3. Put it in OBS
 
-The quickest route is the Vellum scene collection:
+1. Download [`vellum.lua`](/downloads/vellum.lua), the Vellum script for OBS.
+2. In OBS, open **Tools → Scripts**, press **+** and pick the file.
+3. Paste your share link into **Your Vellum link**, pick your webcam under **Camera**, and press **Set up Vellum**.
 
-1. Download [`vellum.scene.json`](https://github.com/alxjrvs/vellum/blob/main/obs/vellum.scene.json).
-2. In OBS, choose **Scene Collection → Import** and pick that file, then **Scene Collection → Vellum**.
-3. Open the **Vellum HUD** source's properties and paste your share link as the URL.
-
-Prefer to do it by hand? See [OBS setup](/docs/obs/).
+The script builds a **Vellum** scene with your webcam under the HUD and starts the Virtual Camera. Approve the one-time system prompt if your OS shows one. Prefer to do it by hand? See [OBS setup](/docs/obs/).
 
 ## 4. Go on camera
 
-1. In OBS, add **Sources → + → Video Capture Device**, pick your webcam, and drag it **below** Vellum HUD.
-2. Click **Start Virtual Camera**. Approve the one-time system prompt if your OS shows one.
-3. In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**.
+In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**.
 
-That's it: your face, with your stats on it. Change a value by clicking the HUD in OBS (right-click the source, **Interact**). Everything you change is saved and survives a reload.
+That's it: your face, with your stats on it. Change a value with a [hotkey](/docs/control/), or by clicking the HUD in OBS (right-click the source, **Interact**). Everything you change is saved and survives a reload.
 
 :::tip[Let the setup panel drive]
-The first time you open the app, a small setup panel walks you through these steps. Inside OBS it checks what it can and ends with a self-test: click one HP pip and confirm it moved on your camera.
+The first time you open the app, a small setup panel walks you through these steps. Inside OBS it ends with a self-test: click one HP pip and confirm it moved on your camera.
 :::
 
 ## Next

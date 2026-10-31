@@ -72,12 +72,10 @@ this list — this is the observer's scoring sheet):
       blanked the HUD or camera.
 - [ ] Configured the character in the form; clicked **Show overlay**.
 - [ ] Clicked **Copy share link** and got a URL.
-- [ ] Got the scene into OBS — either **Scene Collection → Import** of
-      `obs/vellum.scene.json` then pasting the share link as the source URL, **or**
-      adding a Browser Source with the share link. (No file path typed.)
-- [ ] Added the webcam **Video Capture Device** and ordered it **below** the HUD.
-- [ ] **Start Virtual Camera**, approving the OS system-extension / permission
-      prompt (macOS especially).
+- [ ] Loaded `vellum.lua` under **Tools → Scripts**, pasted the share link,
+      picked the webcam, and pressed **Set up Vellum** — the `Vellum` scene
+      appeared with the webcam under the HUD and the Virtual Camera started.
+- [ ] Approved the OS system-extension / permission prompt (macOS especially).
 - [ ] Selected **OBS Virtual Camera** in Discord → Voice & Video.
 - [ ] Inside OBS, the wizard offered the **self-test** — "click one HP pip — did
       it move on your camera?" — and the tester confirmed it moved.

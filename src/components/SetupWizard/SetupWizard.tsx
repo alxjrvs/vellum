@@ -7,11 +7,14 @@ import { sceneHash } from '../../viewMode/useViewMode';
 import { isInsideObs } from './obs';
 import { readOnboardedFromStorage, writeOnboardedToStorage } from './storage';
 
+/** The OBS script that builds the Vellum scene and adds the hotkeys. */
+const OBS_SCRIPT_URL = 'https://vellumhud.com/downloads/vellum.lua';
+
 /**
  * A non-intrusive, dismissible first-run setup panel. It floats over a corner
  * of the live HUD (never blanking it — safe-mode), and adapts to where it is:
  * a normal browser tab gets the paste-and-play path with an inline copy-link,
- * while the OBS browser source gets only the un-scriptable steps plus a
+ * while the OBS browser source gets only what the OBS script can't do plus a
  * self-test. Confirming or dismissing persists `vellum:onboarded` so it stays
  * closed on reload; a small "Setup help" affordance always reopens it.
  */
@@ -72,12 +75,9 @@ export function SetupWizard() {
           </p>
           <ol className="setup-wizard__steps">
             <li>
-              Add your webcam as a <strong>Video Capture Device</strong> and order it <em>below</em>{' '}
-              this HUD source.
-            </li>
-            <li>
-              <strong>Start Virtual Camera</strong> — approve the OS system-extension prompt if it
-              appears.
+              Used <strong>Set up Vellum</strong> in the Vellum script? Your webcam and the Virtual
+              Camera are already on. Otherwise, add your webcam <em>below</em> this source and{' '}
+              <strong>Start Virtual Camera</strong>.
             </li>
             <li>
               In Discord, pick <strong>OBS Virtual Camera</strong> under Settings &rarr; Voice &amp;
@@ -120,15 +120,12 @@ export function SetupWizard() {
               </div>
             </li>
             <li>
-              In OBS, add a <strong>Browser Source</strong> with that URL — or import the Vellum
-              scene collection.
+              In OBS, load the <a href={OBS_SCRIPT_URL}>Vellum script</a> under Tools &rarr;
+              Scripts.
             </li>
             <li>
-              Add your webcam as a <strong>Video Capture Device</strong> ordered <em>below</em> the
-              HUD source.
-            </li>
-            <li>
-              <strong>Start Virtual Camera</strong> in OBS.
+              Paste your link into <strong>Your Vellum link</strong>, pick your webcam, and press{' '}
+              <strong>Set up Vellum</strong>.
             </li>
             <li>
               In Discord, pick <strong>OBS Virtual Camera</strong> under Settings &rarr; Voice &amp;
