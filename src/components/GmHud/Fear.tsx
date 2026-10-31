@@ -12,15 +12,16 @@ export function Fear() {
   const display = useTrackDisplay('fear');
   const system = useSystem();
   const max = system.fear.max;
+  const def = system.resources.find((r) => r.id === 'fear');
   const { fear, setFear } = useFear(max);
 
   return (
     <section className="fear" aria-label="Fear pool">
       <StatTrack
-        label="Fear"
-        shape="pip"
-        interaction="level"
-        tone="var(--color-fear)"
+        label={def?.label ?? 'Fear'}
+        shape={def?.shape}
+        interaction={def?.interaction}
+        tone={def?.tone}
         display={display}
         trackLength={max}
         currentValue={fear}

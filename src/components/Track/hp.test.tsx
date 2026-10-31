@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { HP } from './HP';
+import { Track } from './Track';
 import { CharacterProvider } from '../../character/CharacterProvider';
 import { SystemProvider } from '../../systems/SystemProvider';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
@@ -13,7 +13,7 @@ function renderHP(overrides: Partial<CharacterState> = {}) {
   return render(
     <SystemProvider system={daggerheartSystem}>
       <CharacterProvider>
-        <HP />
+        <Track id="hp" />
       </CharacterProvider>
     </SystemProvider>
   );
@@ -28,7 +28,7 @@ describe('HP', () => {
     const { container } = render(
       <SystemProvider system={daggerheartSystem}>
         <CharacterProvider>
-          <HP />
+          <Track id="hp" />
         </CharacterProvider>
       </SystemProvider>
     );

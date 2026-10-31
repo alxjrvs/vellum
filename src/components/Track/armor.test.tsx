@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { Armor } from './Armor';
+import { Track } from './Track';
 import { CharacterProvider } from '../../character/CharacterProvider';
 import { SystemProvider } from '../../systems/SystemProvider';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
@@ -13,7 +13,7 @@ function renderArmor(overrides: Partial<CharacterState> = {}) {
   return render(
     <SystemProvider system={daggerheartSystem}>
       <CharacterProvider>
-        <Armor />
+        <Track id="armor" />
       </CharacterProvider>
     </SystemProvider>
   );
@@ -28,7 +28,7 @@ describe('Armor', () => {
     const { container } = render(
       <SystemProvider system={daggerheartSystem}>
         <CharacterProvider>
-          <Armor />
+          <Track id="armor" />
         </CharacterProvider>
       </SystemProvider>
     );

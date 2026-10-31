@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { Hope } from './Hope';
+import { Track } from './Track';
 import { CharacterProvider } from '../../character/CharacterProvider';
 import { SystemProvider } from '../../systems/SystemProvider';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
@@ -12,7 +12,7 @@ function renderHope(hope: number) {
   return render(
     <SystemProvider system={daggerheartSystem}>
       <CharacterProvider>
-        <Hope />
+        <Track id="hope" />
       </CharacterProvider>
     </SystemProvider>
   );
@@ -27,7 +27,7 @@ describe('Hope', () => {
     const { container } = render(
       <SystemProvider system={daggerheartSystem}>
         <CharacterProvider>
-          <Hope />
+          <Track id="hope" />
         </CharacterProvider>
       </SystemProvider>
     );

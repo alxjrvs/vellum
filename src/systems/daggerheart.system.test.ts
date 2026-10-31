@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { daggerheartSystem } from './daggerheart.system';
+import { TRACK_IDS } from '../commands/types';
 
 describe('daggerheartSystem', () => {
   it('uses the daggerheart discriminator', () => {
@@ -44,5 +45,18 @@ describe('daggerheartSystem', () => {
       expect(hp).toBeGreaterThanOrEqual(5);
       expect(hp).toBeLessThanOrEqual(7);
     }
+  });
+});
+
+describe('daggerheart resources', () => {
+  it('declares each track exactly once', () => {
+    const ids = daggerheartSystem.resources.map((r) => r.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect([...ids].sort()).toEqual([...TRACK_IDS].sort());
+  });
+
+  it('keeps Fear on the GM side and everything else on the player side', () => {
+    const gm = daggerheartSystem.resources.filter((r) => r.side === 'gm').map((r) => r.id);
+    expect(gm).toEqual(['fear']);
   });
 });
