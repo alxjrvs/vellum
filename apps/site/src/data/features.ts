@@ -73,17 +73,9 @@ export const features: Feature[] = [
   },
   {
     id: 'hotkeys',
-    title: 'Hotkeys',
+    title: 'Programmable hotkeys',
     blurb:
-      'Load one script in OBS and bind keys to +1 Hope, mark HP, toggle a condition. Your hands stay on the game.',
-    status: 'live',
-    href: '/control/',
-  },
-  {
-    id: 'streamdeck-basic',
-    title: 'Stream Deck, day one',
-    blurb:
-      "Point Stream Deck's built-in Hotkey action at the Vellum hotkeys. No plugin, no extra setup.",
+      'Load one script in OBS and bind any key or button to +1 Hope, mark HP or toggle a condition. Your hands stay on the game.',
     status: 'live',
     href: '/control/',
   },
@@ -102,14 +94,6 @@ export const features: Feature[] = [
       'Drag widgets onto the real HUD, bind them to stats, choose bars or chits, and preview at Discord tile size. Your frames stay yours.',
     status: 'later',
     href: '/frames/',
-  },
-  {
-    id: 'streamdeck-plugin',
-    title: 'Stream Deck plugin',
-    blurb:
-      'Keys that show your live Hope and HP, and dials on Stream Deck +, talking to OBS on your own machine.',
-    status: 'later',
-    href: '/control/',
   },
   {
     id: 'more-systems',
