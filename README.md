@@ -13,7 +13,7 @@ system is config + components, not a rewrite.
 
 No download, no build, no terminal:
 
-1. Open **https://alxjrvs.github.io/vellum/app/** in a browser tab and pick your
+1. Open **https://vellumhud.com/app/** in a browser tab and pick your
    game and role. (Running the game? Choose **GM** — it needs no character setup
    and you can stop after step 3.)
 2. Fill in your character; click **Copy share link**.

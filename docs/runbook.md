@@ -24,7 +24,7 @@ Webcam ────────────────▶  Video Capture Device
 
 Everything up to "the HUD is live in Discord" is covered in one screen:
 
-- **`docs/QUICKSTART.md`** — open `https://alxjrvs.github.io/vellum/app/`,
+- **`docs/QUICKSTART.md`** — open `https://vellumhud.com/app/`,
   configure your character, **Copy share link**, paste it into OBS (or import
   the `Vellum` scene), add your webcam below the HUD, **Start Virtual Camera**,
   pick **OBS Virtual Camera** in Discord.
@@ -68,7 +68,7 @@ Demiplane for stat tracking.
 ### GM only — the Fear view
 
 The GM runs the same pipeline but loads the HUD in GM mode: point the OBS
-browser source at `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm` (or
+browser source at `https://vellumhud.com/app/#/daggerheart/gm` (or
 keep a second scene collection whose source uses that URL). You can also just
 open the bare `/app/` URL and pick **GM** from the screen picker.
 
@@ -145,13 +145,13 @@ budget and what counts as a real fallback.
 
 ## Quick reference
 
-| Where            | URL                                                         |
-| ---------------- | ----------------------------------------------------------- |
-| Screen picker    | `https://alxjrvs.github.io/vellum/app/`                     |
-| Player HUD       | `https://alxjrvs.github.io/vellum/app/#/daggerheart/player` |
-| GM / Fear view   | `https://alxjrvs.github.io/vellum/app/#/daggerheart/gm`     |
-| Marketing / docs | `https://alxjrvs.github.io/vellum/`                         |
-| Your character   | your **share link** (Copy share link → paste into OBS)      |
+| Where            | URL                                                    |
+| ---------------- | ------------------------------------------------------ |
+| Screen picker    | `https://vellumhud.com/app/`                           |
+| Player HUD       | `https://vellumhud.com/app/#/daggerheart/player`       |
+| GM / Fear view   | `https://vellumhud.com/app/#/daggerheart/gm`           |
+| Marketing / docs | `https://vellumhud.com/`                               |
+| Your character   | your **share link** (Copy share link → paste into OBS) |
 
 Extending Vellum (systems, themes) or running from source is a developer path —
 see the repo `README.md` and `docs/RELEASE-STRATEGY.md`.

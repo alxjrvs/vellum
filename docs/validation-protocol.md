@@ -54,7 +54,7 @@ and using OBS's own **Scene Collection → Import** menu.
 
 ## The timed run — time-to-first-HUD-in-Discord
 
-**Start the clock** when the tester opens `https://alxjrvs.github.io/vellum/app/`
+**Start the clock** when the tester opens `https://vellumhud.com/app/`
 for the first time. **Stop the clock** when the observer confirms the tester's
 HUD is visible and live on their Discord camera tile (a marked HP pip appears on
 the tile within ~1 second).
@@ -65,7 +65,7 @@ hesitation.
 Walk the paste-and-play path (the tester should be led by the in-app wizard, not
 this list — this is the observer's scoring sheet):
 
-- [ ] Opened `https://alxjrvs.github.io/vellum/app/` in a normal browser tab.
+- [ ] Opened `https://vellumhud.com/app/` in a normal browser tab.
 - [ ] The **screen picker** appeared; the tester chose their game and role
       (Player / GM) without hesitating over which one they were.
 - [ ] The setup wizard appeared on first load and was **dismissible** — it never
@@ -97,7 +97,7 @@ uploaded") must be **verifiable**, not just asserted.
 - [ ] Open the app URL with the browser **Network** tab recording.
 - [ ] Configure a character and mark some pips.
 - [ ] Confirm: the only requests are **GETs for the app's own static assets**
-      (HTML/JS/CSS/fonts/images) from `alxjrvs.github.io`. There are **no POST /
+      (HTML/JS/CSS/fonts/images) from `vellumhud.com`. There are **no POST /
       PUT / PATCH** requests, no calls to any analytics/telemetry host, no
       third-party API, and no WebSocket carrying game data.
 - [ ] Confirm the character data lives in **localStorage** (Application →
