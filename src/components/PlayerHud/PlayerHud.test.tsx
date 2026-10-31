@@ -41,3 +41,30 @@ describe('PlayerHud', () => {
     expect(container.querySelector('.player-hud')).toBeNull();
   });
 });
+
+describe('PlayerHud roster', () => {
+  it('draws the player resources the system declares, in its order', () => {
+    const { container } = renderHud();
+    const labels = [...container.querySelectorAll('.stat-track')].map((el) =>
+      el.getAttribute('aria-label')
+    );
+    expect(labels).toEqual(['HP', 'Hope', 'Stress', 'Armor']);
+  });
+
+  it('drops a resource the system does not declare', () => {
+    writeCharacterToStorage(makeCharacter());
+    const system = {
+      ...daggerheartSystem,
+      resources: daggerheartSystem.resources.filter((r) => r.id !== 'stress'),
+    };
+    render(
+      <SystemProvider system={system}>
+        <CharacterProvider>
+          <PlayerHud />
+        </CharacterProvider>
+      </SystemProvider>
+    );
+    expect(screen.queryByLabelText(/^Stress$/)).toBeNull();
+    expect(screen.getByLabelText(/^Hope$/)).toBeInTheDocument();
+  });
+});
