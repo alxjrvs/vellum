@@ -1,18 +1,12 @@
-import { useId, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { CUSTOM_ID_PREFIX } from '../../frames/customFrames';
 import { useFrame } from '../../frames/useFrame';
 import { useSystem } from '../../systems/useSystem';
 import { validateFrame } from '../../themes/frameRules';
-import {
-  HUD_SLOT_LABELS,
-  HUD_SLOTS,
-  HUD_WIDGET_LABELS,
-  HUD_WIDGETS,
-  regionsFor,
-  type HudSlot,
-} from '../../themes/regions';
+import { regionsFor, type HudPoint, type HudWidget } from '../../themes/regions';
 import type { ThemeColors, ThemeConfig, ThemeTracks, TrackDisplay } from '../../themes/types';
 import { FramePreview } from './FramePreview';
+import { findOverlaps, type WidgetRects } from './layout';
 import './FrameCreator.css';
 
 const COLOR_LABELS: Record<keyof ThemeColors, string> = {
@@ -50,9 +44,10 @@ interface FrameCreatorProps {
 }
 
 /**
- * Make or edit one of My frames: colors, bars or chits per stat, where each
- * widget sits, with a live preview at Discord tile size. The frame rules are
- * checked as you go, and a frame that breaks one can't be saved.
+ * Make or edit one of My frames, full screen: drag the widgets around a live
+ * preview of the stage, pick bars or chits per stat, and set the colors. The
+ * frame rules are checked as you go (readable labels, no overlapping
+ * widgets), and a frame that breaks one can't be saved.
  */
 export function FrameCreator({ base, onDone }: FrameCreatorProps) {
   const { saveFrame } = useFrame();
@@ -68,11 +63,12 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
           origin: 'custom',
         }
   );
+  const [rects, setRects] = useState<WidgetRects>({});
   const problems = [
     ...(draft.label.trim() ? [] : ['Give your frame a name']),
     ...validateFrame(draft),
+    ...findOverlaps(rects),
   ];
-  const regions = regionsFor(draft);
   const trackLabel = (track: keyof ThemeTracks) =>
     system.resources.find((r) => r.id === track)?.label ?? track;
 
@@ -80,11 +76,23 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
     setDraft((d) => ({ ...d, colors: { ...d.colors, [key]: value } }));
   const setTrack = (key: keyof ThemeTracks, value: TrackDisplay) =>
     setDraft((d) => ({ ...d, tracks: { ...d.tracks, [key]: value } }));
-  const setSlot = (widget: (typeof HUD_WIDGETS)[number], slot: HudSlot) =>
-    setDraft((d) => ({ ...d, regions: { ...regionsFor(d), [widget]: slot } }));
+  const place = useCallback(
+    (widget: HudWidget, point: HudPoint) =>
+      setDraft((d) => ({ ...d, regions: { ...regionsFor(d), [widget]: point } })),
+    []
+  );
+  const resetLayout = () => setDraft((d) => ({ ...d, regions: base.regions }));
 
   return (
-    <section className="frame-creator" aria-label="Frame creator">
+    <section
+      className="frame-creator"
+      aria-label="Frame creator"
+      role="dialog"
+      aria-modal="true"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onDone();
+      }}
+    >
       <h2 className="frame-creator__heading">
         {base.origin === 'custom' ? `Edit ${base.label}` : `New frame from ${base.label}`}
       </h2>
@@ -112,7 +120,7 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
               >
                 <span>{trackLabel(track)}</span>
                 {(['bar', 'chits'] as const).map((display) => (
-                  <label key={display}>
+                  <label key={display} className="frame-creator__choice">
                     <input
                       type="radio"
                       name={`${id}-${track}`}
@@ -123,25 +131,6 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
                   </label>
                 ))}
               </div>
-            ))}
-          </fieldset>
-
-          <fieldset className="frame-creator__group">
-            <legend>Where widgets sit</legend>
-            {HUD_WIDGETS.map((widget) => (
-              <label key={widget} className="frame-creator__row">
-                <span>{HUD_WIDGET_LABELS[widget]}</span>
-                <select
-                  value={regions[widget]}
-                  onChange={(e) => setSlot(widget, e.target.value as HudSlot)}
-                >
-                  {HUD_SLOTS.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {HUD_SLOT_LABELS[slot]}
-                    </option>
-                  ))}
-                </select>
-              </label>
             ))}
           </fieldset>
 
@@ -160,35 +149,39 @@ export function FrameCreator({ base, onDone }: FrameCreatorProps) {
           </fieldset>
         </div>
 
-        <FramePreview frame={draft} />
-      </div>
+        <div className="frame-creator__canvas">
+          <FramePreview frame={draft} rects={rects} onMeasure={setRects} onPlace={place} />
+          <button type="button" className="frame-creator__reset" onClick={resetLayout}>
+            Reset layout
+          </button>
+          {problems.length > 0 && (
+            <div className="frame-creator__problems" role="alert">
+              <p>Fix these before saving:</p>
+              <ul>
+                {problems.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-      {problems.length > 0 && (
-        <div className="frame-creator__problems" role="alert">
-          <p>Fix these before saving:</p>
-          <ul>
-            {problems.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
+          <div className="frame-creator__actions">
+            <button
+              type="button"
+              className="frame-creator__save"
+              disabled={problems.length > 0}
+              onClick={() => {
+                saveFrame({ ...draft, label: draft.label.trim() });
+                onDone();
+              }}
+            >
+              Save frame
+            </button>
+            <button type="button" className="frame-creator__cancel" onClick={onDone}>
+              Cancel
+            </button>
+          </div>
         </div>
-      )}
-
-      <div className="frame-creator__actions">
-        <button
-          type="button"
-          className="frame-creator__save"
-          disabled={problems.length > 0}
-          onClick={() => {
-            saveFrame({ ...draft, label: draft.label.trim() });
-            onDone();
-          }}
-        >
-          Save frame
-        </button>
-        <button type="button" className="frame-creator__cancel" onClick={onDone}>
-          Cancel
-        </button>
       </div>
     </section>
   );

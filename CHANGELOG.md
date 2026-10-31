@@ -19,6 +19,14 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Changed
 
+- **Drag-and-drop frame editor.** The frame creator opens full screen with a
+  large live stage: drag widgets anywhere (or nudge them with the arrow keys),
+  and they snap to a grid and stop at other widgets, the ticker and the Setup
+  button, so nothing overlaps. Frames that overlap can't be saved. Bars or
+  chits are now big toggles. `ThemeConfig.regions` accepts `{ x, y }` points
+  (the widget's center and top, in stage px) alongside the named spots, so
+  older frames still load.
+
 - Scenes are plain paths now: `/app/daggerheart/player/` and
   `/app/daggerheart/gm/`, with no `#` in the URL. Share links and screen links
   use the new form. Old `#/daggerheart/…` and `?mode=` links still work; they

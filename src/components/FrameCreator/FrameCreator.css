@@ -1,13 +1,24 @@
+/*
+ * The frame editor covers the whole setup stage, so the preview can be big
+ * enough to drag widgets around comfortably: controls on the left, the live
+ * stage on the right.
+ */
 .frame-creator {
+  position: fixed;
+  inset: 0;
+  /* Above the setup panel (100), which would otherwise cover the stage. */
+  z-index: 200;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border: var(--border-width) solid var(--color-rule);
-  background: var(--color-plate);
+  padding: var(--spacing-xl);
+  background: var(--color-night);
   color: var(--color-text);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
+  /* The page hides the cursor for OBS; the editor needs it back. */
+  cursor: auto;
 }
 
 .frame-creator__heading {
@@ -17,16 +28,30 @@
 
 .frame-creator__body {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-lg);
+  flex: 1;
+  min-height: 0;
+  gap: var(--spacing-xl);
   align-items: flex-start;
 }
 
 .frame-creator__controls {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--spacing-md);
-  min-width: 20rem;
+  min-width: 0;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.frame-creator__canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.frame-creator__canvas .frame-preview {
+  --preview-scale: 0.6;
 }
 
 .frame-creator__field,
@@ -38,13 +63,18 @@
 
 .frame-creator__row > span,
 .frame-creator__field > span {
-  min-width: 8rem;
+  min-width: 7rem;
   color: var(--color-label);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
+  font-weight: 700;
 }
 
-.frame-creator input[type='text'],
-.frame-creator select {
-  padding: var(--spacing-xs) var(--spacing-sm);
+.frame-creator input[type='text'] {
+  flex: 1;
+  min-height: 52px;
+  box-sizing: border-box;
+  padding: var(--spacing-xs) var(--spacing-md);
   border: var(--border-width) solid var(--color-rule);
   background: var(--color-plate-raised);
   color: var(--color-text);
@@ -54,16 +84,52 @@
 .frame-creator__group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   margin: 0;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
   border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate);
 }
 
 .frame-creator__group legend {
   padding: 0 var(--spacing-xs);
   font-family: var(--font-family-display);
+  font-size: var(--font-size-label);
   font-weight: 700;
+  color: var(--color-label);
+}
+
+/* Bars or chits: big chips, the real radio hidden behind them. */
+.frame-creator__choice {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 var(--spacing-md);
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.frame-creator__choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.frame-creator__choice:has(input:checked) {
+  border-color: var(--color-signal);
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+}
+
+.frame-creator__choice:has(input:focus-visible) {
+  outline: 3px solid var(--color-signal);
+  outline-offset: 2px;
 }
 
 .frame-creator__colors {
@@ -71,18 +137,26 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.frame-creator__colors legend {
+  grid-column: 1 / -1;
+}
+
 .frame-creator__color {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  min-height: 44px;
+  cursor: pointer;
 }
 
 .frame-creator__color input {
-  width: var(--chit-width);
-  height: var(--track-height);
+  flex: none;
+  width: 56px;
+  height: 40px;
   padding: 0;
-  border: none;
+  border: var(--border-width) solid var(--color-rule);
   background: none;
+  cursor: pointer;
 }
 
 .frame-creator__problems {
@@ -102,12 +176,20 @@
 }
 
 .frame-creator__save,
-.frame-creator__cancel {
+.frame-creator__cancel,
+.frame-creator__reset {
+  min-height: 56px;
   padding: var(--spacing-sm) var(--spacing-lg);
   border: var(--border-width) solid var(--color-rule);
   background: var(--color-plate-raised);
   color: var(--color-text);
   font: inherit;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+}
+
+.frame-creator__reset {
+  align-self: flex-start;
 }
 
 .frame-creator__save {

@@ -1,6 +1,12 @@
 import { SYSTEM_IDS } from '../systems/types';
 import { daggerheartTheme } from '../themes/daggerheart.theme';
-import { HUD_SLOTS, HUD_WIDGETS } from '../themes/regions';
+import {
+  HUD_SLOTS,
+  HUD_WIDGETS,
+  STAGE_HEIGHT,
+  STAGE_WIDTH,
+  type HudPlacement,
+} from '../themes/regions';
 import type { ThemeConfig } from '../themes/types';
 
 /**
@@ -35,6 +41,17 @@ function pickRecord<T extends string>(
 const isHex = (v: unknown): v is string => typeof v === 'string' && HEX.test(v);
 const isSafeCss = (v: unknown): v is string => typeof v === 'string' && SAFE_CSS.test(v);
 const isDisplay = (v: unknown): v is 'bar' | 'chits' => v === 'bar' || v === 'chits';
+const inRange = (v: unknown, max: number): v is number =>
+  typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= max;
+
+/** A named slot, or a point on the stage placed in the frame editor. */
+function parsePlacement(value: unknown): HudPlacement | null {
+  if ((HUD_SLOTS as readonly unknown[]).includes(value)) return value as HudPlacement;
+  if (isObject(value) && inRange(value.x, STAGE_WIDTH) && inRange(value.y, STAGE_HEIGHT)) {
+    return { x: Math.round(value.x), y: Math.round(value.y) };
+  }
+  return null;
+}
 
 /**
  * Validate a frame from outside the app (a file, a link, storage). Every
@@ -58,11 +75,12 @@ export function parseFrame(input: unknown): ThemeConfig | null {
   let regions: ThemeConfig['regions'];
   if (input.regions !== undefined) {
     if (!isObject(input.regions)) return null;
-    const out: Record<string, string> = {};
-    for (const [widget, slot] of Object.entries(input.regions)) {
+    const out: Record<string, HudPlacement> = {};
+    for (const [widget, value] of Object.entries(input.regions)) {
       if (!(HUD_WIDGETS as readonly string[]).includes(widget)) return null;
-      if (!(HUD_SLOTS as readonly unknown[]).includes(slot)) return null;
-      out[widget] = slot as string;
+      const placement = parsePlacement(value);
+      if (!placement) return null;
+      out[widget] = placement;
     }
     regions = out as ThemeConfig['regions'];
   }

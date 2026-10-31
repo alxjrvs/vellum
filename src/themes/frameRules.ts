@@ -1,5 +1,5 @@
 import type { ThemeConfig } from './types';
-import { regionsFor, type HudWidget } from './regions';
+import { isPoint, regionsFor, type HudPlacement, type HudWidget } from './regions';
 
 /**
  * The two rules every frame keeps (docs/branding/BRANDING.md §6). A frame may
@@ -66,9 +66,15 @@ export function validateFrame(theme: ThemeConfig): string[] {
     }
   }
 
+  // Two widgets in one named slot always overlap. Hand-placed widgets are
+  // checked against their measured boxes in the frame editor.
   const bySlot = new Map<string, HudWidget[]>();
-  for (const [widget, slot] of Object.entries(regionsFor(theme)) as [HudWidget, string][]) {
-    bySlot.set(slot, [...(bySlot.get(slot) ?? []), widget]);
+  for (const [widget, placement] of Object.entries(regionsFor(theme)) as [
+    HudWidget,
+    HudPlacement,
+  ][]) {
+    if (isPoint(placement)) continue;
+    bySlot.set(placement, [...(bySlot.get(placement) ?? []), widget]);
   }
   for (const [slot, widgets] of bySlot) {
     if (widgets.length > 1) problems.push(`${widgets.join(' and ')} both sit at ${slot}`);
