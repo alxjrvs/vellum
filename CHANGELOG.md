@@ -34,6 +34,11 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
 
 ### Added
 
+- **Setup checks.** The setup screen shows, at a glance, whether the page is in
+  OBS, whether the Vellum OBS script is loaded (it announces itself with a
+  `vellum:obs-script` event), the camera's state with the fix for each failure,
+  and whether the Stream Deck plugin is connected.
+
 - **Stream Deck plugin with live keys** (`apps/streamdeck`, published at
   `vellumhud.com/downloads/vellum.streamDeckPlugin`). Stat, Condition and Frame
   actions; keys draw the HUD's live values and Stream Deck + dials turn stats.

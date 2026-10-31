@@ -23,8 +23,28 @@ export function shouldLinkDeck(win: Window = window): boolean {
   return new URLSearchParams(win.location.search).get(DECK_QUERY_PARAM) === '1';
 }
 
+/** Whether the Stream Deck plugin is on the line, for setup to show. */
+export type DeckStatus = 'off' | 'searching' | 'linked';
+
 let current: DeckState = {};
 let socket: WebSocket | null = null;
+let status: DeckStatus = 'off';
+const statusListeners = new Set<() => void>();
+
+function setStatus(next: DeckStatus): void {
+  if (next === status) return;
+  status = next;
+  for (const listener of statusListeners) listener();
+}
+
+export function deckStatus(): DeckStatus {
+  return status;
+}
+
+export function subscribeDeckStatus(listener: () => void): () => void {
+  statusListeners.add(listener);
+  return () => statusListeners.delete(listener);
+}
 
 function send(message: PageMessage): void {
   if (socket?.readyState === WebSocket.OPEN) socket.send(JSON.stringify(message));
@@ -55,10 +75,12 @@ export function startDeckLink({
   let timer: ReturnType<typeof setTimeout> | undefined;
 
   const connect = () => {
+    if (status !== 'linked') setStatus('searching');
     const ws = createSocket(url);
     socket = ws;
     ws.addEventListener('open', () => {
       delay = RETRY_MIN_MS;
+      setStatus('linked');
       send({ type: 'hello', version: DECK_PROTOCOL_VERSION });
       send({ type: 'state', state: current });
     });
@@ -70,6 +92,7 @@ export function startDeckLink({
     ws.addEventListener('close', () => {
       if (socket === ws) socket = null;
       if (stopped) return;
+      setStatus('searching');
       timer = setTimeout(connect, delay);
       delay = Math.min(delay * 2, RETRY_MAX_MS);
     });
@@ -81,5 +104,6 @@ export function startDeckLink({
     clearTimeout(timer);
     socket?.close();
     socket = null;
+    setStatus('off');
   };
 }
