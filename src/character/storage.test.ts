@@ -32,6 +32,12 @@ describe('readCharacterFromStorage', () => {
     const storage = makeMemoryStorage({ [STORAGE_KEY]: '{not json' });
     expect(readCharacterFromStorage(storage)).toBeNull();
   });
+
+  it('returns null for well-formed JSON that is not a character', () => {
+    for (const raw of ['{}', '[]', '42', '{"version":1,"system":"daggerheart"}']) {
+      expect(readCharacterFromStorage(makeMemoryStorage({ [STORAGE_KEY]: raw }))).toBeNull();
+    }
+  });
 });
 
 describe('writeCharacterToStorage', () => {
