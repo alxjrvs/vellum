@@ -396,7 +396,7 @@ header.site {
   color: var(--color-armor);
 }
 
-/* ---------- key caps (hotkeys, Stream Deck) ---------- */
+/* ---------- key caps (hotkeys) ---------- */
 .keys {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
