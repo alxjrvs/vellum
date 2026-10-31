@@ -21,3 +21,18 @@ The script offers Hope, HP, Stress, Armor and Fear up and down, a toggle for eac
 Anything that can send a key combination can drive Vellum: a spare keyboard, a macro pad, or a programmable button controller. Set each button to send the combination you bound to, say, _Vellum: Hope +1_, and label it.
 
 A good starting layout is six buttons: Hope up, Hope down, mark HP, mark Stress, spend Armor, and toggle a condition.
+
+## Keys that show live values (Stream Deck)
+
+If you use a Stream Deck, the Vellum plugin goes a step further than key combinations: each key shows its current value, such as Hope 3/6 with its chits, and condition keys light up while the condition is on. On Stream Deck +, a dial turns a stat up and down.
+
+1. Download [`vellum.streamDeckPlugin`](/downloads/vellum.streamDeckPlugin) and double-click it. The Stream Deck app installs it.
+2. In the **Vellum** category, drag actions onto keys:
+   - **Stat**: pick Hope, HP, Stress, Armor or Fear, and whether a press adds 1, takes 1 away, or only shows the value. Put it on a dial for Stream Deck +.
+   - **Condition**: toggles Hidden, Restrained or Vulnerable.
+   - **Frame**: steps to the next or previous [frame](/docs/frames/).
+3. Keep Vellum open in OBS. The keys fill in within a second or two.
+
+A key shows a dash while no HUD is listening, and pressing it shows a warning. The player HUD and the GM screen can both be open at once.
+
+The plugin listens on your computer's loopback address, `127.0.0.1`, which nothing outside your machine can reach, and it only answers pages from vellumhud.com. The page connects to it only when it runs inside OBS; to try it in a browser tab, add `?deck=1` before the `#`. The plugin isn't signed or on the Elgato Marketplace yet, so the Stream Deck app may ask you to confirm the install.

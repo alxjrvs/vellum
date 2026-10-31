@@ -13,6 +13,7 @@ import { CameraSetup } from './components/CameraSetup';
 import { SceneSelector } from './components/SceneSelector';
 import { SceneShell } from './scenes/SceneShell';
 import { useViewMode } from './viewMode/useViewMode';
+import { FrameDeckReport, PlayerDeckReport } from './deck/DeckReport';
 
 export function App() {
   const { character } = useCharacter();
@@ -54,6 +55,7 @@ export function App() {
         )}
         renderLive={({ edit }) => (
           <CameraHud data-view="gm">
+            <FrameDeckReport />
             <div className="hud__region hud__region--ticker">
               <Ticker />
             </div>
@@ -89,6 +91,8 @@ export function App() {
       )}
       renderLive={({ edit }) => (
         <CameraHud>
+          <FrameDeckReport />
+          <PlayerDeckReport />
           <div className="hud__region hud__region--ticker">
             <Ticker />
           </div>

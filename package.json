@@ -20,7 +20,8 @@
     "check": "bun run lint && bun run format && bun run typecheck",
     "prepare": "simple-git-hooks",
     "site:build": "bun run --filter @vellum/site build",
-    "site:dev": "bun run --filter @vellum/site dev"
+    "site:dev": "bun run --filter @vellum/site dev",
+    "deck:build": "bun run --filter @vellum/streamdeck build"
   },
   "dependencies": {
     "@fontsource/barlow": "5",

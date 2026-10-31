@@ -71,6 +71,10 @@ jobs:
         # (scripts/check-obs-bundle.ts) runs for free at the end of it.
         run: bun run build
 
+      - name: Build Stream Deck plugin
+        # Bundles apps/streamdeck into the installable .streamDeckPlugin file.
+        run: bun run deck:build
+
   site:
     name: Site
     runs-on: ubuntu-latest

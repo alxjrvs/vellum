@@ -1,0 +1,37 @@
+/* Property inspector: the panel under a key in the Stream Deck app. */
+:root {
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+  padding: 12px 10px;
+  background: #2d2d2d;
+  color: #d8d8d8;
+  font:
+    13px/1.4 system-ui,
+    sans-serif;
+}
+label {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+select {
+  width: 100%;
+  padding: 4px 6px;
+  background: #3d3d3d;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 3px;
+  font: inherit;
+}
+p {
+  margin: 12px 0 0;
+  color: #a8a8a8;
+  font-size: 12px;
+}
+a {
+  color: #8ab4ff;
+}

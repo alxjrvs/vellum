@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vellum Stat</title>
+    <link rel="stylesheet" href="pi.css" />
+  </head>
+  <body>
+    <label
+      >Stat
+      <select data-setting="track">
+        <option value="hope">Hope</option>
+        <option value="hp">HP</option>
+        <option value="stress">Stress</option>
+        <option value="armor">Armor</option>
+        <option value="fear">Fear (GM)</option>
+      </select>
+    </label>
+    <label
+      >Key press
+      <select data-setting="step" data-type="number">
+        <option value="1">+1 (gain or mark)</option>
+        <option value="-1">-1 (spend or clear)</option>
+        <option value="0">Show only</option>
+      </select>
+    </label>
+    <p>
+      Keep the Vellum HUD open in OBS on this computer. A key shows a warning if no HUD is
+      listening.
+    </p>
+    <script src="pi.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "com.vellumhud.vellum",
+  "Name": "Vellum",
+  "Version": "0.1.0.0",
+  "Author": "Vellum",
+  "Description": "Drive your Vellum HUD from Stream Deck. Keys show your live Hope, HP, Stress, Armor, Fear and conditions. Talks only to OBS on this computer.",
+  "URL": "https://vellumhud.com/docs/control/",
+  "Icon": "imgs/plugin/marketplace",
+  "Category": "Vellum",
+  "CategoryIcon": "imgs/plugin/category",
+  "CodePath": "bin/plugin.js",
+  "SDKVersion": 2,
+  "Software": { "MinimumVersion": "6.5" },
+  "OS": [
+    { "Platform": "mac", "MinimumVersion": "12" },
+    { "Platform": "windows", "MinimumVersion": "10" }
+  ],
+  "Nodejs": { "Version": "20" },
+  "Actions": [
+    {
+      "UUID": "com.vellumhud.vellum.track",
+      "Name": "Stat",
+      "Tooltip": "Show a stat and change it: +1, -1, or show only. On Stream Deck +, turn the dial.",
+      "Icon": "imgs/actions/track",
+      "Controllers": ["Keypad", "Encoder"],
+      "Encoder": {
+        "layout": "$B1",
+        "TriggerDescription": { "Rotate": "Change the stat", "Touch": "Refresh" }
+      },
+      "PropertyInspectorPath": "ui/track.html",
+      "States": [{ "Image": "imgs/actions/track-key", "ShowTitle": false }]
+    },
+    {
+      "UUID": "com.vellumhud.vellum.condition",
+      "Name": "Condition",
+      "Tooltip": "Toggle a condition. The key lights up while it is on.",
+      "Icon": "imgs/actions/condition",
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "ui/condition.html",
+      "States": [{ "Image": "imgs/actions/condition-key", "ShowTitle": false }]
+    },
+    {
+      "UUID": "com.vellumhud.vellum.frame",
+      "Name": "Frame",
+      "Tooltip": "Switch to the next or previous frame.",
+      "Icon": "imgs/actions/frame",
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "ui/frame.html",
+      "States": [{ "Image": "imgs/actions/frame-key", "ShowTitle": false }]
+    }
+  ]
+}
