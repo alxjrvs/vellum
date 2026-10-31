@@ -59,22 +59,35 @@ button {
   bottom: var(--spacing-xl);
 }
 
-.hud__region--vitals {
+/* Frame-placed widgets (see src/themes/regions.ts). */
+.hud__region[data-slot='top-left'] {
   top: var(--spacing-xl);
   left: var(--spacing-xl);
 }
 
-.hud__region--status {
+.hud__region[data-slot='top-right'] {
   top: var(--spacing-xl);
   right: var(--spacing-xl);
 }
 
-.hud__region--dice {
+.hud__region[data-slot='middle-left'] {
+  top: 50%;
+  left: var(--spacing-xl);
+  transform: translateY(-50%);
+}
+
+.hud__region[data-slot='middle-right'] {
+  top: 50%;
+  right: var(--spacing-xl);
+  transform: translateY(-50%);
+}
+
+.hud__region[data-slot='bottom-left'] {
   bottom: var(--spacing-xl);
   left: var(--spacing-xl);
 }
 
-.hud__region--name {
+.hud__region[data-slot='bottom-center'] {
   bottom: var(--spacing-xl);
   left: 50%;
   transform: translateX(-50%);

@@ -1,4 +1,5 @@
 import type { ThemeConfig } from './types';
+import { regionsFor, type HudWidget } from './regions';
 
 /**
  * The two rules every frame keeps (docs/branding/BRANDING.md §6). A frame may
@@ -63,6 +64,14 @@ export function validateFrame(theme: ThemeConfig): string[] {
     if (ratio < MIN_LABEL_CONTRAST) {
       problems.push(`${name} contrast ${ratio.toFixed(1)}:1 is below ${MIN_LABEL_CONTRAST}:1`);
     }
+  }
+
+  const bySlot = new Map<string, HudWidget[]>();
+  for (const [widget, slot] of Object.entries(regionsFor(theme)) as [HudWidget, string][]) {
+    bySlot.set(slot, [...(bySlot.get(slot) ?? []), widget]);
+  }
+  for (const [slot, widgets] of bySlot) {
+    if (widgets.length > 1) problems.push(`${widgets.join(' and ')} both sit at ${slot}`);
   }
   return problems;
 }

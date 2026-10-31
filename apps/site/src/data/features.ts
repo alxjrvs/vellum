@@ -99,8 +99,8 @@ export const features: Feature[] = [
     id: 'frame-creator',
     title: 'The frame creator',
     blurb:
-      'Drag widgets onto the real HUD, bind them to stats, choose bars or chits, and preview at Discord tile size. Your frames stay yours.',
-    status: 'later',
+      'Place widgets, choose bars or chits and colors, and preview the real HUD at Discord tile size. Your frames stay yours; export one to share it.',
+    status: 'live',
     href: '/frames/',
   },
   {

@@ -8,6 +8,7 @@ import { Ticker } from './components/Ticker';
 import { SetupWizard } from './components/SetupWizard';
 import { FramePicker } from './components/FramePicker';
 import { CameraHud } from './components/CameraHud';
+import { HudRegion } from './components/HudRegion';
 import { CameraSetup } from './components/CameraSetup';
 import { SceneSelector } from './components/SceneSelector';
 import { SceneShell } from './scenes/SceneShell';
@@ -91,18 +92,18 @@ export function App() {
           <div className="hud__region hud__region--ticker">
             <Ticker />
           </div>
-          <div className="hud__region hud__region--vitals">
+          <HudRegion widget="vitals">
             <PlayerHud />
-          </div>
-          <div className="hud__region hud__region--status" data-side="right">
+          </HudRegion>
+          <HudRegion widget="status">
             <ConditionsPanel />
-          </div>
-          <div className="hud__region hud__region--dice">
+          </HudRegion>
+          <HudRegion widget="dice">
             <DiceRoller />
-          </div>
-          <div className="hud__region hud__region--name">
+          </HudRegion>
+          <HudRegion widget="name">
             <IdentityLabel />
-          </div>
+          </HudRegion>
           <div className="hud__region hud__region--utility" data-side="right">
             <button type="button" className="edit-details" onClick={edit}>
               Edit details

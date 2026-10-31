@@ -1,0 +1,122 @@
+.frame-creator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate);
+  color: var(--color-text);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+}
+
+.frame-creator__heading {
+  margin: 0;
+  font-size: var(--font-size-heading);
+}
+
+.frame-creator__body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+}
+
+.frame-creator__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 20rem;
+}
+
+.frame-creator__field,
+.frame-creator__row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.frame-creator__row > span,
+.frame-creator__field > span {
+  min-width: 8rem;
+  color: var(--color-label);
+}
+
+.frame-creator input[type='text'],
+.frame-creator select {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.frame-creator__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--color-rule);
+}
+
+.frame-creator__group legend {
+  padding: 0 var(--spacing-xs);
+  font-family: var(--font-family-display);
+  font-weight: 700;
+}
+
+.frame-creator__colors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.frame-creator__color {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.frame-creator__color input {
+  width: var(--chit-width);
+  height: var(--track-height);
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.frame-creator__problems {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-left: var(--edge-width) solid var(--color-hit);
+  background: var(--color-plate-raised);
+}
+
+.frame-creator__problems p,
+.frame-creator__problems ul {
+  margin: 0;
+}
+
+.frame-creator__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.frame-creator__save,
+.frame-creator__cancel {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: var(--border-width) solid var(--color-rule);
+  background: var(--color-plate-raised);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.frame-creator__save {
+  border-color: var(--color-signal);
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+}
+
+.frame-creator__save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

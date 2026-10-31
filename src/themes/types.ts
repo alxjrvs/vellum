@@ -1,4 +1,5 @@
 import type { SystemId } from '../systems/types';
+import type { HudSlot, HudWidget } from './regions';
 
 /**
  * Color tokens a frame supplies. Names match the chassis tokens in
@@ -97,4 +98,6 @@ export interface ThemeConfig {
   readonly typography: ThemeTypography;
   readonly layout: ThemeLayout;
   readonly tracks: ThemeTracks;
+  /** Where each widget sits. Widgets left out keep the classic layout. */
+  readonly regions?: Partial<Record<HudWidget, HudSlot>>;
 }
