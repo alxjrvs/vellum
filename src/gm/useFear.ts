@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { subscribeCommands } from '../commands/commandBus';
 import { readFearFromStorage, writeFearToStorage } from './fearStorage';
 
 interface FearControls {
@@ -22,6 +23,22 @@ export function useFear(max: number): FearControls {
       setFearState(clamped);
       writeFearToStorage(clamped);
     },
+    [max]
+  );
+
+  // External inputs (OBS hotkeys, Stream Deck) can gain or spend Fear too.
+  useEffect(
+    () =>
+      subscribeCommands((command) => {
+        if (command.type !== 'track.adjust' && command.type !== 'track.set') return;
+        if (command.track !== 'fear') return;
+        setFearState((current) => {
+          const target = command.type === 'track.adjust' ? current + command.delta : command.value;
+          const clamped = Math.max(0, Math.min(target, max));
+          writeFearToStorage(clamped);
+          return clamped;
+        });
+      }),
     [max]
   );
 
