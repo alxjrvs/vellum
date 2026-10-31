@@ -3,37 +3,31 @@ title: Face tracking
 description: Anchor HUD widgets to your face with a small detector that runs on your machine.
 ---
 
-import { Aside } from '@astrojs/starlight/components';
-
-<Aside type="caution" title="Coming in the next release">
-  Face tracking is being built now. This page describes how it will work, so frame makers can plan
-  for it.
-</Aside>
-
-Face tracking lets a frame pin widgets to your face instead of a fixed spot: Hope over your head, a nameplate under your chin. It is **off by default**, and every frame works without it.
+Face tracking lets widgets follow your face instead of sitting in a fixed spot: your conditions ride above your head, your nameplate sits under your chin. It is **off by default**, and every frame works without it.
 
 ## What it does and doesn't do
 
-- It finds a box around your face and six points. That's all.
+- It finds a box around your face. That's all.
 - It doesn't read expressions or recognise who you are.
 - It never changes your stats. It only moves widgets.
 - It runs on your machine. Camera frames are never stored or sent.
 
-The detector is about 230 KB and is served from vellumhud.com along with the app.
+The detector (about 230 KB, plus its runtime) ships with the app, so turning tracking on contacts no server.
 
 ## Turning it on
 
-With tracking on, Vellum opens your webcam itself instead of OBS's webcam source, so the HUD and your face stay perfectly in sync.
+With tracking on, Vellum draws your webcam itself, underneath the HUD, so the widgets and your face stay in sync.
 
 1. **Start OBS with camera access for browser sources.** Add `--enable-media-stream` to how you launch OBS:
    - **Windows:** edit the OBS shortcut's **Target** and add ` --enable-media-stream` after the closing quote.
    - **macOS:** run `open -a OBS --args --enable-media-stream` in Terminal.
    - **Linux:** run `obs --enable-media-stream`, or add it to the `Exec=` line of your OBS desktop file.
-2. **Switch to the "Vellum camera" scene.** It contains only the Vellum source, and Vellum draws your webcam underneath the HUD.
-3. **Pick a frame that uses face anchors.** The picker marks them.
+2. **Turn it on in setup.** Under **Camera and face tracking**, tick **Draw my camera in Vellum**, then **Widgets follow my face**.
+3. **Copy your link again** and paste it into the Vellum browser source, so OBS gets the same settings.
+4. **Hide OBS's Video Capture Device.** Vellum carries your camera now, and most webcams can only be opened by one app at a time.
 
-If the camera won't open, the setup panel tells you why and shows the fix for your system. On Windows, close anything else using the webcam, including OBS's own Video Capture Device.
+If the camera won't open, the setup panel tells you why and shows the fix. Tracking settings travel in the link as `camera=1` and `face=1`, and `mirror=0` turns off the selfie flip.
 
 ## For frame makers
 
-A widget can anchor to `face-top`, `face-bottom`, `face-left` or `face-right`. Every face anchor needs a `fallback` fixed anchor, used when tracking is off or your face leaves the frame. Names may change before release; the frame schema will be the final word.
+Today the nameplate follows your chin and the conditions follow the top of your head, in every frame, and both slide home when your face leaves the picture. Per-widget face anchors (`face-top`, `face-bottom`, `face-left`, `face-right`, each with a fixed `fallback`) arrive with the frame creator.

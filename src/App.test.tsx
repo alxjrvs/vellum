@@ -10,14 +10,17 @@ import { launchStorageKey } from './scenes/launchStorage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
 import { FrameProvider } from './frames/FrameProvider';
+import { CameraProvider } from './camera/CameraProvider';
 
 function renderApp() {
   return render(
     <SystemProvider system={daggerheartSystem}>
       <FrameProvider>
-        <CharacterProvider>
-          <App />
-        </CharacterProvider>
+        <CameraProvider>
+          <CharacterProvider>
+            <App />
+          </CharacterProvider>
+        </CameraProvider>
       </FrameProvider>
     </SystemProvider>
   );

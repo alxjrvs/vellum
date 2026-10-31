@@ -6,6 +6,11 @@
   Cache-Control: public, max-age=31536000, immutable
 /app/v*/assets/*
   Cache-Control: public, max-age=31536000, immutable
+# The face-tracking runtime and model live in a folder named for their version.
+/app/mediapipe-*
+  Cache-Control: public, max-age=31536000, immutable
+/app/v*/mediapipe-*
+  Cache-Control: public, max-age=31536000, immutable
 
 # The app loads nothing from the network but itself: this policy makes the
 # "nothing is uploaded" claim checkable from the response headers.

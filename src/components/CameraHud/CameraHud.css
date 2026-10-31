@@ -1,0 +1,34 @@
+.camera-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-backdrop[data-mirror='on'] {
+  transform: scaleX(-1);
+}
+
+/* Face-anchored widgets: the conditions ride above the head, the nameplate
+   sits under the chin. They glide back home when the face is lost. */
+.hud__region--status,
+.hud__region--name {
+  transition:
+    left 120ms linear,
+    top 120ms linear;
+}
+
+.hud[data-follow-face='on'] .hud__region--status {
+  top: calc(var(--anchor-crown-y) * 100%);
+  left: calc(var(--anchor-crown-x) * 100%);
+  right: auto;
+  transform: translate(-50%, -100%);
+}
+
+.hud[data-follow-face='on'] .hud__region--name {
+  top: calc(var(--anchor-chin-y) * 100%);
+  bottom: auto;
+  left: calc(var(--anchor-chin-x) * 100%);
+  transform: translateX(-50%);
+}

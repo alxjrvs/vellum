@@ -3,7 +3,7 @@ import { useId, useState, type ComponentProps } from 'react';
 import { useCharacter } from '../../character/useCharacter';
 import { useSystem } from '../../systems/useSystem';
 import { encodeCharacterToShareParam } from '../../character/shareCode';
-import { useFrameQuery } from '../../frames/useFrameQuery';
+import { useSourceQuery } from '../../sourceLink/useSourceQuery';
 import { sceneHash } from '../../viewMode/useViewMode';
 import { CHARACTER_SCHEMA_VERSION, type CharacterState } from '../../character/types';
 
@@ -52,7 +52,7 @@ function toInt(value: string): number | undefined {
 export function CharacterSetup({ onDone }: CharacterSetupProps) {
   const { character, dispatch } = useCharacter();
   const system = useSystem();
-  const frameQuery = useFrameQuery();
+  const sourceQuery = useSourceQuery();
   const [form, setForm] = useState<FormState>(() => initialForm(character));
   const [error, setError] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState(false);
@@ -68,7 +68,7 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
     // Address the player scene explicitly: pasted straight into an OBS browser
     // source, a hash-less link would land on the scene selector, which nobody
     // can click past in a non-interactive source.
-    const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}${frameQuery ? `&${frameQuery}` : ''}${sceneHash('player')}`;
+    const url = `${window.location.origin}${window.location.pathname}?c=${encodeCharacterToShareParam(character)}${sourceQuery ? `&${sourceQuery}` : ''}${sceneHash('player')}`;
     void navigator.clipboard.writeText(url).then(
       () => setShareCopied(true),
       () => setShareCopied(false)
