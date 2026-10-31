@@ -5,8 +5,7 @@ import { CharacterProvider } from './character/CharacterProvider';
 import { Stage } from './components/Stage';
 import { SystemProvider } from './systems/SystemProvider';
 import { daggerheartSystem } from './systems/daggerheart.system';
-import { ThemeProvider } from './themes/ThemeProvider';
-import { daggerheartTheme } from './themes/daggerheart.theme';
+import { FrameProvider } from './frames/FrameProvider';
 // Self-hosted faces (bundled, so OBS needs no network) — weights the chassis uses.
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
@@ -32,13 +31,13 @@ if (!rootElement) throw new Error('Root element #root not found');
 createRoot(rootElement).render(
   <StrictMode>
     <SystemProvider system={daggerheartSystem}>
-      <ThemeProvider theme={daggerheartTheme}>
+      <FrameProvider>
         <CharacterProvider>
           <Stage>
             <App />
           </Stage>
         </CharacterProvider>
-      </ThemeProvider>
+      </FrameProvider>
     </SystemProvider>
   </StrictMode>
 );

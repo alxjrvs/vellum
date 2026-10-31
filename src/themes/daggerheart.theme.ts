@@ -7,6 +7,8 @@ import type { ThemeConfig } from './types';
 export const daggerheartTheme: ThemeConfig = {
   id: 'daggerheart',
   label: 'Daggerheart',
+  system: 'daggerheart',
+  origin: 'official',
   colors: {
     night: '#0f0a05',
     plate: '#1b140b',

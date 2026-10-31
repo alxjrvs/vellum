@@ -1,3 +1,5 @@
+import type { SystemId } from '../systems/types';
+
 /**
  * Color tokens a frame supplies. Names match the chassis tokens in
  * vellum.tokens.css one-to-one; ThemeProvider writes them over the chassis
@@ -79,15 +81,20 @@ export interface ThemeTracks {
   readonly fear: TrackDisplay;
 }
 
-export interface DaggerheartThemeConfig {
-  readonly id: 'daggerheart';
+/**
+ * A frame: everything about how the HUD looks, as data. The system says what
+ * is tracked; the frame says how it is drawn.
+ */
+export interface ThemeConfig {
+  /** Stable id, used in `?frame=` URLs and stored preferences. */
+  readonly id: string;
   readonly label: string;
+  /** The game system this frame is drawn for. */
+  readonly system: SystemId;
+  /** Where it comes from: bundled official, bundled community, or the user's own. */
+  readonly origin: 'official' | 'community' | 'custom';
   readonly colors: ThemeColors;
   readonly typography: ThemeTypography;
   readonly layout: ThemeLayout;
   readonly tracks: ThemeTracks;
 }
-
-export type ThemeConfig = DaggerheartThemeConfig;
-
-export type ThemeId = ThemeConfig['id'];

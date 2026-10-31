@@ -17,6 +17,8 @@ copy share link → paste into OBS → go live in Discord) start with
 - `setup-obs.sh` — macOS/Linux installer: regenerates fresh UUIDs and installs
   the file as an OBS scene collection named **Vellum**.
 - `setup-obs.ps1` — Windows PowerShell installer (same behavior).
+- `vellum-hotkeys.lua` — optional OBS script that adds **Vellum** hotkeys
+  (see _Hotkeys and Stream Deck_ below).
 
 All three paths produce the same result: a **Vellum** scene collection whose
 browser source loads the hosted app. They are idempotent and non-destructive —
@@ -92,6 +94,36 @@ address, and those are what belong in a browser source:
 | GM     | `https://vellumhud.com/app/#/daggerheart/gm`     |
 
 The shipped scene collection points at the **player** URL.
+
+## Frames
+
+A frame is the HUD's look: palette, type, and whether each stat draws as a bar
+or as chits. Pick one on the setup screen and it is remembered. To pin a frame
+on a browser source instead, add `?frame=<id>` before the `#`:
+
+```
+https://vellumhud.com/app/?frame=daggerheart-ledger#/daggerheart/player
+```
+
+| Frame       | id                   |
+| ----------- | -------------------- |
+| Daggerheart | `daggerheart`        |
+| Ledger      | `daggerheart-ledger` |
+
+## Hotkeys and Stream Deck
+
+`vellum-hotkeys.lua` adds hotkeys that drive the HUD while you play: Hope,
+HP, Stress, Armor and Fear up and down, the three conditions, and next or
+previous frame. It talks to the Vellum browser source directly, so there is no
+websocket, password or network involved.
+
+1. **Tools → Scripts → +**, and pick `obs/vellum-hotkeys.lua`.
+2. **Settings → Hotkeys**, search for "Vellum", and bind the keys you want.
+3. Stream Deck: use the built-in **Hotkey** action and press the same key
+   combination. Each Stream Deck button is just a key press to OBS.
+
+It only targets browser sources whose URL is on `vellumhud.com` (or a local
+dev server), so other browser sources never see the events.
 
 ## GM view
 

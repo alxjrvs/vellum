@@ -18,4 +18,8 @@ export type Command =
   /** Set a track to an absolute marked count / value. */
   | { readonly type: 'track.set'; readonly track: TrackId; readonly value: number }
   | { readonly type: 'condition.toggle'; readonly condition: CoreConditionId }
-  | { readonly type: 'feature.toggle'; readonly name: string };
+  | { readonly type: 'feature.toggle'; readonly name: string }
+  /** Switch to a frame by id. Unknown ids are ignored. */
+  | { readonly type: 'frame.set'; readonly frame: string }
+  /** Step through the frames available for this system (`1` next, `-1` previous). */
+  | { readonly type: 'frame.cycle'; readonly delta: number };

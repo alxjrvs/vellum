@@ -36,6 +36,12 @@ export function parseCommand(input: unknown): Command | null {
       return typeof c.name === 'string' && c.name.length > 0
         ? { type: 'feature.toggle', name: c.name }
         : null;
+    case 'frame.set':
+      return typeof c.frame === 'string' && c.frame.length > 0
+        ? { type: 'frame.set', frame: c.frame }
+        : null;
+    case 'frame.cycle':
+      return isInteger(c.delta) ? { type: 'frame.cycle', delta: c.delta } : null;
     default:
       return null;
   }
