@@ -1,13 +1,13 @@
 import { WebSocketServer, type WebSocket } from 'ws';
-import type { Command } from '../../../src/commands/types';
 import {
   DECK_PORT,
   isAllowedOrigin,
   mergeStates,
   parsePageMessage,
+  type Command,
   type DeckState,
   type PluginMessage,
-} from '../../../src/deck/protocol';
+} from '@vellum/protocol';
 
 type Listener = (state: DeckState, connected: boolean) => void;
 

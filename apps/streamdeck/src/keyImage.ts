@@ -1,4 +1,4 @@
-import type { DeckTrack } from '../../../src/deck/protocol';
+import type { DeckTrack } from '@vellum/protocol';
 
 /**
  * Key faces, drawn as 144×144 SVG. They follow the HUD's label rules: every

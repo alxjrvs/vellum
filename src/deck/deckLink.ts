@@ -5,7 +5,7 @@ import {
   parsePluginMessage,
   type DeckState,
   type PageMessage,
-} from './protocol';
+} from '@vellum/protocol';
 
 /** The query param that turns the link on outside OBS (for testing in a browser). */
 export const DECK_QUERY_PARAM = 'deck';

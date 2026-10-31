@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import pkg from '../../package.json?raw';
+import pkg from '../package.json?raw';
 import { faceToAnchors, smoothAnchors } from './anchors';
 import { MEDIAPIPE_VERSION } from './assets';
 

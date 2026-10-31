@@ -1,6 +1,6 @@
 import { useCharacter } from '../../character/useCharacter';
 import { useResourceBinding } from '../../character/useResourceBinding';
-import type { TrackId } from '../../commands/types';
+import type { TrackId } from '@vellum/protocol';
 import { useSystem } from '../../systems/useSystem';
 import { useTrackDisplay } from '../../themes/useTrackDisplay';
 import { HpThresholds } from './HpThresholds';

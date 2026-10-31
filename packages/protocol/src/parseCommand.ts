@@ -1,5 +1,10 @@
-import { CORE_CONDITION_IDS, type CoreConditionId } from '../systems/types';
-import { TRACK_IDS, type Command, type TrackId } from './types';
+import {
+  CORE_CONDITION_IDS,
+  TRACK_IDS,
+  type Command,
+  type CoreConditionId,
+  type TrackId,
+} from './commands';
 
 function isTrack(value: unknown): value is TrackId {
   return typeof value === 'string' && (TRACK_IDS as readonly string[]).includes(value);

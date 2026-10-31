@@ -1,0 +1,10 @@
+{
+  "name": "@vellum/protocol",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "The command vocabulary every Vellum input speaks, and the Stream Deck link's wire format. No DOM, no Node.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -1,7 +1,7 @@
 import type { CharacterState } from './types';
 import type { CoreConditionId } from '../systems/types';
 import { commandToActions, type CommandLimits } from '../commands/commandToActions';
-import type { Command } from '../commands/types';
+import type { Command } from '@vellum/protocol';
 
 export type CharacterAction =
   | { type: 'SET_CHARACTER'; character: CharacterState }

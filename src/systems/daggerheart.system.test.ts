@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { daggerheartSystem } from './daggerheart.system';
-import { TRACK_IDS } from '../commands/types';
+import { TRACK_IDS } from '@vellum/protocol';
 
 describe('daggerheartSystem', () => {
   it('uses the daggerheart discriminator', () => {

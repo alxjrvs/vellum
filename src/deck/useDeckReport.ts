@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { reportDeckState } from './deckLink';
-import type { DeckState } from './protocol';
+import type { DeckState } from '@vellum/protocol';
 
 /** Report part of what this page shows to the Stream Deck plugin, whenever it changes. */
 export function useDeckReport(state: DeckState): void {

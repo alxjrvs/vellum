@@ -1,8 +1,7 @@
-import type { TrackId } from '../commands/types';
+import type { CoreConditionId, TrackId } from '@vellum/protocol';
 import type { StatTrackInteraction, StatTrackShape } from '../components/StatTrack';
 
-export const CORE_CONDITION_IDS = ['hidden', 'restrained', 'vulnerable'] as const;
-export type CoreConditionId = (typeof CORE_CONDITION_IDS)[number];
+export { CORE_CONDITION_IDS, type CoreConditionId } from '@vellum/protocol';
 
 export const SYSTEM_IDS = ['daggerheart'] as const;
 
