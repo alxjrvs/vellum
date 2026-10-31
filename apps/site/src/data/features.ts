@@ -26,9 +26,9 @@ export interface Feature {
 export const features: Feature[] = [
   {
     id: 'camera-hud',
-    title: 'Your HUD is your camera',
+    title: 'Your character, on your camera',
     blurb:
-      'OBS draws the HUD over your webcam and its Virtual Camera carries it into Discord. The table sees your stats on your own tile.',
+      'OBS draws your character over your webcam and its Virtual Camera carries it into Discord. The table reads your stats at a glance, right on your tile.',
     status: 'live',
     href: '/docs/',
   },

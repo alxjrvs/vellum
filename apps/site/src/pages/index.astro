@@ -19,10 +19,10 @@ const rundown = features.filter((f) =>
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">A camera HUD for tabletop RPGs</p>
-        <h1>Your sheet.<br /><em>On air.</em></h1>
+        <h1>Your characters,<br /><em>at a glance.</em></h1>
         <p class="lede">
-          Vellum puts your live character sheet on your own Discord camera. Hope, HP, Stress and
-          conditions ride your video tile, where the whole table is already looking.
+          Vellum puts each character's live stats on their player's own Discord camera. Hope, HP,
+          Stress and conditions ride every video tile, so one look at the call reads the whole party.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href="/docs/">Get on camera</a>
@@ -39,9 +39,9 @@ const rundown = features.filter((f) =>
         <p class="eyebrow">How it works</p>
         <h2 id="chain-h">You are the broadcast.</h2>
         <p class="lede">
-          Each player runs their own Vellum. It draws your HUD, OBS lays it over your webcam, and
-          OBS's Virtual Camera hands the finished picture to Discord as your camera. Nobody else
-          installs anything, and no copy of Vellum talks to another.
+          Each player runs their own Vellum. It draws your character over your webcam, and OBS's
+          Virtual Camera hands the finished picture to Discord as your camera. No more asking
+          "how much HP do you have?": the answer is already on your tile.
         </p>
       </div>
       <ol class="chain">
@@ -89,14 +89,14 @@ const rundown = features.filter((f) =>
     <div class="wrap split">
       <div class="stack">
         <p class="eyebrow">Frames</p>
-        <h2 id="frames-h">One HUD, a frame per game.</h2>
+        <h2 id="frames-h">Built to read on a tiny tile.</h2>
         <p class="lede">
           A frame is the look: colors, where each widget sits, and whether a stat draws as a bar or
-          as chits. Pick one from the Library, or build your own.
+          as chits. Pick one from the Library for your game, or build your own.
         </p>
         <p class="small">
-          Frames are data, never code, and every frame keeps two rules: labels stay readable on a
-          tiny Discord tile, and everything reads from the edge of the frame toward your face.
+          Every frame keeps two rules so it reads at a glance: labels stay big and solid on even the
+          smallest Discord tile, and everything reads from the edge of the frame toward your face.
         </p>
         <div class="cta-row">
           <a class="btn btn-secondary" href="/frames/">About frames</a>
@@ -120,8 +120,9 @@ const rundown = features.filter((f) =>
         <p class="eyebrow">Control</p>
         <h2 id="control-h">Hands on the game, not the mouse.</h2>
         <p class="lede">
-          Mark HP, spend Hope and flip conditions with programmable hotkeys. Bind them to any key
-          or button you like; a click and a key press always do exactly the same thing.
+          Mark HP, spend Hope and flip conditions with programmable hotkeys, and your tile updates
+          the moment it happens. Bind them to any key or button; a click and a key press always do
+          exactly the same thing.
         </p>
         <div class="cta-row">
           <a class="btn btn-secondary" href="/control/">Programmable hotkeys</a>
@@ -211,15 +212,15 @@ const rundown = features.filter((f) =>
           <p>Enter your character, then copy your share link. Your whole sheet packs into it.</p>
         </li>
         <li>
-          <h3>Drop it into OBS</h3>
+          <h3>Load it into OBS</h3>
           <p>
-            Import the Vellum scene collection and paste your link. Works on macOS, Windows and
-            Linux.
+            Add the Vellum script to OBS, paste your link and press Set up. Works on macOS, Windows
+            and Linux.
           </p>
         </li>
         <li>
           <h3>Go on camera</h3>
-          <p>Start OBS's Virtual Camera and pick it in Discord. Your face, with your stats on it.</p>
+          <p>Pick OBS Virtual Camera in Discord. Now the whole table sees your character at a glance.</p>
         </li>
       </ol>
       <div class="cta-row">

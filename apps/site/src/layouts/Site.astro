@@ -15,10 +15,10 @@ interface Props {
 
 const {
   title,
-  description = 'Vellum puts your live character sheet on your own Discord camera. Pick a frame for your game, drive it with programmable hotkeys, and keep everything on your machine.',
+  description = 'Your characters, at a glance. Vellum puts each character\'s live stats on their player\'s own Discord camera. Pick a frame for your game, drive it with programmable hotkeys, and keep everything on your machine.',
 } = Astro.props;
 
-const fullTitle = title ? `${title} · Vellum` : 'Vellum · Your sheet. On air.';
+const fullTitle = title ? `${title} · Vellum` : 'Vellum · Your characters, at a glance';
 const path = Astro.url.pathname;
 
 const nav = [
@@ -69,7 +69,7 @@ const nav = [
       <div class="wrap foot-grid">
         <div>
           <a class="wordmark foot-mark" href="/" aria-label="Vellum home" set:html={wordmark} />
-          <p class="small">Your sheet. On air.</p>
+          <p class="small">Your characters, at a glance.</p>
         </div>
         <nav class="foot-nav" aria-label="Footer">
           <a href="/docs/">Quick start</a>
