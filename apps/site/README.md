@@ -2,10 +2,12 @@
 
 The Vellum site: marketing pages (`src/pages`) and docs (`src/content/docs/docs`, Starlight), built with Astro to `dist/`. The app is a separate build served at `/app/`.
 
+It is a Bun workspace of the repo, so install once from the repo root:
+
 ```sh
-bun install
-bun run dev     # http://localhost:4321
-bun run build   # → dist/
+bun install          # at the repo root; covers the app and apps/*
+bun run site:dev     # http://localhost:4321
+bun run site:build   # → apps/site/dist/
 ```
 
 - **Design system:** `src/styles/global.css` imports the app's chassis tokens from `src/themes/vellum.tokens.css`; never copy values. See `docs/branding/BRANDING.md`.

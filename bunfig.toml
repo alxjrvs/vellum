@@ -1,0 +1,4 @@
+[install]
+# simple-git-hooks finds the project from its own install path, which the
+# isolated linker moves; hoisted keeps the single-package layout.
+linker = "hoisted"

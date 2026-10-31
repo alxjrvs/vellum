@@ -82,14 +82,12 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        # apps/site is its own package until the repo moves to Bun workspaces.
+        # One install at the root covers every workspace (apps/*).
         run: bun install --frozen-lockfile
-        working-directory: apps/site
 
       - name: Build
         # Astro + Starlight static build to apps/site/dist (vellumhud.com).
-        run: bun run build
-        working-directory: apps/site
+        run: bun run site:build
 
   ci-success:
     name: CI Success
