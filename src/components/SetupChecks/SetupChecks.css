@@ -1,18 +1,10 @@
 .setup-checks {
-  width: 100%;
-  max-width: 48rem;
-  margin: var(--spacing-lg) auto 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
   font-family: var(--font-family-body);
   font-size: var(--font-size-base);
   color: var(--color-text);
-}
-
-.setup-checks__heading {
-  margin: 0;
-  font-size: var(--font-size-heading);
 }
 
 .setup-checks__list {
@@ -26,11 +18,11 @@
 
 .setup-checks__row {
   display: grid;
-  grid-template-columns: minmax(10rem, max-content) max-content 1fr;
+  grid-template-columns: 9em max-content 1fr;
   align-items: baseline;
   gap: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-left: var(--border-width) solid var(--color-rule);
+  border-left: var(--edge-width) solid var(--color-rule);
   background: var(--color-plate);
 }
 
@@ -41,7 +33,9 @@
 /* The state reads on a solid chip, never color alone. */
 .setup-checks__state {
   padding: 0 var(--spacing-xs);
+  font-family: var(--font-family-display);
   font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-plate);
   background: var(--color-label);

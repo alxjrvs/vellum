@@ -33,34 +33,39 @@ export function CameraSetup() {
         computer. No picture ever leaves it.
       </p>
 
-      <label className="camera-setup__toggle">
-        <input
-          type="checkbox"
-          checked={settings.camera}
-          onChange={(e) =>
-            update({ camera: e.target.checked, ...(e.target.checked ? {} : { followFace: false }) })
-          }
-        />
-        Draw my camera in Vellum
-      </label>
-      <label className="camera-setup__toggle">
-        <input
-          type="checkbox"
-          checked={settings.followFace}
-          disabled={!settings.camera}
-          onChange={(e) => update({ followFace: e.target.checked })}
-        />
-        Widgets follow my face
-      </label>
-      <label className="camera-setup__toggle">
-        <input
-          type="checkbox"
-          checked={settings.mirror}
-          disabled={!settings.camera}
-          onChange={(e) => update({ mirror: e.target.checked })}
-        />
-        Mirror (selfie view)
-      </label>
+      <div className="camera-setup__toggles">
+        <label className="camera-setup__toggle">
+          <input
+            type="checkbox"
+            checked={settings.camera}
+            onChange={(e) =>
+              update({
+                camera: e.target.checked,
+                ...(e.target.checked ? {} : { followFace: false }),
+              })
+            }
+          />
+          Draw my camera in Vellum
+        </label>
+        <label className="camera-setup__toggle">
+          <input
+            type="checkbox"
+            checked={settings.followFace}
+            disabled={!settings.camera}
+            onChange={(e) => update({ followFace: e.target.checked })}
+          />
+          Widgets follow my face
+        </label>
+        <label className="camera-setup__toggle">
+          <input
+            type="checkbox"
+            checked={settings.mirror}
+            disabled={!settings.camera}
+            onChange={(e) => update({ mirror: e.target.checked })}
+          />
+          Mirror (selfie view)
+        </label>
+      </div>
 
       <p className="camera-setup__status" role="status">
         {STATUS_TEXT[camera.status]}

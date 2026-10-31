@@ -1,7 +1,4 @@
 .camera-setup {
-  width: 100%;
-  max-width: 48rem;
-  margin: var(--spacing-lg) auto 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
@@ -10,22 +7,37 @@
   color: var(--color-text);
 }
 
-.camera-setup__heading {
-  margin: 0;
-  font-size: var(--font-size-heading);
-}
-
 .camera-setup__lede,
 .camera-setup__status {
   margin: 0;
   color: var(--color-label);
 }
 
+/* The switches are big chips in a row; a checked one wears the Signal edge. */
+.camera-setup__toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
 .camera-setup__toggle {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  min-height: var(--control-height, 56px);
+  padding: 0 var(--spacing-sm);
+  border-left: var(--edge-width) solid var(--color-rule);
+  background: var(--color-plate-raised);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   cursor: pointer;
+}
+
+.camera-setup__toggle:has(input:checked) {
+  border-left-color: var(--color-signal);
 }
 
 .camera-setup__toggle input {
@@ -35,6 +47,8 @@
 }
 
 .camera-setup__toggle:has(input:disabled) {
+  border-left-color: var(--color-rule);
+  background: var(--color-plate);
   color: var(--color-muted);
   cursor: default;
 }

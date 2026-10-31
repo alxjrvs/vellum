@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { publishCommand } from '../commands/commandBus';
+import { CharacterProvider } from '../character/CharacterProvider';
 import { FramePicker } from '../components/FramePicker';
 import { SystemProvider } from '../systems/SystemProvider';
 import { daggerheartSystem } from '../systems/daggerheart.system';
@@ -18,8 +19,10 @@ function renderFrames() {
   return render(
     <SystemProvider system={daggerheartSystem}>
       <FrameProvider>
-        <ActiveFrame />
-        <FramePicker />
+        <CharacterProvider>
+          <ActiveFrame />
+          <FramePicker />
+        </CharacterProvider>
       </FrameProvider>
     </SystemProvider>
   );
@@ -94,5 +97,14 @@ describe('FrameProvider', () => {
     act(() => publishCommand({ type: 'frame.cycle', delta: -1 }));
     expect(active()).toBe('daggerheart-ledger');
     expect(localStorage.getItem(FRAME_STORAGE_KEY)).toBe('daggerheart-ledger');
+  });
+
+  it('keeps every frame action in place, disabling the ones only your own frames have', () => {
+    renderFrames();
+    const actions = ['Customize', 'Export', 'Delete'].map((name) =>
+      screen.getByRole('button', { name })
+    );
+    expect(actions.map((b) => (b as HTMLButtonElement).disabled)).toEqual([false, true, true]);
+    expect(screen.getByLabelText('Import')).toBeInTheDocument();
   });
 });

@@ -85,7 +85,11 @@ export function SetupWizard() {
             <p className="setup-wizard__selftest-q">
               Click one HP pip — did it move on your camera?
             </p>
-            <button type="button" className="setup-wizard__done" onClick={dismiss}>
+            <button
+              type="button"
+              className="setup-button setup-button--primary setup-wizard__done"
+              onClick={dismiss}
+            >
               Yes — confirm
             </button>
           </div>
@@ -98,15 +102,16 @@ export function SetupWizard() {
               <div className="setup-wizard__copy">
                 <button
                   type="button"
-                  className="setup-wizard__copy-button"
+                  className="setup-button setup-wizard__copy-button"
                   onClick={copyShareLink}
                   disabled={!shareUrl}
                 >
                   {copied ? 'Share link copied' : 'Copy share link'}
                 </button>
-                {!shareUrl && (
-                  <span className="setup-wizard__copy-hint">Save a character first.</span>
-                )}
+                {/* Always one line here, so the steps below never shift. */}
+                <span className="setup-wizard__copy-hint">
+                  {shareUrl ? 'You paste it in step 3.' : 'Save a character first.'}
+                </span>
               </div>
             </li>
             <li>
@@ -122,7 +127,11 @@ export function SetupWizard() {
               Video.
             </li>
           </ol>
-          <button type="button" className="setup-wizard__done" onClick={dismiss}>
+          <button
+            type="button"
+            className="setup-button setup-button--primary setup-wizard__done"
+            onClick={dismiss}
+          >
             Got it
           </button>
         </div>

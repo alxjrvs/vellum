@@ -43,6 +43,15 @@ describe('DiceRoller', () => {
     expect(document.querySelectorAll('.dice-roller__log-row')).toHaveLength(0);
   });
 
+  it('hangs the roll history below the Roll button', () => {
+    rollDuality.mockReturnValue(result({}));
+    render(<DiceRoller />);
+    roll();
+    const button = screen.getByRole('button', { name: 'Roll' });
+    const history = screen.getByLabelText('Roll history');
+    expect(button.compareDocumentPosition(history) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it('rolls with a zero modifier and no advantage by default', () => {
     rollDuality.mockReturnValue(result({ total: 10, hope: 6, fear: 4 }));
     render(<DiceRoller />);

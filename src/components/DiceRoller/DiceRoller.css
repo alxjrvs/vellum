@@ -1,7 +1,12 @@
+/*
+ * A fixed-size box: controls on top, the history below the Roll button in a
+ * reserved area. Rolls fill that area instead of growing the widget, so no
+ * button ever moves, and a frame can place the roller knowing its footprint.
+ */
 .dice-roller {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   width: 600px;
   font-family: var(--font-family-body);
   color: var(--color-text);
@@ -11,8 +16,12 @@
 .dice-roller__log {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  max-height: 320px;
+  justify-content: flex-start;
+  /* Room for four rows; older rolls slide out of view below. */
+  height: calc(
+    4 * (var(--font-size-heading) + 2 * var(--spacing-xs) + 2 * var(--border-width)) + 3 *
+      var(--spacing-sm)
+  );
   overflow: hidden;
 }
 
@@ -156,14 +165,14 @@
 }
 
 .dice-roller__step {
-  width: var(--font-size-heading);
-  height: var(--font-size-heading);
+  width: calc(var(--font-size-heading) + var(--spacing-md));
+  height: calc(var(--font-size-heading) + var(--spacing-md));
   border: var(--border-width) solid var(--color-rule);
   border-radius: var(--radius-sm);
   background: var(--color-plate-raised);
   color: var(--color-text);
   font-family: var(--font-family-display);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-heading);
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
@@ -191,7 +200,8 @@
 }
 
 .dice-roller__toggle-option {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  min-height: calc(var(--font-size-heading) + var(--spacing-md));
+  padding: 0 var(--spacing-sm);
   border: none;
   border-left: var(--border-width) solid var(--color-rule);
   background: var(--color-plate-raised);
@@ -229,15 +239,12 @@
   cursor: pointer;
   /* The slanted broadcast plate. */
   clip-path: polygon(var(--spacing-md) 0, 100% 0, calc(100% - var(--spacing-md)) 100%, 0 100%);
-  transition: transform 0.08s ease;
 }
 
+/* Feedback by color only: a control never shifts under the pointer. */
 .dice-roller__roll:hover {
-  transform: translateY(-2px);
-}
-
-.dice-roller__roll:active {
-  transform: translateY(0);
+  background: var(--color-text);
+  border-color: var(--color-text);
 }
 
 .dice-roller__clear {
@@ -261,4 +268,22 @@
 .dice-roller__clear:disabled {
   color: var(--color-muted);
   cursor: default;
+}
+
+/* Outside-in: on the right of the stage the accent edges move outward. */
+[data-side='right'] .dice-roller__log-row {
+  flex-direction: row-reverse;
+  border-left-width: var(--border-width);
+  border-right-width: var(--edge-width);
+}
+
+[data-side='right'] .dice-roller__log-row[data-outcome='hope'],
+[data-side='right'] .dice-roller__log-row[data-outcome='critical hope'] {
+  border-left-color: var(--color-rule);
+  border-right-color: var(--color-signal);
+}
+
+[data-side='right'] .dice-roller__log-row[data-outcome='fear'] {
+  border-left-color: var(--color-rule);
+  border-right-color: var(--color-fear);
 }

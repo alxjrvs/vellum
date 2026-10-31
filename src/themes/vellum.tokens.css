@@ -7,10 +7,15 @@
  * overrides any of the --color-* / --font-* tokens on :root at runtime. So a
  * frame only ever re-skins the chassis; it never invents new token names.
  *
+ * Setup screens add the .vellum-chassis class to put the chassis back over
+ * whatever frame is active: setup is Vellum's own UI, and only the HUD (and
+ * the frame thumbnails) wear a frame.
+ *
  * Fonts are self-hosted by the app (@fontsource) so nothing loads from the
  * network at runtime; the site pulls the same families from Google Fonts.
  */
-:root {
+:root,
+.vellum-chassis {
   /* Surfaces */
   --color-night: #0d1016; /* page / setup ground */
   --color-plate: #171c26; /* every HUD plate and card */

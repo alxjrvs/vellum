@@ -138,7 +138,7 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
     <form className="character-setup" onSubmit={handleSubmit} aria-label="Character details">
       <h2 className="character-setup__title">Character details</h2>
 
-      <fieldset className="character-setup__group">
+      <fieldset className="character-setup__group character-setup__group--thirds">
         <legend>Identity</legend>
         <Field label="Name" value={form.name} onChange={set('name')} required />
         <Field label="Class" value={form.className} onChange={set('className')} required />
@@ -167,45 +167,47 @@ export function CharacterSetup({ onDone }: CharacterSetupProps) {
         />
       </fieldset>
 
-      <fieldset className="character-setup__group">
+      <fieldset className="character-setup__group character-setup__group--thirds">
         <legend>HP thresholds (optional)</legend>
         <Field label="Major" value={form.major} onChange={set('major')} type="number" min={1} />
         <Field label="Severe" value={form.severe} onChange={set('severe')} type="number" min={1} />
       </fieldset>
 
-      {error && (
-        <p className="character-setup__error" role="alert">
-          {error}
-        </p>
-      )}
-
+      {/* The buttons come before anything that can appear or change length,
+          so they never move. */}
       <div className="character-setup__actions">
-        <button type="submit" className="character-setup__submit">
+        <button type="submit" className="setup-button setup-button--primary">
           Show overlay
         </button>
         {character && (
-          <button type="button" className="character-setup__cancel" onClick={onDone}>
+          <button type="button" className="setup-button" onClick={onDone}>
             Cancel
           </button>
         )}
-      </div>
-
-      {character && (
-        <div className="character-setup__share">
+        {character && (
           <button
             type="button"
-            className="character-setup__share-button"
+            className="setup-button character-setup__share-button"
             onClick={handleCopyShareLink}
             disabled={hasUnsavedEdits}
           >
             {shareCopied ? 'Share link copied' : 'Copy share link'}
           </button>
-          <p className="character-setup__share-hint">
+        )}
+      </div>
+
+      {error ? (
+        <p className="character-setup__note character-setup__error" role="alert">
+          {error}
+        </p>
+      ) : (
+        character && (
+          <p className="character-setup__note">
             {hasUnsavedEdits
               ? 'Show overlay to save your edits, then the link will carry them.'
-              : `Paste this link into OBS to load ${character.identity.name} with no Interact window.`}
+              : `Paste the share link into OBS to load ${character.identity.name} with no Interact window.`}
           </p>
-        </div>
+        )
       )}
     </form>
   );
@@ -230,6 +232,7 @@ function Field({ label, value, onChange, type = 'text', required, min }: FieldPr
       </label>
       <input
         id={id}
+        className="setup-input"
         type={type}
         value={value}
         aria-required={required}
@@ -248,19 +251,47 @@ interface NumberFieldProps {
   max?: number;
 }
 
+/** A count with big − and + buttons either side, so it's set with a click. */
 function NumberField({ label, value, onChange, min, max }: NumberFieldProps) {
   const id = useId();
+  const labelId = `${id}-label`;
+  const clamp = (n: number) => Math.min(Math.max(n, min ?? -Infinity), max ?? Infinity);
   return (
     <div className="character-setup__field">
-      <label htmlFor={id}>{label}</label>
-      <input
-        id={id}
-        type="number"
-        value={value}
-        min={min}
-        max={max}
-        onChange={(e) => onChange(Number.parseInt(e.target.value, 10) || 0)}
-      />
+      <label id={labelId} htmlFor={id}>
+        {label}
+      </label>
+      <div className="character-setup__stepper">
+        <button
+          type="button"
+          className="character-setup__step"
+          aria-label="One fewer"
+          aria-describedby={labelId}
+          disabled={min !== undefined && value <= min}
+          onClick={() => onChange(clamp(value - 1))}
+        >
+          −
+        </button>
+        <input
+          id={id}
+          className="setup-input character-setup__count"
+          type="number"
+          value={value}
+          min={min}
+          max={max}
+          onChange={(e) => onChange(Number.parseInt(e.target.value, 10) || 0)}
+        />
+        <button
+          type="button"
+          className="character-setup__step"
+          aria-label="One more"
+          aria-describedby={labelId}
+          disabled={max !== undefined && value >= max}
+          onClick={() => onChange(clamp(value + 1))}
+        >
+          +
+        </button>
+      </div>
     </div>
   );
 }
