@@ -1,0 +1,29 @@
+---
+title: The OBS script
+description: What the Vellum script for OBS does, and why Vellum uses a script rather than a plugin.
+---
+
+`vellum.lua` is the whole OBS side of Vellum. OBS runs it itself on Windows, macOS and Linux, so there's nothing else to install.
+
+## What Set up Vellum does
+
+It makes a scene called **Vellum** with your webcam (**Vellum Camera**) underneath and the HUD (**Vellum HUD**) on top, fits both to your canvas, switches to the scene, and starts the Virtual Camera. It never touches your other scenes, and pressing it again updates the same scene. If you already have a source with one of those names that's a different kind, it leaves it alone and tells you.
+
+Pasting a new link into **Your Vellum link** updates the HUD straight away.
+
+If Vellum draws your camera for [face tracking](/docs/face-tracking/), choose **Vellum draws the camera (face tracking)** under **Camera** and press **Set up Vellum** again. The script hides its own webcam source so the two don't fight over the camera.
+
+## Hotkeys
+
+The script adds the **Vellum:** entries under **Settings → Hotkeys**. See [Hotkeys](/docs/control/).
+
+## Why a script
+
+OBS has a few ways to extend it, and a script asks least of you:
+
+- **Lua scripts** come with OBS on every OS. They can build scenes, start the Virtual Camera, and register hotkeys, and they talk to the browser source directly, with no network or password.
+- **Python scripts** work the same way but need Python installed and pointed at in OBS.
+- **Plugins** are compiled native code, with a separate installer per OS and signing on macOS, for nothing a script can't do.
+- **Scene collection files** can't know which webcam you have, and importing one switches your whole collection.
+- **Custom browser docks** keep their own storage, separate from browser sources, so they can't carry your character into the HUD.
+- **The OBS WebSocket** needs a password set up, and Vellum doesn't need it.

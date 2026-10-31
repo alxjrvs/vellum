@@ -19,3 +19,6 @@ declare global {
 export function isInsideObs(): boolean {
   return typeof window !== 'undefined' && typeof window.obsstudio !== 'undefined';
 }
+
+/** The Vellum OBS script, which builds the scene and adds the hotkeys. */
+export const OBS_SCRIPT_URL = 'https://vellumhud.com/downloads/vellum.lua';

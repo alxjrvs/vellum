@@ -1,45 +1,19 @@
 ---
-title: Quick start
-description: Get your character HUD onto your own Discord camera in a few minutes.
+title: Set up
+description: Get your character HUD onto your own Discord camera in four steps.
+tableOfContents: false
+editUrl: false
+prev: false
+next: false
 ---
 
-Vellum draws your character HUD, OBS lays it over your webcam, and OBS's Virtual Camera hands the finished picture to Discord as your camera. Each player sets this up once, on their own machine.
+You need [OBS Studio](https://obsproject.com/) 28 or newer, the Discord desktop app, and a webcam. Each player does this once.
 
-**You need:** [OBS Studio](https://obsproject.com/) 28 or newer, the Discord desktop app, and a webcam.
+1. **Copy your link.** Open [the app](/app/), pick your game and screen, fill in your character, and press **Copy share link**. GMs pick the GM screen and press **Copy GM screen link**.
+2. **Load the script.** Download [`vellum.lua`](/downloads/vellum.lua). In OBS, open **Tools → Scripts**, press **+**, and pick it.
+3. **Set up.** Paste your link into **Your Vellum link**, pick your webcam, and press **Set up Vellum**. Approve the system prompt if one appears.
+4. **Go on camera.** In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**.
 
-## 1. Open Vellum
+Next time, just open OBS and press **Start Virtual Camera**.
 
-Open [the app](/app/). It starts on a picker: choose your game (Daggerheart) and your screen, **Player** or **GM**. Each screen has its own address:
-
-- Player: `https://vellumhud.com/app/daggerheart/player/`
-- GM: `https://vellumhud.com/app/daggerheart/gm/`
-
-The GM screen needs no character, so GMs can skip to step 3.
-
-## 2. Fill your sheet and copy your link
-
-Fill in **Character details** with the numbers from your sheet, then click **Copy share link**. The link carries your whole character in the address. This is how your sheet gets into OBS, which has its own separate browser storage.
-
-## 3. Put it in OBS
-
-1. Download [`vellum.lua`](/downloads/vellum.lua), the Vellum script for OBS.
-2. In OBS, open **Tools → Scripts**, press **+** and pick the file.
-3. Paste your share link into **Your Vellum link**, pick your webcam under **Camera**, and press **Set up Vellum**.
-
-The script builds a **Vellum** scene with your webcam under the HUD and starts the Virtual Camera. Approve the one-time system prompt if your OS shows one. Prefer to do it by hand? See [OBS setup](/docs/obs/).
-
-## 4. Go on camera
-
-In Discord, open **Settings → Voice & Video → Camera** and choose **OBS Virtual Camera**.
-
-That's it: your face, with your stats on it. Change a value with a [hotkey](/docs/control/), or by clicking the HUD in OBS (right-click the source, **Interact**). Everything you change is saved and survives a reload.
-
-:::tip[Let the setup panel drive]
-The first time you open the app, a small setup panel walks you through these steps. Inside OBS it ends with a self-test: click one HP pip and confirm it moved on your camera.
-:::
-
-## Next
-
-- [Hotkeys](/docs/control/) to change stats without the mouse.
-- [Pick a frame](/docs/frames/) to change how your HUD looks.
-- [Troubleshooting](/docs/troubleshooting/) if something doesn't show up.
+**More:** [hotkeys](/docs/control/) · [pick a frame](/docs/frames/) · [set up by hand](/docs/obs/) · [troubleshooting](/docs/troubleshooting/)

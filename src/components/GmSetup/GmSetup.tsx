@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSystem } from '../../systems/useSystem';
 import { useSourceQuery } from '../../sourceLink/useSourceQuery';
 import { sceneUrl } from '../../viewMode/useViewMode';
+import { OBS_SCRIPT_URL } from '../SetupWizard/obs';
 
 interface GmSetupProps {
   readonly onLaunch: () => void;
@@ -31,59 +32,39 @@ export function GmSetup({ onLaunch }: GmSetupProps) {
     <section className="gm-setup" aria-label="GM screen setup">
       <h1 className="gm-setup__title">GM screen</h1>
       <p className="gm-setup__lede">
-        Nothing to configure — this screen tracks the table&rsquo;s Fear, not a character.
+        Nothing to configure: this screen tracks the table&rsquo;s Fear, not a character.
       </p>
 
       <h2 className="gm-setup__heading">What you&rsquo;ll see</h2>
       <ul className="gm-setup__list">
         <li>
-          <strong>The Fear pool</strong> — a {system.fear.max}-pip track, the table&rsquo;s shared
-          Fear.
+          <strong>Fear</strong>, a {system.fear.max}-pip track. Click a pip to fill up to it, or use{' '}
+          <strong>&minus;</strong> / <strong>+</strong>. A roll <em>with Fear</em> never moves it
+          for you.
         </li>
         <li>
-          <strong>The Duality Dice roller</strong> — the same roller the players have.
+          <strong>The Duality Dice</strong> and <strong>the ticker</strong>, shared with every
+          screen.
         </li>
-        <li>
-          <strong>The ticker</strong> — the editable banner shared with every screen.
-        </li>
-      </ul>
-
-      <h2 className="gm-setup__heading">During play</h2>
-      <ul className="gm-setup__list">
-        <li>
-          Click a pip to fill the track up to it; click the topmost filled pip to step back down.
-        </li>
-        <li>
-          Or use the <strong>&minus;</strong> / <strong>+</strong> stepper for single steps. Fear
-          stops at 0 and at {system.fear.max}.
-        </li>
-        <li>
-          A roll <em>with Fear</em> gains you a Fear; Vellum reports the dice but never moves the
-          track for you.
-        </li>
-        <li>Your Fear is saved continuously — a reload restores it within about a second.</li>
       </ul>
 
       <h2 className="gm-setup__heading">Get it onto your camera</h2>
       <ol className="gm-setup__steps">
         <li>
-          Copy this screen&rsquo;s address:
-          <div className="gm-setup__copy">
-            <button type="button" className="gm-setup__copy-button" onClick={copyScreenLink}>
-              {copied ? 'Link copied' : 'Copy GM screen link'}
-            </button>
-          </div>
+          <button type="button" className="gm-setup__copy-button" onClick={copyScreenLink}>
+            {copied ? 'Link copied' : 'Copy GM screen link'}
+          </button>
         </li>
         <li>
-          In OBS, add a <strong>Browser Source</strong> with that URL (1920&times;1080).
+          In OBS, load the <a href={OBS_SCRIPT_URL}>Vellum script</a> under Tools &rarr; Scripts.
         </li>
         <li>
-          Add your webcam as a <strong>Video Capture Device</strong> ordered <em>below</em> the HUD
-          source.
+          Paste the link into <strong>Your Vellum link</strong>, pick your webcam, and press{' '}
+          <strong>Set up Vellum</strong>.
         </li>
         <li>
-          <strong>Start Virtual Camera</strong>, then pick <strong>OBS Virtual Camera</strong> in
-          Discord under Settings &rarr; Voice &amp; Video.
+          In Discord, pick <strong>OBS Virtual Camera</strong> under Settings &rarr; Voice &amp;
+          Video.
         </li>
       </ol>
 
@@ -91,8 +72,8 @@ export function GmSetup({ onLaunch }: GmSetupProps) {
         Launch GM screen
       </button>
       <p className="gm-setup__note">
-        You can come back to this page anytime with <strong>Setup</strong> on the live screen. The
-        OBS browser source skips straight to the live view.
+        <strong>Setup</strong> on the live screen brings you back here. OBS skips straight to the
+        live view.
       </p>
     </section>
   );

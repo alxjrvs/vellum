@@ -23,6 +23,12 @@ is stable enough to promise. See [`docs/RELEASE-STRATEGY.md`](docs/RELEASE-STRAT
   `/app/daggerheart/gm/`, with no `#` in the URL. Share links and screen links
   use the new form. Old `#/daggerheart/…` and `?mode=` links still work; they
   move to the new path when they load, so existing OBS sources need no change.
+- **Setup fits on one screen.** The player and GM setup screens lay out in
+  columns with a smaller type scale (they're read in a browser tab, not on a
+  camera tile), the setup panel and GM how-to are four short steps built
+  around the OBS script, and the docs' **Set up** and **Set up by hand** pages
+  each fit a 1280×720 window. The script's details moved to a new **The OBS
+  script** page.
 
 ## [0.3.0] — The expansion
 

@@ -62,12 +62,6 @@
   gap: var(--spacing-md);
 }
 
-.setup-wizard__lead {
-  margin: 0;
-  color: var(--color-label);
-  font-size: var(--font-size-label);
-}
-
 .setup-wizard__steps {
   display: flex;
   flex-direction: column;
@@ -167,4 +161,8 @@
 .setup-help:focus-visible {
   border-right-color: var(--color-signal);
   color: var(--color-text);
+}
+
+.setup-wizard a {
+  color: var(--color-signal);
 }
