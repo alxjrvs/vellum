@@ -1,11 +1,12 @@
-import type { ViewMode } from '../viewMode/useViewMode';
+import type { FrameKind } from '../themes/types';
 
 /**
- * Whether a scene has been launched is per-scene state: a GM launching the Fear
- * view says nothing about whether a player has launched their HUD, and the two
- * can be open in the same browser profile.
+ * Whether a screen has been launched is kept per kind of frame: a GM launching
+ * the Fear view says nothing about whether a player has launched their HUD,
+ * and the two can be open in the same browser profile. (The keys predate
+ * frames choosing the screen, and are kept so nobody is sent back to setup.)
  */
-export function launchStorageKey(scene: ViewMode): string {
+export function launchStorageKey(scene: FrameKind): string {
   return `vellum:launched:${scene}`;
 }
 
@@ -16,7 +17,7 @@ export function launchStorageKey(scene: ViewMode): string {
  * the GM scene defaults to showing its how-to first.
  */
 export function readLaunchedFromStorage(
-  scene: ViewMode,
+  scene: FrameKind,
   storage: Pick<Storage, 'getItem'> = localStorage
 ): boolean | null {
   const raw = storage.getItem(launchStorageKey(scene));
@@ -25,7 +26,7 @@ export function readLaunchedFromStorage(
 }
 
 export function writeLaunchedToStorage(
-  scene: ViewMode,
+  scene: FrameKind,
   launched: boolean,
   storage: Pick<Storage, 'setItem'> = localStorage
 ): void {

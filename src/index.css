@@ -191,17 +191,6 @@ button {
   max-height: none;
 }
 
-/* The bare /app/ route has one thing to show: the screen picker. */
-.setup-shell--single {
-  grid-template-columns: minmax(0, 1200px);
-  grid-template-rows: min-content 1fr;
-  justify-content: center;
-}
-
-.setup-shell--single > :nth-child(2) {
-  grid-row: 2;
-}
-
 /*
  * Setup primitives, shared by every setup panel: section headings are
  * nameplate tabs, buttons are slanted plates, inputs are big solid wells.

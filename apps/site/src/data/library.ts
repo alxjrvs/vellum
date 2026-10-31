@@ -5,6 +5,7 @@
  * this list reads from there instead.
  */
 import { daggerheartTheme } from '../../../../src/themes/daggerheart.theme';
+import { daggerheartGm } from '../../../../src/frames/official/daggerheart-gm';
 import { daggerheartLedger } from '../../../../src/frames/official/daggerheart-ledger';
 import type { TrackStyle } from '../components/HudTile.astro';
 
@@ -17,6 +18,8 @@ export interface LibraryFrame {
   tier: Tier;
   author: string;
   description: string;
+  /** Which HUD the frame shows. */
+  kind: 'player' | 'gm';
   /** Chassis color overrides, keyed by token name without the --color- prefix. */
   colors: Record<string, string>;
   tracks: Record<string, TrackStyle>;
@@ -38,6 +41,7 @@ export const libraryFrames: LibraryFrame[] = [
     author: 'Vellum',
     description:
       'The Vellum chassis as-is: cool plates, a white nameplate, a green player edge. The starting point for every other frame.',
+    kind: 'player',
     colors: {},
     tracks: { hp: 'chits', stress: 'bar', hope: 'chits' },
   },
@@ -49,8 +53,21 @@ export const libraryFrames: LibraryFrame[] = [
     author: 'Vellum',
     description:
       'Warm plates, a parchment nameplate and a gilt player edge. HP, Hope and Armor as chits, Stress as a bar.',
+    kind: daggerheartTheme.kind,
     colors: toTokenNames(daggerheartTheme.colors),
     tracks: daggerheartTheme.tracks,
+  },
+  {
+    id: daggerheartGm.id,
+    name: daggerheartGm.label,
+    game: 'Daggerheart',
+    tier: 'official',
+    author: 'Vellum',
+    description:
+      'The GM screen in the same warm chassis: the table’s Fear pool and the Duality Dice. No character needed.',
+    kind: daggerheartGm.kind,
+    colors: toTokenNames(daggerheartGm.colors),
+    tracks: daggerheartGm.tracks,
   },
   {
     id: daggerheartLedger.id,
@@ -60,6 +77,7 @@ export const libraryFrames: LibraryFrame[] = [
     author: 'Vellum',
     description:
       'Cold steel plates and a cyan player edge, with every stat drawn as a bar. Easy to read on a busy Discord grid.',
+    kind: daggerheartLedger.kind,
     colors: toTokenNames(daggerheartLedger.colors),
     tracks: daggerheartLedger.tracks,
   },

@@ -37,6 +37,13 @@ describe('parseFrame', () => {
     });
   });
 
+  it('keeps a GM frame a GM frame, and reads older frames as player frames', () => {
+    expect(parseFrame({ ...daggerheartTheme, id: 'gm', kind: 'gm' })?.kind).toBe('gm');
+    const older: Record<string, unknown> = { ...daggerheartTheme, id: 'old' };
+    delete older.kind;
+    expect(parseFrame(older)?.kind).toBe('player');
+  });
+
   it.each([
     ['a non-hex color', { colors: { ...daggerheartTheme.colors, plate: 'red' } }],
     [
@@ -45,6 +52,7 @@ describe('parseFrame', () => {
     ],
     ['a CSS break-out', { layout: { ...daggerheartTheme.layout, edgeWidth: '1px; color: red' } }],
     ['an unknown slot', { regions: { dice: 'center' } }],
+    ['an unknown kind', { kind: 'spectator' }],
     ['a point off the stage', { regions: { dice: { x: 2400, y: 10 } } }],
     ['a point that is not a number', { regions: { dice: { x: '10', y: 10 } } }],
     ['an unknown widget', { regions: { ticker: 'top-left' } }],

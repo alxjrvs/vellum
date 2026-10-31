@@ -26,7 +26,7 @@ local ANNOUNCE_EVENT = "vellum:obs-script"
 local ANNOUNCE_JSON = '{"version":1}'
 local ANNOUNCE_MS = 3000
 
-local DEFAULT_LINK = "https://vellumhud.com/app/daggerheart/player/"
+local DEFAULT_LINK = "https://vellumhud.com/app/frames/daggerheart-player/"
 local SCENE_NAME = "Vellum"
 local HUD_NAME = "Vellum HUD"
 local CAMERA_NAME = "Vellum Camera"

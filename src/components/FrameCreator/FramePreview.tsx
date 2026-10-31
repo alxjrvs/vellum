@@ -13,16 +13,17 @@ import { useCharacter } from '../../character/useCharacter';
 import { themeToCssVars } from '../../themes/cssVars';
 import { ThemeContext } from '../../themes/ThemeContext';
 import {
-  HUD_WIDGET_LABELS,
-  HUD_WIDGETS,
+  FRAME_WIDGETS,
   RESERVED_AREAS,
   STAGE_WIDTH,
   type HudPoint,
   type HudWidget,
   type StageRect,
+  widgetLabels,
 } from '../../themes/regions';
 import type { ThemeConfig } from '../../themes/types';
 import { DiceRoller } from '../DiceRoller';
+import { Fear } from '../GmHud/Fear';
 import { HudRegion } from '../HudRegion';
 import { ConditionsPanel, IdentityLabel, PlayerHud } from '../PlayerHud';
 import { GRID, obstaclesFor, placeRect, toPoint, type WidgetRects } from './layout';
@@ -91,6 +92,8 @@ export function FramePreview({
   onPlace,
 }: FramePreviewProps) {
   const editable = onPlace !== undefined;
+  const widgets = FRAME_WIDGETS[frame.kind];
+  const labels = widgetLabels(frame.kind);
   const { character } = useCharacter();
   const stageRef = useRef<HTMLDivElement>(null);
   const drag = useRef<Drag | null>(null);
@@ -109,7 +112,7 @@ export function FramePreview({
     const scale = box.width / STAGE_WIDTH;
     const next: Record<string, StageRect> = {};
     let changed = false;
-    for (const widget of HUD_WIDGETS) {
+    for (const widget of widgets) {
       const el = stage.querySelector(`.hud__region--${widget}`);
       if (!el) continue;
       const r = el.getBoundingClientRect();
@@ -122,8 +125,10 @@ export function FramePreview({
       next[widget] = rect;
       if (!sameRect(rectsRef.current[widget], rect)) changed = true;
     }
-    if (changed) onMeasure(next);
-  }, [onMeasure]);
+    if (changed || Object.keys(next).length !== Object.keys(rectsRef.current).length) {
+      onMeasure(next);
+    }
+  }, [onMeasure, widgets]);
 
   // Re-measure after every render (a frame change can resize a widget) and
   // whenever a widget resizes on its own, such as when a font loads.
@@ -185,20 +190,31 @@ export function FramePreview({
               <CharacterContext.Provider
                 value={{ character: character ?? SAMPLE, dispatch: () => undefined }}
               >
-                <div className="hud">
-                  <HudRegion widget="vitals">
-                    <PlayerHud />
-                  </HudRegion>
-                  <HudRegion widget="status">
-                    <ConditionsPanel />
-                  </HudRegion>
-                  <HudRegion widget="dice">
-                    <DiceRoller />
-                  </HudRegion>
-                  <HudRegion widget="name">
-                    <IdentityLabel />
-                  </HudRegion>
-                </div>
+                {frame.kind === 'gm' ? (
+                  <div className="hud">
+                    <HudRegion widget="vitals">
+                      <Fear />
+                    </HudRegion>
+                    <HudRegion widget="dice">
+                      <DiceRoller />
+                    </HudRegion>
+                  </div>
+                ) : (
+                  <div className="hud">
+                    <HudRegion widget="vitals">
+                      <PlayerHud />
+                    </HudRegion>
+                    <HudRegion widget="status">
+                      <ConditionsPanel />
+                    </HudRegion>
+                    <HudRegion widget="dice">
+                      <DiceRoller />
+                    </HudRegion>
+                    <HudRegion widget="name">
+                      <IdentityLabel />
+                    </HudRegion>
+                  </div>
+                )}
               </CharacterContext.Provider>
             </ThemeContext.Provider>
           </div>
@@ -211,7 +227,7 @@ export function FramePreview({
             ))}
 
           {editable &&
-            HUD_WIDGETS.map((widget) => {
+            widgets.map((widget) => {
               const rect = rects[widget];
               return (
                 <button
@@ -219,7 +235,7 @@ export function FramePreview({
                   type="button"
                   className="frame-preview__handle"
                   style={rect ? boxStyle(rect) : undefined}
-                  aria-label={`Move ${HUD_WIDGET_LABELS[widget]}`}
+                  aria-label={`Move ${labels[widget]}`}
                   aria-pressed={selected === widget}
                   data-edge={rect && rect.y < 60 ? 'top' : undefined}
                   onFocus={() => setSelected(widget)}
@@ -229,7 +245,7 @@ export function FramePreview({
                   onPointerCancel={endDrag}
                   onKeyDown={(e) => onKeyDown(e, widget)}
                 >
-                  <span className="frame-preview__handle-label">{HUD_WIDGET_LABELS[widget]}</span>
+                  <span className="frame-preview__handle-label">{labels[widget]}</span>
                 </button>
               );
             })}

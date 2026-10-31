@@ -46,13 +46,13 @@ describe('GmSetup', () => {
     expect(onLaunch).toHaveBeenCalledOnce();
   });
 
-  it('copies the GM scene URL, not the bare route', async () => {
+  it('copies the GM frame link, not the bare route', async () => {
     renderGmSetup();
 
     fireEvent.click(screen.getByRole('button', { name: /copy gm screen link/i }));
 
     expect(writeText).toHaveBeenCalledOnce();
-    expect(writeText.mock.calls[0][0]).toContain('/daggerheart/gm/');
+    expect(writeText.mock.calls[0][0]).toContain('/frames/daggerheart-gm/');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /link copied/i })).toBeInTheDocument()
     );

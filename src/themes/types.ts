@@ -83,6 +83,13 @@ export interface ThemeTracks {
 }
 
 /**
+ * What a frame puts on screen: a character's HUD (stats, conditions, dice,
+ * nameplate) or the GM's (Fear and dice). There is one app; the frame you
+ * wear decides which.
+ */
+export type FrameKind = 'player' | 'gm';
+
+/**
  * A frame: everything about how the HUD looks, as data. The system says what
  * is tracked; the frame says how it is drawn.
  */
@@ -94,6 +101,8 @@ export interface ThemeConfig {
   readonly system: SystemId;
   /** Where it comes from: bundled official, bundled community, or the user's own. */
   readonly origin: 'official' | 'community' | 'custom';
+  /** Which HUD the frame shows. */
+  readonly kind: FrameKind;
   readonly colors: ThemeColors;
   readonly typography: ThemeTypography;
   readonly layout: ThemeLayout;

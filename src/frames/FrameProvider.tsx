@@ -11,7 +11,8 @@ import {
   writeCustomFrames,
 } from './customFrames';
 import { readFrameFromUrl, readStoredFrame, writeStoredFrame } from './frameStorage';
-import { FRAME_LIBRARY, framesForSystem } from './library';
+import { FRAME_LIBRARY, framesForSystem, resolveFrameId } from './library';
+import { frameIdFromPath, kindFromLegacyUrl, showFrameInUrl } from '../routes/frameRoute';
 
 interface FrameProviderProps {
   children: ReactNode;
@@ -30,10 +31,29 @@ function initialCustomFrames(): ThemeConfig[] {
 }
 
 /**
- * Chooses the frame the HUD wears and applies it. A `?frame=` in the URL wins
- * (an OBS source pins its frame that way), then a frame carried in the link
- * (`?frameData=`), then the stored choice, then the system's first official
- * frame. Hotkeys switch it with `frame.set` / `frame.cycle` commands.
+ * The frame to start on. The address wins (`/app/frames/<id>/`: an OBS source
+ * pins its frame that way), then an old `?frame=`, then a frame carried in the
+ * link (`?frameData=`), then the stored choice, then the first official frame.
+ * An old screen address (`/app/daggerheart/gm/`) only takes a frame of the
+ * kind it named, so it lands on the GM frame rather than a stored player one.
+ */
+function initialFrameId(frames: readonly ThemeConfig[]): string {
+  const pathId = frameIdFromPath();
+  const pinned = pathId ? findFrame(frames, pathId) : undefined;
+  if (pinned) return pinned.id;
+  const kind = kindFromLegacyUrl();
+  const fits = (f: ThemeConfig | undefined): f is ThemeConfig => !!f && (!kind || f.kind === kind);
+  const candidates = [readFrameFromUrl(), readFrameDataFromUrl()?.id, readStoredFrame()].map((id) =>
+    findFrame(frames, id)
+  );
+  return (candidates.find(fits) ?? frames.find(fits) ?? frames[0]).id;
+}
+
+/**
+ * Chooses the frame the HUD wears and applies it, and keeps its address in
+ * the URL. The frame decides the screen: a player frame shows a character's
+ * HUD, a GM frame the Fear pool. Hotkeys switch it with `frame.set` /
+ * `frame.cycle` commands.
  */
 export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProviderProps) {
   const system = useSystem();
@@ -42,13 +62,10 @@ export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProvid
     () => framesForSystem(system.id, [...library, ...custom]),
     [system.id, library, custom]
   );
-  const [frameId, setFrameId] = useState<string>(
-    () =>
-      [readFrameFromUrl(), readFrameDataFromUrl()?.id, readStoredFrame()].find((id) =>
-        known(frames, id)
-      ) ?? frames[0].id
-  );
+  const [frameId, setFrameId] = useState<string>(() => initialFrameId(frames));
   const frame = frames.find((f) => f.id === frameId) ?? frames[0];
+
+  useEffect(() => showFrameInUrl(frame.id), [frame.id]);
 
   const choose = useCallback((id: string) => {
     setFrameId(id);
@@ -57,7 +74,8 @@ export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProvid
 
   const setFrame = useCallback(
     (id: string) => {
-      if (known(frames, id)) choose(id);
+      const found = findFrame(frames, id);
+      if (found) choose(found.id);
     },
     [frames, choose]
   );
@@ -81,9 +99,10 @@ export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProvid
         writeCustomFrames(updated);
         return updated;
       });
-      if (id === frameId) choose(frames[0].id);
+      // Stay on the same screen: fall back to an official frame of the same kind.
+      if (id === frameId) choose((frames.find((f) => f.kind === frame.kind) ?? frames[0]).id);
     },
-    [frameId, frames, choose]
+    [frameId, frame.kind, frames, choose]
   );
 
   useEffect(
@@ -91,12 +110,14 @@ export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProvid
       subscribeCommands((command) => {
         if (command.type === 'frame.set') setFrame(command.frame);
         if (command.type === 'frame.cycle') {
-          const index = frames.findIndex((f) => f.id === frame.id);
-          const n = frames.length;
-          choose(frames[(((index + command.delta) % n) + n) % n].id);
+          // Cycling restyles the screen; it never swaps a player HUD for the GM's.
+          const ring = frames.filter((f) => f.kind === frame.kind);
+          const index = ring.findIndex((f) => f.id === frame.id);
+          const n = ring.length;
+          choose(ring[(((index + command.delta) % n) + n) % n].id);
         }
       }),
-    [frames, frame.id, setFrame, choose]
+    [frames, frame.id, frame.kind, setFrame, choose]
   );
 
   const value = useMemo(
@@ -110,6 +131,11 @@ export function FrameProvider({ children, library = FRAME_LIBRARY }: FrameProvid
   );
 }
 
-function known(frames: readonly ThemeConfig[], id: string | null | undefined): id is string {
-  return !!id && frames.some((f) => f.id === id);
+function findFrame(
+  frames: readonly ThemeConfig[],
+  id: string | null | undefined
+): ThemeConfig | undefined {
+  if (!id) return undefined;
+  const resolved = resolveFrameId(id);
+  return frames.find((f) => f.id === resolved);
 }

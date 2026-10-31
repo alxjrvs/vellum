@@ -132,15 +132,14 @@ describe('CharacterSetup share link', () => {
 
     expect(writeText).toHaveBeenCalledOnce();
     expect(writeText.mock.calls[0][0]).toContain('?c=');
-    // Must address the player scene: pasted into a non-interactive OBS browser
-    // source, a hash-less link would strand the user on the scene selector.
-    expect(writeText.mock.calls[0][0]).toContain('/daggerheart/player/?c=');
+    // Names a player frame in its path, so a fresh OBS source opens the HUD.
+    expect(writeText.mock.calls[0][0]).toContain('/frames/daggerheart-player/?c=');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /share link copied/i })).toBeInTheDocument()
     );
   });
 
-  it('pins the frame picked here into the link, so OBS wears it too', () => {
+  it('links the frame picked here, so OBS wears it too', () => {
     seedMara();
     localStorage.setItem(FRAME_STORAGE_KEY, 'daggerheart-ledger');
     render(
@@ -153,9 +152,7 @@ describe('CharacterSetup share link', () => {
       </SystemProvider>
     );
     fireEvent.click(screen.getByRole('button', { name: /copy share link/i }));
-    expect(writeText.mock.calls[0][0]).toMatch(
-      /\/daggerheart\/player\/\?c=[^&]*&frame=daggerheart-ledger$/
-    );
+    expect(writeText.mock.calls[0][0]).toMatch(/\/frames\/daggerheart-ledger\/\?c=[^&]*$/);
   });
 
   it('disables the copy link and warns while the form has unsaved edits', () => {

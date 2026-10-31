@@ -42,9 +42,9 @@ export const features: Feature[] = [
   },
   {
     id: 'daggerheart',
-    title: 'Daggerheart, player and GM',
+    title: 'Daggerheart, player and GM frames',
     blurb:
-      'Hope, HP, Stress, Armor, conditions and damage thresholds for players. A Fear track for the GM.',
+      'Hope, HP, Stress, Armor, conditions and damage thresholds in the player frame. A Fear track in the GM frame.',
     status: 'live',
   },
   {

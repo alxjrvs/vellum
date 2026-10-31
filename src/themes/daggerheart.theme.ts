@@ -1,14 +1,15 @@
 import type { ThemeConfig } from './types';
 
 /**
- * The official Daggerheart frame: the Vellum broadcast chassis in warm plates,
- * a parchment nameplate and a gilt player edge.
+ * The official Daggerheart player frame: the Vellum broadcast chassis in warm
+ * plates, a parchment nameplate and a gilt player edge.
  */
 export const daggerheartTheme: ThemeConfig = {
-  id: 'daggerheart',
-  label: 'Daggerheart',
+  id: 'daggerheart-player',
+  label: 'Daggerheart – Player',
   system: 'daggerheart',
   origin: 'official',
+  kind: 'player',
   colors: {
     night: '#0f0a05',
     plate: '#1b140b',

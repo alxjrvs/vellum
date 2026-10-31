@@ -27,8 +27,10 @@ if [ -d "$ROOT/apps/site/dist" ]; then
 else
   cp -RL "$ROOT/site/." "$OUT/"
 fi
-# Platform files: response headers, and a fallback 404 if the site has none.
+# Platform files: response headers, frame-path rewrites, and a fallback 404
+# if the site has none.
 cp "$ROOT/deploy/_headers" "$OUT/_headers"
+cp "$ROOT/deploy/_redirects" "$OUT/_redirects"
 [ -f "$OUT/404.html" ] || cp "$ROOT/deploy/404.html" "$OUT/404.html"
 cp -R "$ROOT/dist/." "$OUT/app/"
 mkdir -p "$OUT/app/v$VERSION"

@@ -5,8 +5,10 @@ import { FrameProvider } from '../../frames/FrameProvider';
 import { readCustomFrames } from '../../frames/customFrames';
 import { SystemProvider } from '../../systems/SystemProvider';
 import { daggerheartSystem } from '../../systems/daggerheart.system';
+import { daggerheartGm } from '../../frames/official/daggerheart-gm';
 import { daggerheartTheme } from '../../themes/daggerheart.theme';
 import type { StageRect } from '../../themes/regions';
+import type { ThemeConfig } from '../../themes/types';
 import { FrameCreator } from './FrameCreator';
 
 const SCALE = 0.6;
@@ -61,12 +63,12 @@ afterEach(() => {
   localStorage.clear();
 });
 
-function renderCreator(onDone = () => undefined) {
+function renderCreator(onDone = () => undefined, base: ThemeConfig = daggerheartTheme) {
   render(
     <SystemProvider system={daggerheartSystem}>
       <FrameProvider>
         <CharacterProvider>
-          <FrameCreator base={daggerheartTheme} onDone={onDone} />
+          <FrameCreator base={base} onDone={onDone} />
         </CharacterProvider>
       </FrameProvider>
     </SystemProvider>
@@ -111,5 +113,20 @@ describe('FrameCreator layout editing', () => {
     fireEvent.keyDown(creator, { key: 'Escape' });
     expect(onDone).toHaveBeenCalled();
     expect(readCustomFrames()).toEqual([]);
+  });
+});
+
+describe('FrameCreator for a GM frame', () => {
+  it('lays out the Fear pool and the dice, and offers only the Fear track', () => {
+    const creator = renderCreator(undefined, daggerheartGm);
+    const handles = within(creator)
+      .getAllByRole('button', { name: /^Move / })
+      .map((b) => b.getAttribute('aria-label'));
+    expect(handles).toEqual(['Move Fear', 'Move Dice']);
+    expect(within(creator).getByRole('radiogroup', { name: 'Fear' })).toBeInTheDocument();
+    expect(within(creator).queryByRole('radiogroup', { name: 'HP' })).toBeNull();
+
+    fireEvent.click(within(creator).getByRole('button', { name: 'Save frame' }));
+    expect(readCustomFrames()[0]).toMatchObject({ kind: 'gm', origin: 'custom' });
   });
 });

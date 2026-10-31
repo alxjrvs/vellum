@@ -5,11 +5,12 @@ description: Frames change how your HUD looks. Pick one per game from the Frame 
 
 import { Aside } from '@astrojs/starlight/components';
 
-A **frame** is the look of your HUD: its colors, where each widget sits, and whether each stat draws as a bar or as chits. Your character's numbers come from your game, not the frame, so switching frames never changes your sheet.
+A **frame** is your HUD: what it shows (a player's stats or the GM's Fear), its colors, where each widget sits, and whether each stat draws as a bar or as chits. Your character's numbers come from your game, not the frame, so switching frames never changes your sheet.
 
 <Aside type="note" title="Today">
-  Daggerheart has two official frames, Daggerheart and Ledger. Pick one on the setup screen, or
-  [make your own](/docs/frames/make/). The Community shelf is open for pull requests.
+  Daggerheart has three official frames: Daggerheart – Player, Daggerheart – GM, and Ledger (a
+  player frame). Pick one on the setup screen, or [make your own](/docs/frames/make/). The Community
+  shelf is open for pull requests.
 </Aside>
 
 ## Where frames come from
@@ -20,9 +21,9 @@ The picker has three shelves for each game:
 - **Community:** made by players and merged into the [Frame Library](/library/). Labelled unofficial.
 - **My frames:** frames you made or imported. They live only on your machine.
 
-## Your pick travels in your link
+## Every frame has an address
 
-When you choose a frame, it becomes part of your share link (`&frame=` followed by its id). Paste the new link into your OBS browser source and OBS uses that frame. Library frames ship inside the app, so loading one never contacts a server. A [hotkey](/docs/control/) can also step to the next frame mid-session.
+Each frame lives at its own address, `/app/frames/<id>/`, and your share link points there. Paste the new link into your OBS browser source and OBS uses that frame. Library frames ship inside the app, so loading one never contacts a server. A [hotkey](/docs/control/) can also step to the next frame of the same kind mid-session.
 
 Your own frames, which aren't in the Library, are packed into the link too. That makes the link longer but keeps it working with no server.
 

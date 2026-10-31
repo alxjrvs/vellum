@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { isInsideObs } from '../components/SetupWizard/obs';
 import { readLaunchedFromStorage, writeLaunchedToStorage } from './launchStorage';
-import type { ViewMode } from '../viewMode/useViewMode';
+import type { FrameKind } from '../themes/types';
 
 interface SetupRenderProps {
   /** Persist the launch and switch to the live scene. */
@@ -16,7 +16,7 @@ interface LiveRenderProps {
 }
 
 interface SceneShellProps {
-  readonly scene: ViewMode;
+  readonly scene: FrameKind;
   /**
    * Whether the scene has everything it needs to render live. The player scene
    * needs a character; the GM scene needs nothing.

@@ -65,6 +65,9 @@ export function parseFrame(input: unknown): ThemeConfig | null {
   if (typeof id !== 'string' || !/^[a-z0-9-]{1,64}$/.test(id)) return null;
   if (typeof label !== 'string' || label.trim().length === 0 || label.length > 40) return null;
   if (!(SYSTEM_IDS as readonly unknown[]).includes(system)) return null;
+  // Frames made before GM frames existed are all player frames.
+  const kind = input.kind ?? 'player';
+  if (kind !== 'player' && kind !== 'gm') return null;
 
   const colors = pickRecord(input.colors, Object.keys(template.colors), isHex);
   const typography = pickRecord(input.typography, Object.keys(template.typography), isSafeCss);
@@ -90,6 +93,7 @@ export function parseFrame(input: unknown): ThemeConfig | null {
     label: label.trim(),
     system: system as ThemeConfig['system'],
     origin: 'custom',
+    kind,
     colors: colors as unknown as ThemeConfig['colors'],
     typography: typography as unknown as ThemeConfig['typography'],
     layout: layout as unknown as ThemeConfig['layout'],

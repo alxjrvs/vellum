@@ -3,7 +3,6 @@ import { CharacterContext } from './CharacterContext';
 import { characterReducer } from './reducer';
 import { decodeShareParam } from './shareCode';
 import { readCharacterFromStorage, writeCharacterToStorage } from './storage';
-import { appRoot, scenePath } from '../viewMode/useViewMode';
 import { subscribeCommands } from '../commands/commandBus';
 import { SystemContext } from '../systems/SystemContext';
 import type { CharacterState } from './types';
@@ -16,12 +15,8 @@ const SHARE_PARAM = 'c';
  * from the URL via `history.replaceState`) and let the persist effect promote it
  * into localStorage — the live in-session store. Otherwise fall back to storage.
  *
- * Consuming the param also *addresses a scene* when the link carries none: a
- * share link is a character, which is inherently a player artifact, so it lands
- * on the player HUD rather than the scene selector. This runs in the reducer's
- * lazy initializer — before `App` reads the scene — so the hash is in place by
- * the time `useViewMode` takes its first snapshot. Links generated before the
- * scene hash existed keep working because of this.
+ * A share link is a character, so one that names no frame opens a player
+ * frame: FrameProvider reads the param before this consumes it.
  */
 function readInitialCharacter(): CharacterState | null {
   if (typeof window !== 'undefined') {
@@ -33,9 +28,7 @@ function readInitialCharacter(): CharacterState | null {
         params.delete(SHARE_PARAM);
         const query = params.toString();
         const { pathname, hash } = window.location;
-        // A share link to the bare app opens the player scene.
-        const path = pathname === appRoot(pathname) ? scenePath('player', pathname) : pathname;
-        const url = `${path}${query ? `?${query}` : ''}${hash}`;
+        const url = `${pathname}${query ? `?${query}` : ''}${hash}`;
         window.history.replaceState(window.history.state, '', url);
         return result.character;
       }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { SCENES, SYSTEM_ID } from '../src/viewMode/routes';
+import { routePages } from '../src/routes/routePages';
 
 const distDir = join(process.cwd(), 'dist');
 const indexPath = join(distDir, 'index.html');
@@ -29,21 +29,22 @@ for (const asset of referencedAssets) {
   }
 }
 
-// Each scene path gets its own index.html (no server rewrites), and its
-// relative URLs must still land on the shared assets two directories up.
-for (const scene of SCENES) {
-  const page = join(distDir, SYSTEM_ID, scene, 'index.html');
+// Each frame path (and each old screen path) gets its own index.html (no
+// server rewrites), and its relative URLs must still land on the shared
+// assets two directories up.
+for (const route of routePages()) {
+  const page = join(distDir, route, 'index.html');
   if (!existsSync(page)) {
-    failures.push(`Scene page missing from dist: ${SYSTEM_ID}/${scene}/index.html`);
+    failures.push(`Route page missing from dist: ${route}/index.html`);
     continue;
   }
   const refs = [...readFileSync(page, 'utf8').matchAll(/(?:src|href)="(\.[^"]+)"/g)].map(
     (m) => m[1]
   );
-  if (refs.length === 0) failures.push(`${SYSTEM_ID}/${scene}/index.html references no assets.`);
+  if (refs.length === 0) failures.push(`${route}/index.html references no assets.`);
   for (const ref of refs) {
     if (!existsSync(join(dirname(page), ref))) {
-      failures.push(`${SYSTEM_ID}/${scene}/index.html references a missing asset: ${ref}`);
+      failures.push(`${route}/index.html references a missing asset: ${ref}`);
     }
   }
 }

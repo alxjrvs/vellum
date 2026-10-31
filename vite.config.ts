@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { MEDIAPIPE_DIR } from '@vellum/tracking/assets';
-import { SCENES, SYSTEM_ID } from './src/viewMode/routes';
+import { routePages } from './src/routes/routePages';
 
 /**
  * Face tracking runs entirely on the device, so its WASM runtime and model ship
@@ -46,25 +46,21 @@ function mediapipeAssets(): Plugin {
 }
 
 /**
- * Scenes are plain paths (`/app/daggerheart/gm/`), and the app is static with
- * no server rewrites, so each scene gets its own copy of index.html with its
- * relative asset URLs pointed two directories up.
+ * Frames are plain paths (`/app/frames/daggerheart-gm/`), and the app is
+ * static with no server rewrites, so each route gets its own copy of
+ * index.html with its relative asset URLs pointed two directories up.
  */
-function sceneRoutes(): Plugin {
+function routeCopies(): Plugin {
   return {
-    name: 'vellum-scene-routes',
+    name: 'vellum-route-pages',
     apply: 'build',
     enforce: 'post',
     generateBundle(_options, bundle) {
       const index = bundle['index.html'];
       if (!index || index.type !== 'asset') return;
       const html = String(index.source).replaceAll('="./', '="../../');
-      for (const scene of SCENES) {
-        this.emitFile({
-          type: 'asset',
-          fileName: `${SYSTEM_ID}/${scene}/index.html`,
-          source: html,
-        });
+      for (const page of routePages()) {
+        this.emitFile({ type: 'asset', fileName: `${page}/index.html`, source: html });
       }
     },
   };
@@ -73,7 +69,7 @@ function sceneRoutes(): Plugin {
 // Chromium-only target — OBS CEF (Chromium 103+) and modern desktop Chromium browsers.
 // `base: './'` is mandatory for file:// safety (architecture §8.3); do not change.
 export default defineConfig({
-  plugins: [react(), mediapipeAssets(), sceneRoutes()],
+  plugins: [react(), mediapipeAssets(), routeCopies()],
   base: './',
   build: {
     target: 'chrome103',
