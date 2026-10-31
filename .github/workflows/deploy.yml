@@ -1,0 +1,62 @@
+name: Deploy to Cloudflare
+
+# Publishes vellumhud.com: the marketing site at / and the app at /app/ (plus
+# every released /app/vX.Y.Z/) as static assets on the `vellum-web` Worker
+# (wrangler.jsonc). Runs on every push to main once CI-relevant files change.
+#
+# Needs two repository secrets: CLOUDFLARE_API_TOKEN (an API token with the
+# "Edit Cloudflare Workers" template, scoped to the vellumhud.com zone) and
+# CLOUDFLARE_ACCOUNT_ID. Until both exist the deploy step is skipped and the
+# build still runs, so main stays green.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://vellumhud.com
+    env:
+      HAS_CLOUDFLARE: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Tags are needed to rebuild every pinned /app/vX.Y.Z/.
+          fetch-depth: 0
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Vellum app
+        run: bun run build
+
+      - name: Assemble site + app + pinned versions
+        run: scripts/assemble-site.sh
+
+      - name: Deploy to Cloudflare
+        if: env.HAS_CLOUDFLARE == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: bun
+          command: deploy
+
+      - name: Note skipped deploy
+        if: env.HAS_CLOUDFLARE != 'true'
+        run: echo "::notice::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID not set; built but did not deploy."

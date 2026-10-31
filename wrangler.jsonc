@@ -1,0 +1,22 @@
+// The `web` Worker: serves the marketing site at / and the Vellum app at
+// /app/ (plus frozen /app/vX.Y.Z/ builds) as static assets. There is no Worker
+// script: nothing runs on Cloudflare at request time beyond asset serving, so
+// the "nothing is uploaded" promise holds. Assemble the assets with
+// `scripts/assemble-site.sh` before `wrangler deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vellum-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./_pages",
+    // Hash routing (#/daggerheart/gm) means every app URL is a real file, so
+    // no SPA fallback; unknown paths get the site's 404 page.
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+  },
+  "routes": [
+    { "pattern": "vellumhud.com", "custom_domain": true },
+    { "pattern": "www.vellumhud.com", "custom_domain": true },
+  ],
+  "workers_dev": true,
+}
