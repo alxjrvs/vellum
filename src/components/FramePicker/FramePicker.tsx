@@ -3,7 +3,7 @@ import { useFrame } from '../../frames/useFrame';
 import type { ThemeConfig } from '../../themes/types';
 import './FramePicker.css';
 
-const SWATCHES = ['plate', 'signal', 'hit', 'stress', 'armor', 'fear'] as const;
+const SWATCHES = ['nameplate', 'signal', 'hit', 'stress', 'armor', 'fear'] as const;
 
 function trackSummary(frame: ThemeConfig): string {
   const displays = new Set(Object.values(frame.tracks));
